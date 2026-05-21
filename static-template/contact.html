@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Contact Dede's Braids</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#8c30e8",
+            "background-light": "#f7f6f8",
+            "background-dark": "#191121",
+          },
+          fontFamily: {
+            "display": ["Plus Jakarta Sans"]
+          },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+  </style>
+</head>
+
+<body
+  class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 transition-colors duration-300">
+  <!-- Navigation -->
+  <!-- Navigation -->
+  <div id="app-header"></div>
+  <!-- Header Section -->
+  <header class="py-16 text-center">
+    <div class="max-w-3xl mx-auto px-4">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4">Let's Create Your <span
+          class="text-primary">Perfect Style</span></h1>
+      <p class="text-lg text-slate-600 dark:text-slate-400">Have questions about our braiding services or want to
+        schedule a consultation? We're here to help you shine.</p>
+    </div>
+  </header>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+    <!-- Contact Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+      <!-- Left Side: Contact Form -->
+      <div class="bg-white dark:bg-slate-900/50 p-8 rounded-2xl shadow-sm border border-primary/10">
+        <h2 class="text-2xl font-bold mb-6 text-slate-900 dark:text-white">Send Us a Message</h2>
+        <form class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Full Name</label>
+              <input
+                class="w-full bg-background-light dark:bg-background-dark border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-3 outline-none transition-all"
+                placeholder="Jane Doe" type="text" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Email Address</label>
+              <input
+                class="w-full bg-background-light dark:bg-background-dark border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-3 outline-none transition-all"
+                placeholder="jane@example.com" type="email" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Service Interest</label>
+            <select
+              class="w-full bg-background-light dark:bg-background-dark border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-3 outline-none transition-all">
+              <option>Box Braids</option>
+              <option>Cornrows</option>
+              <option>Knotless Braids</option>
+              <option>Twists &amp; Locs</option>
+              <option>Other Services</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Message</label>
+            <textarea
+              class="w-full bg-background-light dark:bg-background-dark border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-3 outline-none transition-all"
+              placeholder="Tell us what you're looking for..." rows="4"></textarea>
+          </div>
+          <button
+            class="w-full bg-primary text-white font-bold py-4 rounded-xl hover:bg-opacity-90 hover:shadow-lg transition-all flex items-center justify-center gap-2"
+            type="submit">
+            <span class="material-icons text-sm">send</span>
+            Send Message
+          </button>
+        </form>
+      </div>
+      <!-- Right Side: Contact Info -->
+      <div class="space-y-8 lg:pl-8">
+        <div>
+          <h2 class="text-2xl font-bold mb-8 text-slate-900 dark:text-white">Contact Information</h2>
+          <div class="space-y-6">
+            <!-- Address -->
+            <div class="flex items-start gap-4">
+              <div
+                class="w-12 h-12 bg-primary/10 flex items-center justify-center rounded-xl text-primary flex-shrink-0">
+                <span class="material-icons">location_on</span>
+              </div>
+              <div>
+                <h3 class="font-semibold text-slate-900 dark:text-white">Our Location</h3>
+                <p class="text-slate-600 dark:text-slate-400">123 Beauty Lane, Suite 400<br />Atlanta, GA 30301</p>
+              </div>
+            </div>
+            <!-- Phone -->
+            <div class="flex items-start gap-4">
+              <div
+                class="w-12 h-12 bg-primary/10 flex items-center justify-center rounded-xl text-primary flex-shrink-0">
+                <span class="material-icons">phone</span>
+              </div>
+              <div>
+                <h3 class="font-semibold text-slate-900 dark:text-white">Phone Number</h3>
+                <p class="text-slate-600 dark:text-slate-400">(555) 123-4567</p>
+              </div>
+            </div>
+            <!-- Hours -->
+            <div class="flex items-start gap-4">
+              <div
+                class="w-12 h-12 bg-primary/10 flex items-center justify-center rounded-xl text-primary flex-shrink-0">
+                <span class="material-icons">schedule</span>
+              </div>
+              <div>
+                <h3 class="font-semibold text-slate-900 dark:text-white">Business Hours</h3>
+                <p class="text-slate-600 dark:text-slate-400">Mon - Sat: 9:00 AM - 7:00 PM<br />Sunday: Closed</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Social Media -->
+        <div class="pt-8 border-t border-primary/10">
+          <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4">Follow Our Work</h3>
+          <div class="flex gap-4">
+            <a class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all"
+              href="#">
+              <img class="w-5 h-5 opacity-70 group-hover:opacity-100" data-alt="Instagram icon for social media"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTZF3tT5VgKLZFNGHc0stdW35dJBs3J7PxcpxZgHiIwldhy9JpqwesDCSfbjxdKXjubNniXJIKcJvTtdIvz7Rn2QSFnnK49MQDr_0yb8TTR9CzuyZ3U26k9Qsohwm9XVdvJ1cb7jXTRUKFEzIlpyzEhJXTG2chgr3zh9kspCBHmRlNzQu9OxoxcMARoZY97cVwlO8qJGlOKT14aBBBYiWuSvdHiGBDB3PQThSlOjLo4G2A6kcU75qvzZuD07SPtAUmR5VTyKxrpw" />
+            </a>
+            <a class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all"
+              href="#">
+              <img class="w-5 h-5 opacity-70 group-hover:opacity-100" data-alt="Facebook icon for social media"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1y3MvOzASRUvTzRoA95-y356ncdgwRBOTXIL8FOFQKGMZ0qGChB3EcSVZYkt5hv8KovsIK2NJApA-ffiMyE79jP8cW9-3g2TNsB8ty9knhFpxYTKsJSbw5GVcdCV9yr_ZXsqzhN88vuxPyIcT2hnqDCP1xd__ehpgsfuddmfxgLor0H3q4LerVFQvXcfb92iKay5E939gKv5on4BOkaarVZEnz6PtIbsAY8ROTP4eNYEDtgtE8WRRQBqsD7buz0NHAJArp8Olmw" />
+            </a>
+            <a class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all"
+              href="#">
+              <img class="w-5 h-5 opacity-70 group-hover:opacity-100" data-alt="Pinterest icon for social media"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdGJQAI5M-9J2B26CkG_pdnwPfMOOd-A2zphNohv4yUnuDgFIRFZJtHo_5Oo0cg5weqi1DXM8pukUsibNTjEIZxbOp-ZCsPZ6e-EzKBEiX2F_Gl-xQy4nijGBSFJv8ygSe29kS7BPseOMHsQ_sitqofYGomb3lDC0MDc-BTM2kn2XVsoS8NMkiEBftKfSWPbvn19-2Si28is_1W87vnqxZ9K0II2pNabS5S15nu_sxIdbxjr9Y7BW-QbvKVOAAriHRl3dxUs-6Og" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Map Section -->
+    <div class="mt-20">
+      <div class="w-full h-96 rounded-2xl overflow-hidden shadow-lg border-4 border-white dark:border-slate-800">
+        <div class="relative w-full h-full bg-slate-200 dark:bg-slate-800">
+          <img class="w-full h-full object-cover grayscale opacity-80" data-alt="Map showing salon location in Atlanta"
+            data-location="Atlanta, Georgia"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAela9pfXlaxKZQrwkKY_hJBzL1WCtUMVsc-05SFfwsCGx1x7-7utZpmewMNsy5-iuJpKJzO95OOMmTeAXB-p45Lm1kI2y9LXvYvZ0StXZjcqkbPA9UUZsMV-fPTsW9Wq07ZqL7iqIzqsf63v83J6jDPn97q0V_4kC6WHSVHbS-EOqvCDb-XtZxTQRJnHqEprg5DOQ4rN5RD8J-fifEiBLhlrUvDckHRxe5eZvHKy_xfSu1eWLjChbjDnzgZeCc9fikB2JxlNM4RA" />
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="bg-primary p-3 rounded-full shadow-2xl animate-bounce">
+              <span class="material-icons text-white text-3xl">location_on</span>
+            </div>
+          </div>
+          <div
+            class="absolute bottom-4 left-4 bg-white dark:bg-slate-900 p-4 rounded-xl shadow-lg border border-primary/20">
+            <p class="font-bold text-slate-900 dark:text-white">Dede's Braids</p>
+            <p class="text-xs text-slate-500">123 Beauty Lane, Atlanta, GA</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- Footer -->
+  <!-- Footer -->
+  <div id="app-footer"></div>
+
+  <!-- Component Loader -->
+  <script src="components.js?v=2"></script>
+</body>
+
+</html>

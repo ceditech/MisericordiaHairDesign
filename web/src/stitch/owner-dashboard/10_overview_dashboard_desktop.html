@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed": "#ffdcbb",
+              "secondary-container": "#fd56a7",
+              "on-background": "#121c2a",
+              "on-tertiary-container": "#fffbff",
+              "primary-fixed": "#e9ddff",
+              "on-tertiary": "#ffffff",
+              "surface-container-highest": "#d9e3f6",
+              "outline": "#7b7486",
+              "inverse-on-surface": "#eaf1ff",
+              "inverse-primary": "#d0bcff",
+              "surface-dim": "#d0dbed",
+              "surface-bright": "#f8f9ff",
+              "error": "#ba1a1a",
+              "on-error": "#ffffff",
+              "on-surface": "#121c2a",
+              "surface": "#f8f9ff",
+              "secondary": "#b4136d",
+              "surface-container-low": "#eff4ff",
+              "outline-variant": "#cbc3d7",
+              "on-primary": "#ffffff",
+              "on-error-container": "#93000a",
+              "secondary-fixed-dim": "#ffb0cd",
+              "primary-fixed-dim": "#d0bcff",
+              "surface-tint": "#6d3bd7",
+              "error-container": "#ffdad6",
+              "secondary-fixed": "#ffd9e4",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed-variant": "#673d00",
+              "inverse-surface": "#27313f",
+              "primary": "#6b38d4",
+              "tertiary": "#855000",
+              "surface-variant": "#d9e3f6",
+              "on-secondary-fixed": "#3e0022",
+              "on-secondary-container": "#600037",
+              "on-secondary": "#ffffff",
+              "on-primary-fixed-variant": "#5516be",
+              "surface-container": "#e6eeff",
+              "on-primary-container": "#fffbff",
+              "surface-container-high": "#dee9fc",
+              "tertiary-container": "#a76500",
+              "background": "#f8f9ff",
+              "tertiary-fixed-dim": "#ffb869",
+              "on-secondary-fixed-variant": "#8c0053",
+              "primary-container": "#8455ef",
+              "on-surface-variant": "#494454",
+              "on-tertiary-fixed": "#2c1700",
+              "on-primary-fixed": "#23005c"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body { background-color: #f8f9ff; }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body class="font-body text-on-surface">
+<!-- Sidebar Navigation -->
+<nav class="hidden lg:flex flex-col fixed left-0 top-0 h-full py-8 gap-4 bg-slate-50 dark:bg-slate-950 h-screen w-64 rounded-r-3xl z-40">
+<div class="px-8 mb-8">
+<h1 class="font-headline font-extrabold text-violet-600 text-2xl tracking-tight">Dede’s Braids</h1>
+<p class="text-xs text-slate-500 font-medium uppercase tracking-widest mt-1">Management Portal</p>
+</div>
+<div class="flex flex-col gap-1 px-4 overflow-y-auto no-scrollbar flex-1">
+<a class="flex items-center gap-3 text-violet-700 dark:text-violet-300 bg-white dark:bg-slate-900 shadow-sm rounded-full mx-2 px-4 py-3 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-['Manrope'] font-medium text-sm">Overview</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-['Manrope'] font-medium text-sm">Appointments</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">content_cut</span>
+<span class="font-['Manrope'] font-medium text-sm">Service Styles</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-['Manrope'] font-medium text-sm">Inventory</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-['Manrope'] font-medium text-sm">Shop Sales</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">group_add</span>
+<span class="font-['Manrope'] font-medium text-sm">Affiliates</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Manrope'] font-medium text-sm">Customers</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-['Manrope'] font-medium text-sm">Reports</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-['Manrope'] font-medium text-sm">Settings</span>
+</a>
+</div>
+<div class="mt-auto px-6">
+<button class="w-full py-4 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white font-semibold text-sm shadow-lg shadow-violet-200 active:scale-95 duration-200">
+                Book Appointment
+            </button>
+</div>
+</nav>
+<!-- Main Canvas Area -->
+<main class="lg:ml-64 min-h-screen">
+<!-- Top Navigation -->
+<header class="fixed top-0 right-0 left-0 lg:left-64 z-30 bg-white/80 backdrop-blur-md px-6 py-4 flex justify-between items-center shadow-sm shadow-violet-100/20">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-violet-500 transition-colors">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full py-2.5 pl-12 pr-4 focus:ring-2 focus:ring-primary-fixed text-sm transition-all" placeholder="Search appointments, styles or products..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex bg-surface-container-low rounded-full p-1 gap-1">
+<button class="px-4 py-1.5 rounded-full text-xs font-semibold bg-white shadow-sm text-violet-700">Month</button>
+<button class="px-4 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-white/50 transition-colors">Week</button>
+<button class="px-4 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-white/50 transition-colors">Today</button>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative text-slate-500 hover:text-violet-600 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-secondary rounded-full border-2 border-white"></span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-slate-100">
+<div class="text-right">
+<p class="text-sm font-bold text-on-surface">Dede</p>
+<p class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Admin</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary overflow-hidden">
+<img alt="Dede" class="w-full h-full object-cover" data-alt="professional headshot of a stylish woman with intricate braided hairstyle, warm studio lighting, clean background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC797PWBn9mqCwjQ9ugpKZeJOvVmKlRxuGGASkviC033D1PsbWmJp8bneDc7a1SrDi25pjcsJCxV8oefT3WTLjq0DvzqLBtcUqk1981xPmwQpZhbxjlVFAg5VnPRhFfP6GY3drlB2gDa6Eqrt1zu1wDGTaOqPgpUtet5jj8EYFUIpogiU4TTSSGkejV9e-X4rDvtlQj432sjESKt6-JtZnO-Wr7sZNIobIluVz_QgIOc9O2TMy8OT7M25o0zR_G2M7kd7QFei1diQAt"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="pt-24 px-8 pb-12">
+<!-- Page Header -->
+<div class="mb-8 flex justify-between items-end">
+<div>
+<h2 class="font-headline text-3xl font-bold tracking-tight text-on-surface">Dashboard Overview</h2>
+<p class="text-slate-500 mt-1">Welcome back, Dede. Here's what's happening at the studio.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 bg-surface-container-lowest text-on-surface px-5 py-2.5 rounded-full text-sm font-semibold shadow-sm hover:shadow-md transition-all">
+<span class="material-symbols-outlined text-lg">download</span>
+                        Export Report
+                    </button>
+</div>
+</div>
+<!-- Bento Grid - KPI Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-6 mb-10">
+<!-- Main Revenue Bento Item -->
+<div class="xl:col-span-2 bg-surface-container-lowest p-6 rounded-lg shadow-sm border border-transparent hover:shadow-md transition-all flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-primary-fixed rounded-2xl text-primary">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<span class="text-emerald-500 text-xs font-bold bg-emerald-50 px-2 py-1 rounded-full">+12.5%</span>
+</div>
+<p class="text-slate-500 text-sm font-medium">Total Revenue</p>
+<h3 class="text-3xl font-headline font-extrabold text-on-surface mt-1">$42,850.00</h3>
+</div>
+<div class="mt-4 flex gap-4 text-[10px] font-bold uppercase tracking-wider">
+<div class="flex items-center gap-1 text-violet-600">
+<span class="w-2 h-2 rounded-full bg-violet-600"></span> Services
+                        </div>
+<div class="flex items-center gap-1 text-fuchsia-500">
+<span class="w-2 h-2 rounded-full bg-fuchsia-500"></span> Shop
+                        </div>
+</div>
+</div>
+<!-- Bookings -->
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-sm hover:shadow-md transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-secondary-fixed rounded-2xl text-secondary">
+<span class="material-symbols-outlined">event_available</span>
+</div>
+</div>
+<p class="text-slate-500 text-sm font-medium">Bookings</p>
+<h3 class="text-2xl font-headline font-bold text-on-surface mt-1">1,284</h3>
+<p class="text-xs text-slate-400 mt-2">Target: 1,500</p>
+</div>
+<!-- New Clients -->
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-sm hover:shadow-md transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-tertiary-fixed rounded-2xl text-tertiary">
+<span class="material-symbols-outlined">person_add</span>
+</div>
+</div>
+<p class="text-slate-500 text-sm font-medium">New Clients</p>
+<h3 class="text-2xl font-headline font-bold text-on-surface mt-1">156</h3>
+<div class="flex -space-x-2 mt-4">
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-200"></div>
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-300"></div>
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-400"></div>
+<div class="w-6 h-6 rounded-full border-2 border-white bg-violet-100 flex items-center justify-center text-[8px] font-bold">+150</div>
+</div>
+</div>
+<!-- Conversion -->
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-sm hover:shadow-md transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-slate-100 rounded-2xl text-slate-600">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+</div>
+<p class="text-slate-500 text-sm font-medium">Conversion</p>
+<h3 class="text-2xl font-headline font-bold text-on-surface mt-1">24.8%</h3>
+<div class="w-full bg-slate-100 h-1.5 rounded-full mt-4">
+<div class="bg-violet-500 h-full rounded-full w-[24.8%]"></div>
+</div>
+</div>
+<!-- Payouts/Refunds -->
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-sm hover:shadow-md transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-error-container rounded-2xl text-error">
+<span class="material-symbols-outlined">payments</span>
+</div>
+</div>
+<p class="text-slate-500 text-sm font-medium">Payouts Due</p>
+<h3 class="text-2xl font-headline font-bold text-on-surface mt-1">$2,410</h3>
+<p class="text-[10px] text-error font-bold uppercase mt-2">6 Affiliates</p>
+</div>
+</div>
+<!-- Charts and Insights Section -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Main Trend Chart Area -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Booking Trend -->
+<div class="bg-surface-container-lowest rounded-lg p-8 shadow-sm">
+<div class="flex justify-between items-center mb-8">
+<h4 class="font-headline text-lg font-bold">Monthly Bookings Trend</h4>
+<div class="flex gap-4">
+<div class="flex items-center gap-2 text-xs font-semibold text-slate-400">
+<span class="w-3 h-3 rounded-full bg-violet-600"></span> Completed
+                                </div>
+<div class="flex items-center gap-2 text-xs font-semibold text-slate-400">
+<span class="w-3 h-3 rounded-full bg-fuchsia-200"></span> Cancelled
+                                </div>
+</div>
+</div>
+<!-- Visual Mockup of Chart -->
+<div class="h-64 flex items-end justify-between gap-4">
+<div class="flex-1 bg-violet-50 rounded-t-xl relative group" style="height: 40%">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">840</div>
+<div class="w-full bg-violet-200 absolute bottom-0 rounded-t-xl" style="height: 15%"></div>
+</div>
+<div class="flex-1 bg-violet-50 rounded-t-xl relative group" style="height: 60%">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">1200</div>
+<div class="w-full bg-violet-300 absolute bottom-0 rounded-t-xl" style="height: 10%"></div>
+</div>
+<div class="flex-1 bg-violet-50 rounded-t-xl relative group" style="height: 85%">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">1840</div>
+<div class="w-full bg-violet-400 absolute bottom-0 rounded-t-xl" style="height: 12%"></div>
+</div>
+<div class="flex-1 bg-violet-600 rounded-t-xl relative group" style="height: 100%">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">2100</div>
+<div class="w-full bg-fuchsia-200 absolute bottom-0 rounded-t-xl" style="height: 8%"></div>
+</div>
+<div class="flex-1 bg-violet-100 rounded-t-xl relative group" style="height: 70%">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">1450</div>
+<div class="w-full bg-violet-300 absolute bottom-0 rounded-t-xl" style="height: 10%"></div>
+</div>
+<div class="flex-1 bg-violet-50 rounded-t-xl relative group" style="height: 55%">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">1100</div>
+<div class="w-full bg-violet-200 absolute bottom-0 rounded-t-xl" style="height: 15%"></div>
+</div>
+</div>
+<div class="flex justify-between mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+<span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+</div>
+</div>
+<!-- Ranking Lists -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Top Services -->
+<div class="bg-surface-container-lowest rounded-lg p-6 shadow-sm">
+<h4 class="font-headline font-bold mb-6">Top 3 Services</h4>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
+<img alt="Knotless Braids" class="w-full h-full object-cover" data-alt="close up of neat and intricate knotless braids with honey blonde highlights on dark hair" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPV1SoE1BFBSGEPi3xo8WqPwiTi2nYq6_3wRXJAa2B6eLEhQhlsrc0M9rlZBduJRGGcDMcrpdNchf_OxyCqTexf_X2ZhQiodMg1ql2q7XcZuXBPOiJkSt95JD8xFoCU-9d5ljPA4ht7HaVDl1DvHxflOsbvXVVUMx_2xB5zYUztdsjfhjcDGxvXmQIT4-Ru2hRCWCRm01tNW0uJgrPz5D1UM1FU8UA3Ec25OY60qqLtBc2Y4f0WdXGTRmMKmcSeC3_xOERP8JToD_0"/>
+</div>
+<div class="flex-1">
+<p class="font-bold text-sm">Knotless Braids (Large)</p>
+<p class="text-xs text-slate-400">420 Bookings this month</p>
+</div>
+<div class="text-right">
+<p class="font-bold text-violet-600">$180.00</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
+<img alt="Bohemian Locs" class="w-full h-full object-cover" data-alt="stylish bohemian faux locs with curly ends, medium length, warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAQz-7cmVLChWEGxrwTtUC-eHVNOOpJzOhfyqsJaumPguLMU7Eftchr4iYb1qnkrv8rIh3lbcorlMSzavGihX0Ie0xO4UM5yR0J8uqZ1OFdykpvc340PMsgDIRrBc32-w_eDXDNoXE7l-BWU5ne4_hozOwAEPQegmkYtHvLg9HXF4yp4KJzkJBTvSXmEoEsSC0iREtbcp3nZCT60K300qV3TnCq0jihjTabdVWWmIy-HNNLJeUNJyWs0NMJnbJmkzk3uCX4Yl6elcO"/>
+</div>
+<div class="flex-1">
+<p class="font-bold text-sm">Bohemian Faux Locs</p>
+<p class="text-xs text-slate-400">312 Bookings this month</p>
+</div>
+<div class="text-right">
+<p class="font-bold text-violet-600">$220.00</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
+<img alt="Fulani Braids" class="w-full h-full object-cover" data-alt="Traditional Fulani braids with beads and gold hair jewelry, high fashion style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApvl4MB3RNit-E6Fjr9Ij28R3mOZEC7J8jGWJE1HyrOAdWEubvMxH23-8ZrNF5Gb_tPSWV6JaUrF2Zo7jxO8CvDzK-bcIw4Al1gw7ZTzkvMNsug08zYON-o9_OGsrl4Hl7BkomfPEaBJwtk794qkjFUJuXzL9x_CpsGX-We83iFUOEl5Gsu5XILdPNid7yYTAJaCVbwbsheOTiZ1lv9D5UHuOho5giYi9K0b6fklb1akbwMC8iyQajQgUq5gjI5ZmG3Cpbzq2m560Y"/>
+</div>
+<div class="flex-1">
+<p class="font-bold text-sm">Fulani Braids w/ Beads</p>
+<p class="text-xs text-slate-400">285 Bookings this month</p>
+</div>
+<div class="text-right">
+<p class="font-bold text-violet-600">$150.00</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Top Products -->
+<div class="bg-surface-container-lowest rounded-lg p-6 shadow-sm">
+<h4 class="font-headline font-bold mb-6">Top 3 Products</h4>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-2xl bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-violet-400">sanitizer</span>
+</div>
+<div class="flex-1">
+<p class="font-bold text-sm">Silk Edge Control (Strong Hold)</p>
+<p class="text-xs text-slate-400">215 Sales this month</p>
+</div>
+<div class="text-right">
+<p class="font-bold text-fuchsia-600">$24.99</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-2xl bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-violet-400">opacity</span>
+</div>
+<div class="flex-1">
+<p class="font-bold text-sm">Grow &amp; Glow Scalp Oil</p>
+<p class="text-xs text-slate-400">188 Sales this month</p>
+</div>
+<div class="text-right">
+<p class="font-bold text-fuchsia-600">$32.00</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-2xl bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-violet-400">dry_cleaning</span>
+</div>
+<div class="flex-1">
+<p class="font-bold text-sm">Luxury Satin Bonnet (Rose)</p>
+<p class="text-xs text-slate-400">142 Sales this month</p>
+</div>
+<div class="text-right">
+<p class="font-bold text-fuchsia-600">$18.50</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Panel Insights -->
+<div class="lg:col-span-4 space-y-8">
+<!-- Business Health -->
+<div class="bg-gradient-to-br from-violet-600 to-fuchsia-500 rounded-lg p-8 text-white shadow-xl shadow-violet-200">
+<div class="flex items-center gap-3 mb-6">
+<div class="bg-white/20 p-2 rounded-xl backdrop-blur-md">
+<span class="material-symbols-outlined">auto_awesome</span>
+</div>
+<h4 class="font-headline font-bold">Business Health</h4>
+</div>
+<p class="text-violet-100 text-sm leading-relaxed mb-8">
+                            Your weekend slots are filling up fast! Consider opening more slots for Sunday to maximize revenue potential.
+                        </p>
+<div class="space-y-4">
+<div class="flex justify-between text-xs font-bold uppercase tracking-wider">
+<span>Monthly Goal</span>
+<span>85% Reach</span>
+</div>
+<div class="w-full bg-white/20 h-2.5 rounded-full overflow-hidden">
+<div class="bg-white h-full rounded-full w-[85%]"></div>
+</div>
+<p class="text-[10px] text-violet-100 italic">Expected to hit 100% by the 25th of the month.</p>
+</div>
+</div>
+<!-- Revenue Split Doughnut Mockup -->
+<div class="bg-surface-container-lowest rounded-lg p-6 shadow-sm border border-transparent">
+<h4 class="font-headline font-bold mb-6">Revenue Split</h4>
+<div class="relative w-48 h-48 mx-auto mb-8 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#f1f5f9" stroke-width="3"></path>
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#6b38d4" stroke-dasharray="75, 100" stroke-width="3"></path>
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#fd56a7" stroke-dasharray="25, 100" stroke-dashoffset="-75" stroke-width="3"></path>
+</svg>
+<div class="absolute text-center">
+<p class="text-xs text-slate-400 font-bold uppercase">Services</p>
+<p class="text-2xl font-bold">75%</p>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-sm">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-violet-600"></span>
+<span class="text-slate-600 font-medium">Salon Services</span>
+</div>
+<span class="font-bold">$32,137</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-secondary-container"></span>
+<span class="text-slate-600 font-medium">Product Sales</span>
+</div>
+<span class="font-bold">$10,713</span>
+</div>
+</div>
+</div>
+<!-- Quick Actions -->
+<div class="bg-surface-container-lowest rounded-lg p-6 shadow-sm">
+<h4 class="font-headline font-bold mb-6">Quick Actions</h4>
+<div class="grid grid-cols-1 gap-3">
+<button class="flex items-center justify-between w-full p-4 rounded-2xl bg-surface-container-low hover:bg-primary hover:text-white group transition-all duration-300">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary group-hover:text-white">add_circle</span>
+<span class="text-sm font-bold">Add Appointment</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-white/50">chevron_right</span>
+</button>
+<button class="flex items-center justify-between w-full p-4 rounded-2xl bg-surface-container-low hover:bg-primary hover:text-white group transition-all duration-300">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary group-hover:text-white">content_cut</span>
+<span class="text-sm font-bold">Add Style</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-white/50">chevron_right</span>
+</button>
+<button class="flex items-center justify-between w-full p-4 rounded-2xl bg-surface-container-low hover:bg-primary hover:text-white group transition-all duration-300">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary group-hover:text-white">inventory_2</span>
+<span class="text-sm font-bold">Add Product</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-white/50">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/80 glass-nav border-t border-slate-100 flex justify-around items-center py-3 px-6 z-50">
+<button class="flex flex-col items-center gap-1 text-violet-700">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="text-[10px] font-bold">Overview</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px] font-bold">Bookings</span>
+</button>
+<button class="bg-gradient-to-tr from-violet-600 to-fuchsia-500 w-12 h-12 rounded-full -mt-10 flex items-center justify-center text-white shadow-lg shadow-violet-200">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-[10px] font-bold">Shop</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold">Account</span>
+</button>
+</nav>
+</body></html>

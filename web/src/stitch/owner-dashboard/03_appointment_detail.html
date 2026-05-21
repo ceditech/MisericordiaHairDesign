@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Appointment Details - Dede’s Braids</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed": "#ffdcbb",
+              "secondary-container": "#fd56a7",
+              "on-background": "#121c2a",
+              "on-tertiary-container": "#fffbff",
+              "primary-fixed": "#e9ddff",
+              "on-tertiary": "#ffffff",
+              "surface-container-highest": "#d9e3f6",
+              "outline": "#7b7486",
+              "inverse-on-surface": "#eaf1ff",
+              "inverse-primary": "#d0bcff",
+              "surface-dim": "#d0dbed",
+              "surface-bright": "#f8f9ff",
+              "error": "#ba1a1a",
+              "on-error": "#ffffff",
+              "on-surface": "#121c2a",
+              "surface": "#f8f9ff",
+              "secondary": "#b4136d",
+              "surface-container-low": "#eff4ff",
+              "outline-variant": "#cbc3d7",
+              "on-primary": "#ffffff",
+              "on-error-container": "#93000a",
+              "secondary-fixed-dim": "#ffb0cd",
+              "primary-fixed-dim": "#d0bcff",
+              "surface-tint": "#6d3bd7",
+              "error-container": "#ffdad6",
+              "secondary-fixed": "#ffd9e4",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed-variant": "#673d00",
+              "inverse-surface": "#27313f",
+              "primary": "#6b38d4",
+              "tertiary": "#855000",
+              "surface-variant": "#d9e3f6",
+              "on-secondary-fixed": "#3e0022",
+              "on-secondary-container": "#600037",
+              "on-secondary": "#ffffff",
+              "on-primary-fixed-variant": "#5516be",
+              "surface-container": "#e6eeff",
+              "on-primary-container": "#fffbff",
+              "surface-container-high": "#dee9fc",
+              "tertiary-container": "#a76500",
+              "background": "#f8f9ff",
+              "tertiary-fixed-dim": "#ffb069",
+              "on-secondary-fixed-variant": "#8c0053",
+              "primary-container": "#8455ef",
+              "on-surface-variant": "#494454",
+              "on-tertiary-fixed": "#2c1700",
+              "on-primary-fixed": "#23005c"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body overflow-hidden">
+<!-- TopNavBar (Immutable Content & Mandatory Styling) -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm shadow-violet-100/20 font-['Plus_Jakarta_Sans'] tracking-tight">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent">Dede’s Braids</span>
+<div class="hidden md:flex gap-6 items-center">
+<span class="text-violet-700 dark:text-violet-300 font-semibold cursor-pointer">Appointments</span>
+<span class="text-slate-500 dark:text-slate-400 hover:text-violet-600 transition-colors cursor-pointer">Customers</span>
+<span class="text-slate-500 dark:text-slate-400 hover:text-violet-600 transition-colors cursor-pointer">Service Styles</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary text-on-primary font-semibold text-sm active:scale-95 duration-200">
+                Live Data
+            </button>
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-slate-500 cursor-pointer hover:bg-slate-50 p-2 rounded-full transition-colors" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-slate-500 cursor-pointer hover:bg-slate-50 p-2 rounded-full transition-colors" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</nav>
+<!-- SideNavBar (Immutable Content & Mandatory Styling) -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-0 h-full py-8 gap-4 bg-slate-50 dark:bg-slate-950 h-screen w-64 rounded-r-3xl z-40">
+<div class="px-8 mb-8">
+<h1 class="font-['Plus_Jakarta_Sans'] font-extrabold text-violet-600 text-lg">Dede’s Braids</h1>
+<p class="text-xs text-slate-500">Management Portal</p>
+</div>
+<nav class="flex-1 space-y-1 font-['Manrope'] font-medium text-sm">
+<div class="text-slate-500 dark:text-slate-400 px-4 py-2 flex items-center gap-3 hover:text-violet-600 hover:translate-x-1 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span> Overview
+            </div>
+<div class="text-violet-700 dark:text-violet-300 bg-white dark:bg-slate-900 shadow-sm rounded-full mx-2 px-4 py-2 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span> Appointments
+            </div>
+<div class="text-slate-500 dark:text-slate-400 px-4 py-2 flex items-center gap-3 hover:text-violet-600 hover:translate-x-1 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="content_cut">content_cut</span> Service Styles
+            </div>
+<div class="text-slate-500 dark:text-slate-400 px-4 py-2 flex items-center gap-3 hover:text-violet-600 hover:translate-x-1 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span> Inventory
+            </div>
+<div class="text-slate-500 dark:text-slate-400 px-4 py-2 flex items-center gap-3 hover:text-violet-600 hover:translate-x-1 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="payments">payments</span> Shop Sales
+            </div>
+<div class="text-slate-500 dark:text-slate-400 px-4 py-2 flex items-center gap-3 hover:text-violet-600 hover:translate-x-1 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="group_add">group_add</span> Affiliates
+            </div>
+<div class="text-slate-500 dark:text-slate-400 px-4 py-2 flex items-center gap-3 hover:text-violet-600 hover:translate-x-1 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="person">person</span> Customers
+            </div>
+<div class="text-slate-500 dark:text-slate-400 px-4 py-2 flex items-center gap-3 hover:text-violet-600 hover:translate-x-1 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span> Reports
+            </div>
+<div class="text-slate-500 dark:text-slate-400 px-4 py-2 flex items-center gap-3 hover:text-violet-600 hover:translate-x-1 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="settings">settings</span> Settings
+            </div>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-gradient-to-r from-violet-600 to-primary-container text-white rounded-full py-3 font-semibold shadow-lg shadow-violet-200/50 active:scale-95 transition-all">
+                Book Appointment
+            </button>
+</div>
+</aside>
+<!-- Main Content Area (Faded Background List) -->
+<main class="lg:pl-64 pt-20 h-screen overflow-hidden opacity-30 grayscale-[0.5] blur-[2px] pointer-events-none">
+<div class="p-8">
+<div class="flex justify-between items-center mb-8">
+<h2 class="text-3xl font-headline font-bold tracking-tight">Appointments</h2>
+<div class="flex gap-4">
+<div class="bg-surface-container-lowest px-6 py-2 rounded-full shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm" placeholder="Search bookings..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Fake Content List -->
+<div class="grid gap-4">
+<div class="bg-surface-container-lowest p-6 rounded-lg flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed"></div>
+<div>
+<p class="font-bold">Sarah Jenkins</p>
+<p class="text-sm text-slate-500">Box Braids - Large</p>
+</div>
+</div>
+<span class="px-4 py-1 rounded-full bg-secondary-container/10 text-secondary font-semibold text-xs">Confirmed</span>
+</div>
+<!-- Highlighted Active Row -->
+<div class="bg-primary/5 p-6 rounded-lg flex items-center justify-between border-2 border-primary/20">
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Portrait of a young Black woman with professional studio lighting and a warm, glowing skin tone" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHOsa0jN9P4MlAFTMLvHxjYz8WpAgwxyiJpc6WfPWSV34zueUDg4drs9D1_iDmbxE8pM9o0hH3dVEONimqy6NSWEEv-ogwbcnGzVxlx5U4W0fLZNg7pOLPlVlI__DM0r4oHOQEH-6tJ3fCAA0EEL8bRxyb55hy1pVyEmJ_WrtCWk7FEIoRHRxYnwARsPOyLMHBEwt91SmYEsCbp6QH5b8dmGi8z46GnzUIpqIc6oRcfYT9cjVVmSSP60t9cKc9a3LppGALTk1_51R0"/>
+<div>
+<p class="font-bold">Tasha Smith</p>
+<p class="text-sm text-slate-500">Knotless Braids - Mid Back</p>
+</div>
+</div>
+<span class="px-4 py-1 rounded-full bg-secondary-container/10 text-secondary font-semibold text-xs uppercase tracking-wider">Deposited</span>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-lg flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-fixed"></div>
+<div>
+<p class="font-bold">Maria Garcia</p>
+<p class="text-sm text-slate-500">Faux Locs</p>
+</div>
+</div>
+<span class="px-4 py-1 rounded-full bg-slate-100 text-slate-500 font-semibold text-xs">Pending</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Side Drawer Overlay -->
+<div class="fixed inset-0 bg-slate-900/20 backdrop-blur-[2px] z-[60] flex justify-end">
+<!-- Drawer Container -->
+<div class="w-full max-w-lg bg-surface h-full shadow-2xl relative flex flex-col animate-slide-in">
+<!-- Header -->
+<div class="px-8 py-6 flex items-center justify-between border-b border-outline-variant/10">
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-on-surface" data-icon="chevron_right">chevron_right</span>
+</button>
+<h3 class="font-headline font-bold text-xl">Booking Details</h3>
+</div>
+<span class="px-4 py-1.5 rounded-full bg-secondary-container text-white text-xs font-bold tracking-widest uppercase">Confirmed</span>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto no-scrollbar px-8 py-6 space-y-8">
+<!-- Client Info Card -->
+<section class="space-y-4">
+<div class="flex items-center gap-5">
+<img class="w-20 h-20 rounded-xl object-cover shadow-md" data-alt="Close-up portrait of Tasha Smith, smiling softly with beautiful braided hairstyle and glowing natural makeup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsxqTUXqMBFNdqT2-hAi30kfepcRLuf8Qg4mAfQNHYozj6ahhs9weOTyfzuhiajEYOiBr5sEgE7KuPgnMwVR3q5Jsq6tkE5DOvqNGpALxaDcCtKQEC7yUyXodwf9Nn-6UbJu-Uq5CoXDNcp-vv4r3QB4VjlTj7VvMkfo0diljgrUxN-Q6PsL9ZdkbGiACsws3E3AhaBccC49_9_RygisZhKVf_ZjT_CjPVXWsiPYCgMvLUsM49NttDHG63d6-7jQFB_G2ZCG3_GvWX"/>
+<div>
+<h4 class="font-headline font-bold text-2xl text-on-surface">Tasha Smith</h4>
+<p class="text-slate-500 text-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="verified">verified</span>
+                                Repeat Client • Last visit: Sept 12
+                            </p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center gap-3">
+<span class="material-symbols-outlined text-violet-400" data-icon="mail">mail</span>
+<div class="truncate">
+<p class="text-[10px] uppercase text-slate-400 font-bold">Email</p>
+<p class="text-sm font-medium truncate">t.smith@example.com</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center gap-3">
+<span class="material-symbols-outlined text-violet-400" data-icon="call">call</span>
+<div>
+<p class="text-[10px] uppercase text-slate-400 font-bold">Phone</p>
+<p class="text-sm font-medium">(555) 012-3456</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Service Details -->
+<section class="bg-surface-container-low p-6 rounded-lg space-y-4 border border-white/40">
+<div class="flex justify-between items-start">
+<div>
+<h5 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Service Selection</h5>
+<p class="font-headline font-bold text-lg">Knotless Braids - Mid Back</p>
+</div>
+<div class="text-right">
+<p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Duration</p>
+<p class="font-bold flex items-center gap-1 justify-end">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span> 4 hrs
+                            </p>
+</div>
+</div>
+<div class="flex justify-between items-center pt-4 border-t border-outline-variant/20">
+<span class="text-on-surface-variant font-medium">Base Price</span>
+<span class="text-xl font-bold font-headline">$180.00</span>
+</div>
+</section>
+<!-- Payment Status -->
+<section class="space-y-4">
+<h5 class="text-on-surface font-bold text-sm">Payment Breakdown</h5>
+<div class="space-y-2">
+<div class="flex justify-between items-center p-4 bg-emerald-50 rounded-lg">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<span class="font-medium text-emerald-900">Deposit Paid via Stripe</span>
+</div>
+<span class="font-bold text-emerald-900">$50.00</span>
+</div>
+<div class="flex justify-between items-center p-4 bg-primary-fixed rounded-lg">
+<div class="flex items-center gap-3 text-on-primary-fixed-variant">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-medium">Balance Due at Salon</span>
+</div>
+<span class="font-bold text-on-primary-fixed-variant text-lg">$130.00</span>
+</div>
+</div>
+</section>
+<!-- Notes & Timeline -->
+<div class="grid grid-cols-1 gap-8 pb-10">
+<section class="space-y-2">
+<h5 class="text-on-surface font-bold text-sm">Stylist Notes</h5>
+<div class="p-4 bg-tertiary-fixed/30 rounded-lg border-l-4 border-tertiary">
+<p class="text-sm italic text-on-tertiary-fixed-variant">"Wants extra length, willing to pay more if needed."</p>
+</div>
+</section>
+<section class="space-y-4">
+<h5 class="text-on-surface font-bold text-sm">Timeline</h5>
+<div class="relative space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-[2px] before:bg-outline-variant/30">
+<div class="relative flex items-center gap-4 pl-8">
+<div class="absolute left-0 w-4 h-4 rounded-full bg-violet-600 ring-4 ring-white shadow-sm"></div>
+<div class="flex-1">
+<p class="text-sm font-bold">Created</p>
+<p class="text-[10px] text-slate-500">Oct 20, 2023 • 02:15 PM</p>
+</div>
+</div>
+<div class="relative flex items-center gap-4 pl-8">
+<div class="absolute left-0 w-4 h-4 rounded-full bg-violet-600 ring-4 ring-white shadow-sm"></div>
+<div class="flex-1">
+<p class="text-sm font-bold">Confirmed</p>
+<p class="text-[10px] text-slate-500">Oct 21, 2023 • 10:30 AM</p>
+</div>
+</div>
+<div class="relative flex items-center gap-4 pl-8">
+<div class="absolute left-0 w-4 h-4 rounded-full bg-emerald-500 ring-4 ring-white shadow-sm"></div>
+<div class="flex-1">
+<p class="text-sm font-bold">Paid Deposit</p>
+<p class="text-[10px] text-slate-500">Oct 21, 2023 • 10:35 AM</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="px-8 py-6 bg-white border-t border-outline-variant/10 flex flex-col gap-3">
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center gap-2 py-3 rounded-full border border-outline-variant text-on-surface font-semibold hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="mail">mail</span> Message Client
+                    </button>
+<button class="flex items-center justify-center gap-2 py-3 rounded-full border border-outline-variant text-on-surface font-semibold hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="refresh">refresh</span> Rebook
+                    </button>
+</div>
+<button class="w-full py-4 rounded-full bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:scale-[1.01] transition-transform active:scale-95">
+                    Mark Completed
+                </button>
+<button class="w-full py-2 text-error text-xs font-bold uppercase tracking-widest hover:underline">
+                    Issue Refund
+                </button>
+</div>
+</div>
+</div>
+</body></html>

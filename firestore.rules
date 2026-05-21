@@ -1,0 +1,42 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner() {
+      return isAuthenticated() && 
+        (request.auth.token.email in ['info@dedesbraids.com', 'e.noom@test.com', 'sales@edxstore.com', 'dedeadmin@example.com'] ||
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['owner', 'admin', 'assistant']);
+    }
+
+    // User profiles
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Catch-All for Owner Management
+    match /{collectionName}/{docId} {
+      allow read, write: if isOwner();
+    }
+    
+    // Explicit Public/Semi-Public Rules (to override or supplement catch-all)
+    match /products/{productId} { allow read: if true; }
+    match /styles/{styleId} { allow read: if true; }
+    match /presets/{presetId} { allow read: if true; }
+    match /braidPresets/{presetId} { allow read: if true; }
+    match /braidAddons/{addonId} { allow read: if true; }
+    match /codes/{codeId} { allow read: if true; }
+    match /reviews/{reviewId} { allow read: if true; allow create: if isAuthenticated(); }
+    match /bookingDrafts/{draftId} { allow read, write: if true; }
+    
+    // Nested Default (for safety on subcollections)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Gallery - Dede's Braids</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a319c5",
+                        "background-light": "#f8f6f7",
+                        "background-dark": "#221019",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: "Plus Jakarta Sans", sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-[#181114] transition-colors duration-300">
+    <div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            <!-- Top Navigation Bar -->
+            <!-- Navigation -->
+            <div id="app-header"></div>
+            <main class="flex-1 px-6 md:px-20 lg:px-40 py-10">
+                <!-- Hero Section -->
+                <div class="flex flex-wrap justify-between items-end gap-6 mb-12">
+                    <div class="flex min-w-72 flex-col gap-3">
+                        <h1 class="text-[#181114] text-4xl md:text-5xl font-black leading-tight tracking-[-0.033em]">Our
+                            Braiding Gallery</h1>
+                        <p class="text-primary/70 text-lg font-medium max-w-xl">Expertly crafted braids for every
+                            occasion. Discover your next look and book with our master stylists.</p>
+                    </div>
+                </div>
+                <!-- Filters -->
+                <div class="flex gap-3 pb-8 overflow-x-auto no-scrollbar scroll-smooth">
+                    <button
+                        class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary px-6 text-white text-sm font-bold shadow-md">
+                        All Styles
+                    </button>
+                    <button
+                        class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white border border-primary/10 hover:border-primary px-6 text-[#181114] hover:text-primary text-sm font-medium transition-all">
+                        Knotless
+                    </button>
+                    <button
+                        class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white border border-primary/10 hover:border-primary px-6 text-[#181114] hover:text-primary text-sm font-medium transition-all">
+                        Box Braids
+                    </button>
+                    <button
+                        class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white border border-primary/10 hover:border-primary px-6 text-[#181114] hover:text-primary text-sm font-medium transition-all">
+                        Cornrows
+                    </button>
+                    <button
+                        class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white border border-primary/10 hover:border-primary px-6 text-[#181114] hover:text-primary text-sm font-medium transition-all">
+                        Fulani
+                    </button>
+                    <button
+                        class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white border border-primary/10 hover:border-primary px-6 text-[#181114] hover:text-primary text-sm font-medium transition-all">
+                        Locs
+                    </button>
+                    <button
+                        class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white border border-primary/10 hover:border-primary px-6 text-[#181114] hover:text-primary text-sm font-medium transition-all">
+                        Kids
+                    </button>
+                </div>
+                <!-- Gallery Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    <!-- Card 1 -->
+                    <div
+                        class="group flex flex-col bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-primary/5">
+                        <div class="relative overflow-hidden aspect-[4/5]">
+                            <div class="w-full h-full bg-center bg-no-repeat bg-cover transform group-hover:scale-110 transition-transform duration-700"
+                                data-alt="Close up of neat boho knotless braids on a woman"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAHw6KnBRsRLw30BfaLg1FsN285GXbdTL0TPG8fhaTFUwU1ahdzr1oHBIES9DiJY-sAoTiIzFzlTsH_UOX1hrEuw-zWqEHnozJp_EdzlM36PzizIqvLm68ZkzeJFGtffrzahcFKg-sva7Ye93dRcWhhwoHgzd8iPe30zLf4htP7ByEy6CqSVsXYxc-sB5CMBQHadv2AXzHYhAmXeEopfkqR1N2kmegZ2PxZmcTpjBcjX7fe11Me8Xcy0SlArv5MbIsyLJV5CeD1Fw");'>
+                            </div>
+                            <div
+                                class="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full shadow-sm">
+                                <span class="text-primary text-xs font-bold uppercase tracking-wider">Trending</span>
+                            </div>
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <h3 class="text-[#181114] text-lg font-bold mb-1">Boho Knotless - Medium</h3>
+                            <p class="text-primary/60 text-sm font-semibold mb-4">Starting at $180</p>
+                            <a href="booking.html"
+                                class="mt-auto w-full flex items-center justify-center gap-2 rounded-lg h-11 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold transition-all group-hover:shadow-md group-hover:shadow-primary/20">
+                                <span class="material-symbols-outlined text-sm">calendar_month</span>
+                                Book Now
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div
+                        class="group flex flex-col bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-primary/5">
+                        <div class="relative overflow-hidden aspect-[4/5]">
+                            <div class="w-full h-full bg-center bg-no-repeat bg-cover transform group-hover:scale-110 transition-transform duration-700"
+                                data-alt="Intricate tribal fulani braids with gold hair accessories"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB9JTkcXS1i0NXCbu8fqYZc4k-iIb48UBDqM9Q0_zMo978TJtSOpB8OJ9phZm0nKMlaiafIqieLt5QAbxFHFi5a7gCp4kgF_-SOPEDeCHP9zFnCouBUkLUrd1Pg0EC27u3koCpAPXicVgZntZqVihUqk07AkEmDJ0XF7Ct72lGOHFOSxVBhw4msfmYKg4-6eZ7Up8J_pa2w-LUZfEeyWBRByRWjeAsW9aMFXVNoSB1yO4M8DPzItflvNl1LahXyeneEakvH41HYbg");'>
+                            </div>
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <h3 class="text-[#181114] text-lg font-bold mb-1">Fulani Tribal Braids</h3>
+                            <p class="text-primary/60 text-sm font-semibold mb-4">Starting at $200</p>
+                            <a href="booking.html"
+                                class="mt-auto w-full flex items-center justify-center gap-2 rounded-lg h-11 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold transition-all">
+                                <span class="material-symbols-outlined text-sm">calendar_month</span>
+                                Book Now
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div
+                        class="group flex flex-col bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-primary/5">
+                        <div class="relative overflow-hidden aspect-[4/5]">
+                            <div class="w-full h-full bg-center bg-no-repeat bg-cover transform group-hover:scale-110 transition-transform duration-700"
+                                data-alt="Long blonde box braids styled in a ponytail"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAn8fZ8G8heV1LjYaqHZzoZ5s0PVs2o4_hZG_CwEN2W1q_v7m0NXDnVZJjcAZ-BNrkebMmx4m8yIlgvwvWh2F_O8ocNR54Z01IMLUz8limuUr5dImE3ART7R_JibCnmanltoxDXhXJNfCHOVc2Dvh1aBfv2ieW9dL3_qW6thkraxX4BO7PWJhxRacWQcgYqIVLkWX4kLavBtuLtXYzFnJioXEXT_qfLjLFunose7pdfl4GN2yU_RtdXOqUsE42lk6nacjqT81jGOA");'>
+                            </div>
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <h3 class="text-[#181114] text-lg font-bold mb-1">Classic Box Braids</h3>
+                            <p class="text-primary/60 text-sm font-semibold mb-4">Starting at $150</p>
+                            <a href="booking.html"
+                                class="mt-auto w-full flex items-center justify-center gap-2 rounded-lg h-11 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold transition-all">
+                                <span class="material-symbols-outlined text-sm">calendar_month</span>
+                                Book Now
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div
+                        class="group flex flex-col bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-primary/5">
+                        <div class="relative overflow-hidden aspect-[4/5]">
+                            <div class="w-full h-full bg-center bg-no-repeat bg-cover transform group-hover:scale-110 transition-transform duration-700"
+                                data-alt="Men cornrows with clean parting and faded sides"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA5QFeG4Jv6GQvIs9_39eigVCBbw6vunWJRUiWWmGpMU15ffNOLeqv-PguO_z3OaAy1Qr740oX9ZEEdZW0GvjdiRX1IASMoUi-kXatssUwYiX1ia5VhoWk-gzsZ9agn-OebJG5QfghP7wAiSABgFY5Sr_gIz0aW528bUSnG3cuhWph1VdrvSXcBWCy1jpWQ-PNapHtcbLg2o8nXzEN-0HeRKDCCwnErBi_gRLaV5R2mz8Jw45x8cH4Ykg6dphY28kGxGq5NejE8MQ");'>
+                            </div>
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <h3 class="text-[#181114] text-lg font-bold mb-1">Feed-in Cornrows</h3>
+                            <p class="text-primary/60 text-sm font-semibold mb-4">Starting at $85</p>
+                            <a href="booking.html"
+                                class="mt-auto w-full flex items-center justify-center gap-2 rounded-lg h-11 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold transition-all">
+                                <span class="material-symbols-outlined text-sm">calendar_month</span>
+                                Book Now
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Card 5 -->
+                    <div
+                        class="group flex flex-col bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-primary/5">
+                        <div class="relative overflow-hidden aspect-[4/5]">
+                            <div class="w-full h-full bg-center bg-no-repeat bg-cover transform group-hover:scale-110 transition-transform duration-700"
+                                data-alt="Short butterfly locs in a dark brown shade"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBJuKQgqNX4g868GatBF4ex1HyO_rY0q5jwTppboPo3hwMvQZscn-E0qOZGRTb8IJWY5Jq0zn7rbFUJ_oPo92Np3EUVm5LmxHlb-5yjxiWTX_QxjCQJMblJLlgaM938EjTtVmoxbrGmbYzvxSZ2xVCdlCy3oUs6TA4EnKb28GPla388ZDcPcDLx-Gjk4as1fOjgUnDeqO2-JtntD0KCBTXW6RPgqKtVZml_VJFOE_xjae6bRmUn6CGVZO8nZ3NaFZytM-bdSzL40A");'>
+                            </div>
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <h3 class="text-[#181114] text-lg font-bold mb-1">Butterfly Locs</h3>
+                            <p class="text-primary/60 text-sm font-semibold mb-4">Starting at $220</p>
+                            <a href="booking.html"
+                                class="mt-auto w-full flex items-center justify-center gap-2 rounded-lg h-11 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold transition-all">
+                                <span class="material-symbols-outlined text-sm">calendar_month</span>
+                                Book Now
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Card 6 -->
+                    <div
+                        class="group flex flex-col bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-primary/5">
+                        <div class="relative overflow-hidden aspect-[4/5]">
+                            <div class="w-full h-full bg-center bg-no-repeat bg-cover transform group-hover:scale-110 transition-transform duration-700"
+                                data-alt="Child with heart shaped braid pattern and beads"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBNS8HGpzZi4qqaff_CSGYaOqMHd8kEh-npgt2Fy8p0r02kQp1s5z0UTOy8sE61VBGFfzMcEhD-mrJVD8lKAuBg6oWXmg7DfeLe2irK7TMkH9uw0D45ZiGj7AXPJp3P5LizfgPmI1PiyQhpjTmyypyHd8Thl7ww8miFt2fsgPck6NgtIKHz5RY1_gRJTvOM6tG6yP-2i1DLEd1okvuHR3U2HX7U0nEMd7DM69COww0DDIMpQmlF7oD75C5O23h2Weo-yQa-uNbh8Q");'>
+                            </div>
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <h3 class="text-[#181114] text-lg font-bold mb-1">Kids Heart Braids</h3>
+                            <p class="text-primary/60 text-sm font-semibold mb-4">Starting at $100</p>
+                            <a href="booking.html"
+                                class="mt-auto w-full flex items-center justify-center gap-2 rounded-lg h-11 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold transition-all">
+                                <span class="material-symbols-outlined text-sm">calendar_month</span>
+                                Book Now
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Card 7 -->
+                    <div
+                        class="group flex flex-col bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-primary/5">
+                        <div class="relative overflow-hidden aspect-[4/5]">
+                            <div class="w-full h-full bg-center bg-no-repeat bg-cover transform group-hover:scale-110 transition-transform duration-700"
+                                data-alt="Medium size goddess knotless braids with curly ends"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBk4bLk9mdxeUOgTi7o5ZmzhPJfL2O1IMcXyvCX-ROiiticyc-3OkgujGuFYAWm7sgQBnAMNv-MMYw30SUq-5Bzl93LkCn3jYu9LBfgBEmf5f23rbQ08g4Q-WOaubW7w9nPuzWNsbcGEIrJNNk2gdkc57E5WlFYi85oO9PS-xOBD3gjesLX8ytp2XbWQ8FF4umuixtTSCrmDsnkaEav0iNOAKvN1d5P5Kk9vWwAVaseHwXph9qBCojtFqScJTElnt7ioC1JBq0hFQ");'>
+                            </div>
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <h3 class="text-[#181114] text-lg font-bold mb-1">Goddess Knotless</h3>
+                            <p class="text-primary/60 text-sm font-semibold mb-4">Starting at $190</p>
+                            <a href="booking.html"
+                                class="mt-auto w-full flex items-center justify-center gap-2 rounded-lg h-11 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold transition-all">
+                                <span class="material-symbols-outlined text-sm">calendar_month</span>
+                                Book Now
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Card 8 -->
+                    <div
+                        class="group flex flex-col bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-primary/5">
+                        <div class="relative overflow-hidden aspect-[4/5]">
+                            <div class="w-full h-full bg-center bg-no-repeat bg-cover transform group-hover:scale-110 transition-transform duration-700"
+                                data-alt="Stitch braids into a high bun with neat partings"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAE-WAymgJySLL5_w9HOU_im5_68hU5ptfJJTFsW7sUuq_S1T1_lTk2OuXpVjc3GAxpvahJ333xJaaVTuScFf3p5uIcTGXR0KfiMCXWNVggM21R7FcTgDB6XLwHSmSIS-SWBIWngjD0_gjUMU-9MZ1RbdQvxHH0nkJEcc_hdl4HPinWAI_TCCfwL6MuLdJnZRQE1trEaeJnMHD5zJekVfdbh4Qq_hTkf_SX7iUTbslNO47CYxFCXGqHNXmSumE1uJM38NelWNI6KA");'>
+                            </div>
+                        </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <h3 class="text-[#181114] text-lg font-bold mb-1">High Bun Stitch Braids</h3>
+                            <p class="text-primary/60 text-sm font-semibold mb-4">Starting at $120</p>
+                            <a href="booking.html"
+                                class="mt-auto w-full flex items-center justify-center gap-2 rounded-lg h-11 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold transition-all">
+                                <span class="material-symbols-outlined text-sm">calendar_month</span>
+                                Book Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Pagination -->
+                <div class="flex items-center justify-center gap-2 mt-16 mb-8">
+                    <button
+                        class="flex size-10 items-center justify-center rounded-lg bg-white border border-primary/10 text-primary hover:bg-primary hover:text-white transition-all">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </button>
+                    <button
+                        class="text-sm font-bold flex size-10 items-center justify-center text-white rounded-lg bg-primary shadow-lg shadow-primary/20">1</button>
+                    <button
+                        class="text-sm font-medium flex size-10 items-center justify-center text-[#181114] rounded-lg bg-white border border-primary/10 hover:border-primary transition-all">2</button>
+                    <button
+                        class="text-sm font-medium flex size-10 items-center justify-center text-[#181114] rounded-lg bg-white border border-primary/10 hover:border-primary transition-all">3</button>
+                    <button
+                        class="hidden sm:flex text-sm font-medium size-10 items-center justify-center text-[#181114] rounded-lg bg-white border border-primary/10 hover:border-primary transition-all">4</button>
+                    <button
+                        class="flex size-10 items-center justify-center rounded-lg bg-white border border-primary/10 text-primary hover:bg-primary hover:text-white transition-all">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </button>
+                </div>
+            </main>
+            <!-- Footer -->
+            <!-- Footer -->
+            <div id="app-footer"></div>
+
+            <!-- Component Loader -->
+            <script src="components.js?v=2"></script>
+        </div>
+    </div>
+</body>
+
+</html>

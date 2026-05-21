@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Brand Colors - Constant across themes */
+  --color-brand-primary: #a319c5;
+  --color-brand-secondary: #8b15a8;
+  --color-brand-light: #b84dd4;
+  --color-brand-accent: #d084e8;
+  --color-brand-violet: #7c3aed;
+
+  /* Theme-aware Semantic Colors */
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-elevated: var(--elevated);
+  --color-border: var(--border);
+  --color-input-border: var(--input-border);
+  --color-input-focus: var(--input-focus);
+
+  /* Explicit Theme Variants (for specific overrides) */
+  --color-background-light: #f8f6f7;
+  --color-background-dark: #221019;
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #1a0b13;
+  --color-elevated-light: #ffffff;
+  --color-elevated-dark: #2a1621;
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-inverse: var(--text-inverse);
+
+  /* State Colors */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Typography Extensions */
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  /* Spacing/Transitions */
+  --transition-duration: 200ms;
+  --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root {
+  --background: #f8f6f7;
+  --surface: #ffffff;
+  --elevated: #ffffff;
+  --border: #e2e8f0;
+  --input-border: #cbd5e1;
+  --input-focus: #a319c5;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-inverse: #ffffff;
+}
+
+.dark {
+  --background: #221019;
+  --surface: #1a0b13;
+  --elevated: #2a1621;
+  --border: rgba(255, 255, 255, 0.05);
+  --input-border: rgba(255, 255, 255, 0.1);
+  --input-focus: #b84dd4;
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-inverse: #0f172a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition-duration) var(--transition-timing),
+    color var(--transition-duration) var(--transition-timing);
+}
+
+/* Focus visible styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 2px;
+}
+
+@utility hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

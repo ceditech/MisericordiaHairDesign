@@ -1,0 +1,45 @@
+# Firebase App Hosting Configuration
+# Documentation: https://firebase.google.com/docs/app-hosting/configure
+
+kind: "apphosting.yaml"
+schemaVersion: "v1"
+
+# Environment variables available to both build and runtime
+env:
+  - variable: NODE_OPTIONS
+    value: "--max-old-space-size=4096"
+  - variable: NEXT_TELEMETRY_DISABLED
+    value: "1"
+  - variable: NEXT_PUBLIC_OWNER_DASH_UI
+    value: "stitch"
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: "AIzaSyAhy50i981ZOrnJpQH7Ohh0HE6bFHzM-Go"
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: "dedesbraids-site.firebaseapp.com"
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: "dedesbraids-site"
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: "dedesbraids-site.firebasestorage.app"
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    value: "238127283579"
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: "1:238127283579:web:c6a3b52f6d8810697c51de"
+  - variable: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+    value: "pk_test_51TCwmTGhGPCysRtGD4N3m6RVPYPqwhC7I8Kw6shRnu11foLQVgQJgF02h9vPBw3UtGOq4lluNhtTlpOOUBFLBLtu00vGCgeFM3"
+  - variable: GOOGLE_REDIRECT_URI
+    value: "https://dedesbraids.com/api/admin/email/callback"
+
+  - variable: STRIPE_SECRET_KEY
+    secret: STRIPE_SECRET_KEY@1
+  - variable: STRIPE_WEBHOOK_SECRET
+    secret: STRIPE_WEBHOOK_SECRET@1
+  - variable: PAYPAL_CLIENT_ID
+    secret: PAYPAL_CLIENT_ID@1
+  - variable: PAYPAL_CLIENT_SECRET
+    secret: PAYPAL_CLIENT_SECRET@1
+  - variable: FIREBASE_SERVICE_ACCOUNT_KEY
+    secret: FIREBASE_SERVICE_ACCOUNT_KEY@1
+  - variable: GOOGLE_CLIENT_ID
+    secret: GOOGLE_CLIENT_ID@2
+  - variable: GOOGLE_CLIENT_SECRET
+    secret: GOOGLE_CLIENT_SECRET@2

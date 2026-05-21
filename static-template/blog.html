@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Braid Diary | Dede's Braids</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a319c5",
+                        "background-light": "#f8f6f7",
+                        "background-dark": "#221019",
+                        "violet-accent": "#7c3aed"
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 antialiased font-display">
+    <!-- Navigation -->
+    <!-- Navigation -->
+    <div id="app-header"></div>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Header -->
+        <header class="mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4">The Braid Diary</h1>
+            <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl">Discover the latest trends, maintenance
+                tips, and professional secrets for flawless African American braiding.</p>
+        </header>
+        <!-- Featured Post Section -->
+        <section class="mb-20">
+            <div
+                class="relative group overflow-hidden rounded-xl bg-white dark:bg-slate-900 shadow-xl border border-primary/5 flex flex-col lg:flex-row">
+                <div class="lg:w-3/5 h-[400px] lg:h-auto overflow-hidden">
+                    <img alt="Beautiful Knotless Braids"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        data-alt="Woman showcasing long intricate knotless braids"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdCzN0qxWCDwwMXF0X4FWL7TBxTAn2iArDXMRsF8CxFAmDNajrdtLMY62GDUPI_zCJqvCtX8zF8ArHYh4mxufwkNEanBuhdYDsC3PzSmfPLy10vWT5NtQ7KLC2fVDdNTlqCc9c0qT2OuL0gD4nn7Ic_eNpzMQwUb1mUKdJPrG2aS_rbQd_wP8SfewAVB-mxSvf0VzXVhR1N8hXunGHNQXChhgYF3WJG0VjRXGJmQcaGF33oZEEUOEEtfTxYrKtzcgEm0IOu-wm3A" />
+                </div>
+                <div class="lg:w-2/5 p-8 lg:p-12 flex flex-col justify-center">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span
+                            class="px-4 py-1 bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest rounded-full">Featured
+                            Article</span>
+                        <span class="text-slate-400 text-sm">12 Min Read</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4 leading-tight"><a
+                            href="blog-post.html" class="hover:text-primary transition-colors">The Ultimate Guide
+                            to 2024 Knotless Trends</a></h2>
+                    <p class="text-slate-600 dark:text-slate-400 mb-8 text-lg">From bohemian ends to ombre transitions,
+                        explore the evolution of knotless braids and why they continue to dominate the hair world this
+                        season.</p>
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                            <span class="material-icons text-primary text-sm">person</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-900 dark:text-white">Dede Williams</p>
+                            <p class="text-xs text-slate-500">Master Braider</p>
+                        </div>
+                    </div>
+                    <a href="blog-post.html"
+                        class="w-fit flex items-center gap-2 px-8 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary/90 transition-colors">
+                        Read Full Story <span class="material-icons text-sm">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- Category Filter -->
+        <div class="flex flex-wrap items-center gap-3 mb-12">
+            <button class="px-6 py-2 bg-primary text-white rounded-full text-sm font-semibold">All Posts</button>
+            <button
+                class="px-6 py-2 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-full text-sm font-semibold hover:border-primary transition-colors">Hair
+                Care</button>
+            <button
+                class="px-6 py-2 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-full text-sm font-semibold hover:border-primary transition-colors">Style
+                Guide</button>
+            <button
+                class="px-6 py-2 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-full text-sm font-semibold hover:border-primary transition-colors">Maintenance</button>
+            <button
+                class="px-6 py-2 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-full text-sm font-semibold hover:border-primary transition-colors">Tips
+                &amp; Tricks</button>
+        </div>
+        <!-- Post Grid -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Card 1 -->
+            <article
+                class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-md border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-shadow group">
+                <div class="h-64 overflow-hidden relative">
+                    <img alt="Braids Maintenance"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        data-alt="Close up of well-maintained scalp with braids"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUchIIyq4YLx5TvrUL7EK0lDLTFKPvOwq00-HJ1bRn4iWYnLBRbiR6DQFeCS4OS-PoJfLku6h9dH047N9soVXxmW0M1Iz6-mqwaB7bGdZrIR8euTCyzO2H3kNuypJHoxCU_9Fv1gYWaEZF0SFk1yycBZX5pjrHwCsgLfSPKhMRSVlxltY-zR9FGopig5LwLs5ItR6ekaQG5UQVpMd0cxtuBky3vfU_VUh5D1Ur_bd6cc7852vlMcrh7pFLJ4IoTDoMsbQSJjHWMQ" />
+                    <span
+                        class="absolute top-4 left-4 bg-violet-accent text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Hair
+                        Care</span>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-2 text-xs text-slate-500 mb-3">
+                        <span class="material-icons text-sm">schedule</span> 8 Min Read
+                    </div>
+                    <h3
+                        class="text-xl font-bold text-slate-900 dark:text-white mb-3 line-clamp-2 hover:text-primary cursor-pointer transition-colors">
+                        <a href="blog-post.html">How to Maintain Your Knotless Braids for 8+ Weeks</a>
+                    </h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-3">Keep your style looking
+                        fresh and your scalp healthy with our professional maintenance routine for long-wear braids.</p>
+                    <a href="blog-post.html" class="text-primary font-bold text-sm flex items-center gap-1 group/btn">
+                        Read More <span
+                            class="material-icons text-sm group-hover/btn:translate-x-1 transition-transform">chevron_right</span>
+                    </a>
+                </div>
+            </article>
+            <!-- Card 2 -->
+            <article
+                class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-md border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-shadow group">
+                <div class="h-64 overflow-hidden relative">
+                    <img alt="Summer Braid Trends"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        data-alt="Trendy summer braiding style on a beach background"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8fnqNY5ifa6OcFgpBICJ3dGzLRnt0qJN4qjkJ9rpLQZrBZzF1qrV2WlDEgp6X3Sh_C8UZBY4wTvRDjzlaw0ptRfPw4h7XcQzbqs_Oj9NHQJ2zOooPsvpa2a_aOLIYrtBxp2T6Bj2vODuZmxH30G90PF3CdPtFk9J8WBpWViXhzeDBkRo58EgQ9Hg8UBq7S_jJxv2aOkvmlN2P5rbrqv87iaMQApH4fLSmn6MwnWpNGP3bahP9MVz6pgM8BPOG23PX64gbiTPilA" />
+                    <span
+                        class="absolute top-4 left-4 bg-primary text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Style
+                        Guide</span>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-2 text-xs text-slate-500 mb-3">
+                        <span class="material-icons text-sm">schedule</span> 5 Min Read
+                    </div>
+                    <h3
+                        class="text-xl font-bold text-slate-900 dark:text-white mb-3 line-clamp-2 hover:text-primary cursor-pointer transition-colors">
+                        <a href="blog-post.html">Top 5 Braiding Trends for the Summer Season</a>
+                    </h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-3">From vibrant colors to
+                        unique parting patterns, see what styles are making waves this summer at Dede's.</p>
+                    <a href="blog-post.html" class="text-primary font-bold text-sm flex items-center gap-1 group/btn">
+                        Read More <span
+                            class="material-icons text-sm group-hover/btn:translate-x-1 transition-transform">chevron_right</span>
+                    </a>
+                </div>
+            </article>
+            <!-- Card 3 -->
+            <article
+                class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-md border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-shadow group">
+                <div class="h-64 overflow-hidden relative">
+                    <img alt="Scalp Health"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        data-alt="Variety of natural oils and hair products"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMQHYLgl81q5YKAuJVpN1m0d0a07AfqTUj0r-EJODEE-lls7JJTJZm54vaK4rOQb_OVq2IBvbv6P8gfzSOGYwqN0dyp1L-ry5Q_ktmex2qiwFLPQYp5dNhTWhwXo-TX7G9EGsejCOuovd1fpHC3f-jY_jeI21GT2tl7osItaZMoHUdupL8Kp2s3Ksa0bq-VeYQXuPanFYFk4NG56od5fNHP-3ErykjYc2k0uNBJzne2qaAcOUvnpdXHfHojA-vTSH99FaH_c994Q" />
+                    <span
+                        class="absolute top-4 left-4 bg-primary/20 text-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Products</span>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-2 text-xs text-slate-500 mb-3">
+                        <span class="material-icons text-sm">schedule</span> 10 Min Read
+                    </div>
+                    <h3
+                        class="text-xl font-bold text-slate-900 dark:text-white mb-3 line-clamp-2 hover:text-primary cursor-pointer transition-colors">
+                        <a href="blog-post.html">Best Essential Oils for Scalp Health Under Braids</a>
+                    </h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-3">Prevent itchiness and
+                        dryness. We review the top 10 oils that penetrate braids to nourish your natural hair.</p>
+                    <a href="blog-post.html" class="text-primary font-bold text-sm flex items-center gap-1 group/btn">
+                        Read More <span
+                            class="material-icons text-sm group-hover/btn:translate-x-1 transition-transform">chevron_right</span>
+                    </a>
+                </div>
+            </article>
+            <!-- Card 4 -->
+            <article
+                class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-md border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-shadow group">
+                <div class="h-64 overflow-hidden relative">
+                    <img alt="Pre-appointment prep"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        data-alt="Person prepping hair for a professional session"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnyqBoLpM46mD0IegoyljnGCIT0RWYWwHA6jsQNbshGCYlbPDMkTzPMqG5TBNklucoSYRyiFJ_Yt8-nVucL25QM6hjNPQQS8qPv4e229qAStwmrSyWiMKnWdgcgLebC9NbdiG03tsnBc2mWpPd-lXB_smztFvKRVP_CzZ8x9YRG6oYZ7nkiDfBRUO5Ffp4rbMY3FeeNvfi64f31-f4Iih1FidbEQrYukMRH20BIG6GsZla2_62zcULiHcEYFYrmbxlji9SKkadGw" />
+                    <span
+                        class="absolute top-4 left-4 bg-violet-accent text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Tips</span>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-2 text-xs text-slate-500 mb-3">
+                        <span class="material-icons text-sm">schedule</span> 4 Min Read
+                    </div>
+                    <h3
+                        class="text-xl font-bold text-slate-900 dark:text-white mb-3 line-clamp-2 hover:text-primary cursor-pointer transition-colors">
+                        <a href="blog-post.html">Pre-appointment Prep: What You Need to Know</a>
+                    </h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-3">Prepare your hair for a
+                        flawless finish. A step-by-step guide on washing and detangling before your visit.</p>
+                    <a href="blog-post.html" class="text-primary font-bold text-sm flex items-center gap-1 group/btn">
+                        Read More <span
+                            class="material-icons text-sm group-hover/btn:translate-x-1 transition-transform">chevron_right</span>
+                    </a>
+                </div>
+            </article>
+            <!-- Card 5 -->
+            <article
+                class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-md border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-shadow group">
+                <div class="h-64 overflow-hidden relative">
+                    <img alt="Braid Styles"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        data-alt="Selection of different braided hairstyles"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJLuYNC3axcj4XyRGRKUmyhWcvX165dShH5Zf1mxMjIRJVM2_xlJ6PuHZwzdgraKBvXyy7ID6YBdq3wXLXP4sBipUn8caBABD2PO4FthuaJMVBC0B596yT2rpDD1TxTbHfdeib1KNXJIGBbqNB_27FjToEto67J1QIj_a39JVppycqfcrumtARmw4ikpHXWZWizdrBfXTCQmn3scNjCWNz4-2NC231NWp752xh7zOZTgJwCe2KfOc3HOX1ee99hoUidbuGijhjiA" />
+                    <span
+                        class="absolute top-4 left-4 bg-primary text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Style
+                        Guide</span>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-2 text-xs text-slate-500 mb-3">
+                        <span class="material-icons text-sm">schedule</span> 7 Min Read
+                    </div>
+                    <h3
+                        class="text-xl font-bold text-slate-900 dark:text-white mb-3 line-clamp-2 hover:text-primary cursor-pointer transition-colors">
+                        <a href="blog-post.html">Box Braids vs. Knotless: Which is Right for You?</a>
+                    </h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-3">A detailed comparison of
+                        tension, longevity, and aesthetics between these two iconic braiding techniques.</p>
+                    <a href="blog-post.html" class="text-primary font-bold text-sm flex items-center gap-1 group/btn">
+                        Read More <span
+                            class="material-icons text-sm group-hover/btn:translate-x-1 transition-transform">chevron_right</span>
+                    </a>
+                </div>
+            </article>
+            <!-- Card 6 -->
+            <article
+                class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-md border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-shadow group">
+                <div class="h-64 overflow-hidden relative">
+                    <img alt="Braiding Tools"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        data-alt="Professional hair salon tools and accessories"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjVlObkHaw0XbR-BQQeZH8S480ycec_m-SpoROTcqhAEOFE9zpISpto92dN6-w8sX1tCBPxYTo1DqriJznW8DgLzn8aIARH9LcRvR6y3DsjcaX2S_DQj0gHw_N0DrCV3GYq23yL-GlIIgBGagwAw4WPDJLZCprh2mT-cgDIZREI52ZopIa6E_9ubbLo3mrieTp4gI6xl6iMzf6OIiNeLggTTXDJ0iLGXmJUUMZGlyAXY01xr5phLV6m_MmdltQOP7gE84Rkqv1Qw" />
+                    <span
+                        class="absolute top-4 left-4 bg-primary/20 text-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Maintenance</span>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-2 text-xs text-slate-500 mb-3">
+                        <span class="material-icons text-sm">schedule</span> 6 Min Read
+                    </div>
+                    <h3
+                        class="text-xl font-bold text-slate-900 dark:text-white mb-3 line-clamp-2 hover:text-primary cursor-pointer transition-colors">
+                        <a href="blog-post.html">The Best Satin Wraps and Bonnets of the Year</a>
+                    </h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-3">Don't let your pillowcase
+                        ruin your edges. Our top picks for nighttime protection of your braids.</p>
+                    <a href="blog-post.html" class="text-primary font-bold text-sm flex items-center gap-1 group/btn">
+                        Read More <span
+                            class="material-icons text-sm group-hover/btn:translate-x-1 transition-transform">chevron_right</span>
+                    </a>
+                </div>
+            </article>
+        </section>
+        <!-- Newsletter Section -->
+        <section
+            class="mt-24 mb-12 relative overflow-hidden rounded-2xl bg-slate-900 text-white p-8 md:p-16 text-center">
+            <div class="absolute inset-0 opacity-10 pointer-events-none">
+                <div
+                    class="absolute top-0 left-0 w-64 h-64 bg-primary rounded-full filter blur-[100px] -translate-x-1/2 -translate-y-1/2">
+                </div>
+                <div
+                    class="absolute bottom-0 right-0 w-64 h-64 bg-violet-accent rounded-full filter blur-[100px] translate-x-1/2 translate-y-1/2">
+                </div>
+            </div>
+            <div class="relative z-10 max-w-2xl mx-auto">
+                <span class="text-primary font-bold uppercase tracking-[0.2em] text-xs mb-4 block">Newsletter</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold mb-6">Get Exclusive Braid Tips &amp; Special Offers</h2>
+                <p class="text-slate-400 mb-10 text-lg">Join our community of 2,000+ hair lovers and get weekly styling
+                    inspiration delivered to your inbox.</p>
+                <form class="flex flex-col sm:flex-row gap-4">
+                    <input
+                        class="flex-1 px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-primary outline-none transition-all placeholder:text-slate-500"
+                        placeholder="Your email address" type="email" />
+                    <button
+                        class="px-8 py-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-lg transition-all active:scale-95">Subscribe
+                        Now</button>
+                </form>
+                <p class="text-xs text-slate-500 mt-6 italic">We respect your privacy. Unsubscribe at any time.</p>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <!-- Footer -->
+    <div id="app-footer"></div>
+
+    <!-- Component Loader -->
+    <script src="components.js?v=2"></script>
+</body>
+
+</html>

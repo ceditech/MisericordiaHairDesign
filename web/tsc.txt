@@ -1,0 +1,12 @@
+﻿app/debug/auth/page.tsx(8,19): error TS2339: Property 'role' does not exist on type 'AuthContextType'.
+app/debug/auth/page.tsx(8,25): error TS2339: Property 'isLoading' does not exist on type 'AuthContextType'.
+app/debug/seed-owner/page.tsx(13,19): error TS2339: Property 'role' does not exist on type 'AuthContextType'.
+app/debug/seed-owner/page.tsx(13,25): error TS2339: Property 'roleLoading' does not exist on type 'AuthContextType'.
+app/dev/set-owner/page.tsx(9,19): error TS2339: Property 'role' does not exist on type 'AuthContextType'.
+app/login/page.tsx(23,19): error TS2339: Property 'role' does not exist on type 'AuthContextType'.
+app/login/page.tsx(23,25): error TS2339: Property 'roleLoading' does not exist on type 'AuthContextType'.
+app/our-styles/page.tsx(89,48): error TS2339: Property 'label' does not exist on type '{ id: string; name: string; price: number; deposit: number; }'.
+components/Header.tsx(19,19): error TS2339: Property 'role' does not exist on type 'AuthContextType'.
+src/hooks/useRequireOwner.ts(13,19): error TS2339: Property 'isLoading' does not exist on type 'AuthContextType'.
+src/hooks/useRequireOwner.ts(13,39): error TS2339: Property 'role' does not exist on type 'AuthContextType'.
+src/hooks/useRequireOwner.ts(13,45): error TS2339: Property 'roleLoading' does not exist on type 'AuthContextType'.

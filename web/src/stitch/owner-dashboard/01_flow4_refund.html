@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Unified Refund Center | Dede’s Braids</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-fixed": "#ffd9e4",
+                        "primary": "#6b38d4",
+                        "on-secondary-fixed": "#3e0022",
+                        "primary-fixed-dim": "#d0bcff",
+                        "on-tertiary-container": "#fffbff",
+                        "on-surface-variant": "#494454",
+                        "on-surface": "#121c2a",
+                        "background": "#f8f9ff",
+                        "primary-container": "#8455ef",
+                        "surface-container-low": "#eff4ff",
+                        "tertiary-fixed-dim": "#ffb869",
+                        "primary-fixed": "#e9ddff",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-fixed": "#23005c",
+                        "inverse-primary": "#d0bcff",
+                        "surface": "#f8f9ff",
+                        "tertiary-container": "#a76500",
+                        "surface-variant": "#d9e3f6",
+                        "outline-variant": "#cbc3d7",
+                        "surface-tint": "#6d3bd7",
+                        "on-secondary-fixed-variant": "#8c0053",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-primary-fixed-variant": "#5516be",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#fffbff",
+                        "inverse-surface": "#27313f",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#fd56a7",
+                        "on-tertiary-fixed-variant": "#673d00",
+                        "tertiary": "#855000",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#d9e3f6",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#ffdcbb",
+                        "on-secondary-container": "#600037",
+                        "secondary": "#b4136d",
+                        "on-tertiary-fixed": "#2c1700",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#ffb0cd",
+                        "surface-dim": "#d0dbed",
+                        "on-error": "#ffffff",
+                        "on-background": "#121c2a",
+                        "surface-container-high": "#dee9fc",
+                        "surface-container": "#e6eeff",
+                        "error": "#ba1a1a",
+                        "outline": "#7b7486"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Manrope', sans-serif; }
+        .font-plus-jakarta-sans { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-inverse-surface text-inverse-on-surface min-h-screen">
+<!-- Sidebar (Suppressed for focused financial task, but represented as a ghost navigation to maintain identity) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-inverse-surface flex flex-col py-6 space-y-2 hidden md:flex">
+<div class="px-6 mb-10">
+<h1 class="font-plus-jakarta-sans text-lg font-extrabold text-violet-400">The Atelier</h1>
+<p class="text-slate-400 text-xs">Salon Management</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-violet-400 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-medium">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-violet-400 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-medium">Appointments</span>
+</a>
+<div class="flex items-center gap-3 px-6 py-3 text-violet-300 font-bold border-r-4 border-violet-500 bg-violet-900/20">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-medium">Refund Center</span>
+</div>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-violet-400 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+<span class="font-medium">Shop Sales</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-64 p-4 md:p-8">
+<!-- Header Section -->
+<header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="text-3xl font-plus-jakarta-sans font-bold tracking-tight text-white mb-2">Refund Center</h2>
+<p class="text-slate-400">Manage transactional reversals and partial adjustments.</p>
+</div>
+<div class="flex items-center gap-4 bg-white/5 p-2 rounded-full backdrop-blur-sm">
+<button class="px-6 py-2 rounded-full bg-white/10 text-white font-medium text-sm transition-all hover:bg-white/20">Booking Payments</button>
+<button class="px-6 py-2 rounded-full bg-primary text-white font-medium text-sm shadow-lg shadow-primary/20">Shop Orders</button>
+</div>
+</header>
+<!-- Search & Filter Bar -->
+<section class="mb-8">
+<div class="relative w-full max-w-2xl">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">search</span>
+<input class="w-full bg-white/5 border-0 rounded-full py-4 pl-12 pr-6 text-white focus:ring-2 focus:ring-primary placeholder:text-slate-500" placeholder="Search by email, booking ID, or order ID..." type="text"/>
+</div>
+</section>
+<!-- Dashboard Bento Grid / Table -->
+<section class="grid grid-cols-1 gap-6">
+<div class="bg-white/5 rounded-lg overflow-hidden border border-white/10">
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-white/5 text-slate-400 text-xs uppercase tracking-wider">
+<tr>
+<th class="px-6 py-4 font-semibold">Order / ID</th>
+<th class="px-6 py-4 font-semibold">Customer</th>
+<th class="px-6 py-4 font-semibold">Amount</th>
+<th class="px-6 py-4 font-semibold">Date</th>
+<th class="px-6 py-4 font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/10">
+<tr class="hover:bg-white/[0.02] transition-colors">
+<td class="px-6 py-6 font-medium text-white">#DB-9842 <span class="block text-xs text-slate-500 font-normal mt-1">Silk Sensation Oil</span></td>
+<td class="px-6 py-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary text-xs font-bold">AB</div>
+<div>
+<p class="text-white text-sm font-medium">Amani Beauty</p>
+<p class="text-xs text-slate-500">amani.beauty@gmail.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-6 text-white font-semibold">$75.00</td>
+<td class="px-6 py-6 text-slate-400 text-sm">Oct 24, 2023</td>
+<td class="px-6 py-6 text-right">
+<button class="bg-primary/20 text-primary-fixed-dim px-5 py-2 rounded-full text-sm font-bold hover:bg-primary transition-all hover:text-white">Refund</button>
+</td>
+</tr>
+<tr class="hover:bg-white/[0.02] transition-colors">
+<td class="px-6 py-6 font-medium text-white">#DB-9840 <span class="block text-xs text-slate-500 font-normal mt-1">Edge Control Wax (x2)</span></td>
+<td class="px-6 py-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">JD</div>
+<div>
+<p class="text-white text-sm font-medium">Jane Doe</p>
+<p class="text-xs text-slate-500">j.doe@outlook.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-6 text-white font-semibold">$45.00</td>
+<td class="px-6 py-6 text-slate-400 text-sm">Oct 23, 2023</td>
+<td class="px-6 py-6 text-right">
+<button class="bg-primary/20 text-primary-fixed-dim px-5 py-2 rounded-full text-sm font-bold hover:bg-primary transition-all hover:text-white">Refund</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</main>
+<!-- Payment Detail Drawer (Overlay Simulation) -->
+<div class="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex justify-end">
+<div class="w-full max-w-lg bg-inverse-surface h-full shadow-2xl flex flex-col border-l border-white/10">
+<!-- Header -->
+<div class="p-8 flex items-center justify-between">
+<h3 class="text-2xl font-plus-jakarta-sans font-bold text-white">Order Details</h3>
+<button class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto px-8 space-y-8">
+<!-- Product Card -->
+<div class="bg-white/5 rounded-lg p-6 flex gap-4">
+<div class="w-20 h-20 rounded-lg bg-slate-800 overflow-hidden">
+<img alt="Silk Sensation Oil bottle" class="w-full h-full object-cover" data-alt="Close-up of a premium hair oil glass bottle on a dark reflective surface with purple lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTBFhg8PsWyzpxCBjDRiN0hzzqsSM58kWUJX6jPFPWPBikRn2fv_EQoE5PZzBS3hyJLlLRUmRQUGQ8qms_84keiPFPPiuVg1c8leHWT6RkNg5csS8Cg8YcEPiTlCuxPcV1jH7ivxTdKuRtmiGFyy-4sX2YgTEa8ogrjFndELX0y333W6mEWbhXBj-iMWA48D-BZZXZDnBk3xYuswfupwa53EsozoUisTLxMZizIJtJfZsWec3fpp22bIGc8LlAvWKmSclj5XT4c2Le"/>
+</div>
+<div>
+<h4 class="text-white font-bold text-lg">Silk Sensation Oil</h4>
+<p class="text-slate-400 text-sm">Order #DB-9842</p>
+<p class="text-violet-400 font-bold mt-1">$70.00</p>
+</div>
+</div>
+<!-- Breakdown -->
+<div class="space-y-4">
+<div class="flex justify-between text-slate-400">
+<span>Subtotal</span>
+<span class="text-white">$70.00</span>
+</div>
+<div class="flex justify-between text-slate-400">
+<span>Tax (VAT 7%)</span>
+<span class="text-white">$5.00</span>
+</div>
+<div class="pt-4 border-t border-white/10 flex justify-between">
+<span class="text-lg font-bold text-white">Total</span>
+<span class="text-lg font-bold text-white">$75.00</span>
+</div>
+</div>
+<!-- Timeline -->
+<div class="space-y-6">
+<h5 class="text-xs uppercase tracking-widest text-slate-500 font-bold">Activity</h5>
+<div class="relative pl-8 space-y-8">
+<div class="absolute left-3 top-2 bottom-2 w-px bg-white/10"></div>
+<div class="relative">
+<span class="absolute -left-8 w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</span>
+<div>
+<p class="text-white text-sm font-semibold">Paid via Stripe</p>
+<p class="text-slate-500 text-xs">Oct 24 • 2:15 PM</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Action -->
+<div class="p-8 bg-white/5">
+<button class="w-full bg-primary py-4 rounded-full text-white font-bold text-lg shadow-xl shadow-primary/30 hover:scale-[1.02] transition-transform">
+                    Initialize Refund
+                </button>
+</div>
+</div>
+</div>
+<!-- Partial Refund Modal (Overlay Simulation) -->
+<div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+<div class="w-full max-w-md bg-inverse-surface rounded-lg shadow-2xl border border-white/10 overflow-hidden">
+<div class="p-8">
+<h3 class="text-xl font-plus-jakarta-sans font-bold text-white mb-6">Refund Amount</h3>
+<div class="space-y-6">
+<!-- Choice Toggle -->
+<div class="grid grid-cols-2 gap-2 bg-white/5 p-1 rounded-full">
+<button class="py-2 rounded-full text-sm font-bold text-slate-400">Full Refund</button>
+<button class="py-2 rounded-full text-sm font-bold bg-white text-inverse-surface">Partial</button>
+</div>
+<!-- Input Field -->
+<div class="space-y-2">
+<label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Amount to Refund</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-white font-bold">$</span>
+<input class="w-full bg-white/5 border-white/10 rounded-lg py-4 pl-8 pr-4 text-white font-bold text-2xl focus:ring-primary focus:border-primary" type="number" value="35.00"/>
+</div>
+<p class="text-xs text-slate-400">Maximum available: $75.00</p>
+</div>
+<!-- Dropdown -->
+<div class="space-y-2">
+<label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Reason</label>
+<select class="w-full bg-white/5 border-white/10 rounded-lg py-3 px-4 text-white focus:ring-primary focus:border-primary appearance-none">
+<option>Item Out of Stock</option>
+<option>Customer Service Issue</option>
+<option>Late Shipping</option>
+<option>Duplicate Charge</option>
+</select>
+</div>
+</div>
+</div>
+<div class="p-8 pt-0 flex gap-4">
+<button class="flex-1 py-4 text-white font-bold border border-white/10 rounded-full hover:bg-white/5">Cancel</button>
+<button class="flex-1 py-4 bg-primary text-white font-bold rounded-full shadow-lg shadow-primary/20">Review Refund</button>
+</div>
+</div>
+</div>
+<!-- Final Confirmation Modal (Overlay Simulation) -->
+<div class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[70] flex items-center justify-center p-4">
+<div class="w-full max-w-md bg-inverse-surface rounded-lg p-8 border border-white/20 text-center">
+<div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="error" style="font-variation-settings: 'FILL' 1;">error</span>
+</div>
+<h3 class="text-2xl font-plus-jakarta-sans font-extrabold text-white mb-2">Confirm Refund</h3>
+<p class="text-slate-400 mb-8">
+                Are you sure you want to refund <span class="text-white font-bold">$35.00</span> to <span class="text-white font-bold">amani.beauty@gmail.com</span>? This action cannot be undone.
+            </p>
+<div class="space-y-4">
+<button class="w-full bg-primary py-4 rounded-full text-white font-bold text-lg hover:scale-[1.02] transition-transform">
+                    Confirm &amp; Send
+                </button>
+<button class="w-full py-4 text-slate-400 font-medium hover:text-white transition-colors">
+                    Wait, go back
+                </button>
+</div>
+</div>
+</div>
+<!-- Success State Modal (Overlay Simulation) -->
+<div class="fixed inset-0 bg-inverse-surface z-[80] flex items-center justify-center">
+<div class="text-center animate-pulse-slow">
+<div class="relative w-24 h-24 mx-auto mb-8">
+<!-- Pulsing Outer -->
+<div class="absolute inset-0 bg-primary/30 rounded-full animate-ping"></div>
+<!-- Core Dot -->
+<div class="relative w-full h-full bg-primary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-4xl" data-icon="sync" style="font-variation-settings: 'wght' 700;">sync</span>
+</div>
+</div>
+<h3 class="text-3xl font-plus-jakarta-sans font-extrabold text-white mb-2">Refund Initiated</h3>
+<p class="text-slate-400 max-w-sm mx-auto">
+                Processing payment of $35.00 via Stripe. The customer will receive an email confirmation shortly.
+            </p>
+<div class="mt-12 flex flex-col gap-4">
+<button class="px-8 py-4 bg-white/5 text-white font-bold rounded-full hover:bg-white/10 transition-colors">
+                    Back to Dashboard
+                </button>
+<button class="px-8 py-4 text-violet-400 font-bold hover:underline">
+                    View Transaction on Stripe
+                </button>
+</div>
+</div>
+</div>
+<!-- Bottom Mobile Nav -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-inverse-surface/80 backdrop-blur-md flex justify-around items-center py-4 px-6 z-40 border-t border-white/5">
+<div class="flex flex-col items-center text-slate-500">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px] mt-1 font-bold">Overview</span>
+</div>
+<div class="flex flex-col items-center text-violet-400">
+<span class="material-symbols-outlined" data-icon="payments" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="text-[10px] mt-1 font-bold">Refunds</span>
+</div>
+<div class="flex flex-col items-center text-slate-500">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+<span class="text-[10px] mt-1 font-bold">Shop</span>
+</div>
+<div class="flex flex-col items-center text-slate-500">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px] mt-1 font-bold">Profile</span>
+</div>
+</nav>
+<style>
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.95; transform: scale(0.99); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 3s ease-in-out infinite;
+        }
+    </style>
+</body></html>

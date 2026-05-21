@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Select Style and Schedule | Dede's Braids</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a319c5",
+                        "background-light": "#f8f6f7",
+                        "background-dark": "#221019",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #a319c520;
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a319c540;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 min-h-screen">
+    <!-- Header Navigation -->
+    <!-- Navigation -->
+    <div id="app-header"></div>
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Left Side: Service Selection -->
+            <div class="flex-1 space-y-8">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2">Select Your Style</h2>
+                    <p class="text-slate-500 dark:text-slate-400">Choose from our signature African American braiding
+                        services.</p>
+                </div>
+                <!-- Filter Bar -->
+                <div class="flex items-center gap-3 overflow-x-auto pb-2 custom-scrollbar">
+                    <button
+                        class="whitespace-nowrap px-6 py-2.5 rounded-full bg-primary text-white text-sm font-semibold shadow-lg shadow-primary/20">All
+                        Styles</button>
+                    <button
+                        class="whitespace-nowrap px-6 py-2.5 rounded-full bg-white dark:bg-slate-800 border border-primary/10 text-slate-600 dark:text-slate-300 text-sm font-semibold hover:border-primary/40 transition-all">Knotless</button>
+                    <button
+                        class="whitespace-nowrap px-6 py-2.5 rounded-full bg-white dark:bg-slate-800 border border-primary/10 text-slate-600 dark:text-slate-300 text-sm font-semibold hover:border-primary/40 transition-all">Box
+                        Braids</button>
+                    <button
+                        class="whitespace-nowrap px-6 py-2.5 rounded-full bg-white dark:bg-slate-800 border border-primary/10 text-slate-600 dark:text-slate-300 text-sm font-semibold hover:border-primary/40 transition-all">Cornrows</button>
+                    <button
+                        class="whitespace-nowrap px-6 py-2.5 rounded-full bg-white dark:bg-slate-800 border border-primary/10 text-slate-600 dark:text-slate-300 text-sm font-semibold hover:border-primary/40 transition-all">Fulani</button>
+                    <button
+                        class="whitespace-nowrap px-6 py-2.5 rounded-full bg-white dark:bg-slate-800 border border-primary/10 text-slate-600 dark:text-slate-300 text-sm font-semibold hover:border-primary/40 transition-all">Twists</button>
+                </div>
+                <!-- Service Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Service Card 1 (Active) -->
+                    <div
+                        class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden border-2 border-primary shadow-xl shadow-primary/5 cursor-pointer">
+                        <div class="relative h-48">
+                            <img class="w-full h-full object-cover" data-alt="Close up of small knotless braids"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEvtE3Pf9q2BoBB4Xi4U0sbBTgaOJVBiReumhA5oimuvy_9I6AhVy6RsiybFVofAt_Sl1hzB6e7CmvStI4LzBdT2817wlnO3JldutI6urb_TkM20H9eIa_GiiI0O9C4kM9mGY1bQV4_BlUmV1_ZLvx4ScL9hpi6FURxEqbSxRDnpbDlZvicR51uXh7NacFgBI9WWsFpevSmAS_a0uYuklOXfMb74ytvy-EUqXJKUynIys_1EsM4tw2Bk_MuQkQRBo7-iVaOOgcXQ" />
+                            <div
+                                class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+                                <span class="material-icons text-primary text-sm">schedule</span>
+                                <span class="text-xs font-bold">4h 30m</span>
+                            </div>
+                            <div class="absolute inset-0 bg-primary/10 group-hover:bg-transparent transition-colors">
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-bold text-lg">Small Knotless Braids</h3>
+                                <span class="text-primary font-bold">$180+</span>
+                            </div>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Tension-free, natural looking
+                                braids with a clean finish. Mid-back length included.</p>
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-primary/10 text-primary rounded">Selected</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Service Card 2 -->
+                    <div
+                        class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-primary/5 hover:border-primary/40 shadow-sm transition-all cursor-pointer">
+                        <div class="relative h-48">
+                            <img class="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all"
+                                data-alt="Medium bohemian box braids with curly ends"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwLsn8tctkpdpKjGQS1zi3NwJtXngj29Z0Loco8kBXYrZeZyme9fnOGLeULjSD0bicyx4mRZJGPvp25OGMyfHwn-koSEV1X894XsQsNwxrVmvtKkqV8-unQORQTG26Ns2S1nRJRVxWuohWSaua8THJEuuooBj51AE8xEDU_LMht6zLmZlcDSgb4AGDT3OWxEBhzObGyhhzkykOLk1zdD53JBmdDqZ2cJtv8URub6Nek-qm1hPUQjzMdx4eNhu55qEePNNq-STLmQ" />
+                            <div
+                                class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+                                <span class="material-icons text-primary text-sm">schedule</span>
+                                <span class="text-xs font-bold">5h 00m</span>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-bold text-lg text-slate-700 dark:text-slate-200">Bohemian Box Braids
+                                </h3>
+                                <span class="text-slate-900 dark:text-white font-bold">$220+</span>
+                            </div>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Classic box braids with curly
+                                hair extensions mixed in for a boho look.</p>
+                        </div>
+                    </div>
+                    <!-- Service Card 3 -->
+                    <div
+                        class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-primary/5 hover:border-primary/40 shadow-sm transition-all cursor-pointer">
+                        <div class="relative h-48">
+                            <img class="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all"
+                                data-alt="Fulani tribal braid pattern"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBFV8AYn-fEWeeyn_2SYWU9IViAdaAGVftIW5Au4EXEsFqHpAdi1dUZdYwFBve_zTNEQflHPT32rrE2B3lTUDsHIclshRFTfkuYM2sUdR-1AylRcmm_tsR6MGlLCmi6bae-tvQq1BNtHsJIGIgfgGwqtwyTLnDuzOjyagLf6chXorob0Axp200ZAiXWgV_MAmPXq28VM6mXtcZjiYbDIy8pojgXMkx-1a5uUDw3EJdDxDQTrjLMVIhiu-5D1woAc7VKA-YXAOPqQ" />
+                            <div
+                                class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+                                <span class="material-icons text-primary text-sm">schedule</span>
+                                <span class="text-xs font-bold">3h 45m</span>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-bold text-lg text-slate-700 dark:text-slate-200">Fulani Tribal Styles
+                                </h3>
+                                <span class="text-slate-900 dark:text-white font-bold">$150+</span>
+                            </div>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Artistic cornrows in front with
+                                traditional box braids or curls in the back.</p>
+                        </div>
+                    </div>
+                    <!-- Service Card 4 -->
+                    <div
+                        class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-primary/5 hover:border-primary/40 shadow-sm transition-all cursor-pointer">
+                        <div class="relative h-48">
+                            <img class="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all"
+                                data-alt="Feed-in cornrows hairstyle"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEu0u62relfAJ5lVDr-maFTlJru1zbwPkryx381wEC329eauGNXVGl8qWlBCd41-EIztWrc_qWNhUk87eXkgznajVOwCZzTwJnp9orkEOMo5bp7A6dSQ5DxBn-V4qCOqheJMty79hAhbucrgp_ZkdGc4rLAALtQ30_zF4DSGJv45QpnMuHvb7FJTFLg5Q5P7XXLSrgfXJR27JL8bSCITknWqyx63d17jzf82P0fwARxxnVB8DbvAPUh-e4e4Ct1zALxc3YQXkq0A" />
+                            <div
+                                class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+                                <span class="material-icons text-primary text-sm">schedule</span>
+                                <span class="text-xs font-bold">2h 15m</span>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-bold text-lg text-slate-700 dark:text-slate-200">6-8 Feed-in Braids</h3>
+                                <span class="text-slate-900 dark:text-white font-bold">$120+</span>
+                            </div>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Sleek feed-in cornrows perfect
+                                for a low-maintenance, polished look.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Inspiration Upload -->
+                <div class="bg-primary/5 rounded-xl p-8 border border-dashed border-primary/30 text-center">
+                    <div
+                        class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white mx-auto mb-4">
+                        <span class="material-icons">add_a_photo</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">Upload Inspiration</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Have a specific look in mind? Upload a
+                        photo to help Dede prepare.</p>
+                    <button
+                        class="bg-white dark:bg-slate-700 border border-primary/20 text-primary px-6 py-2 rounded-lg text-sm font-semibold hover:bg-primary/5 transition-colors">Choose
+                        Files</button>
+                </div>
+            </div>
+            <!-- Right Side: Booking Panel -->
+            <div class="lg:w-[400px]">
+                <div class="sticky top-28 space-y-6">
+                    <!-- Calendar Card -->
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl border border-primary/10 shadow-lg overflow-hidden">
+                        <div class="p-5 bg-primary/5 border-b border-primary/10 flex items-center justify-between">
+                            <h4 class="font-bold">November 2024</h4>
+                            <div class="flex gap-2">
+                                <button class="p-1 hover:text-primary"><span
+                                        class="material-icons text-sm">chevron_left</span></button>
+                                <button class="p-1 hover:text-primary"><span
+                                        class="material-icons text-sm">chevron_right</span></button>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <div class="grid grid-cols-7 gap-2 text-center mb-4">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Su</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Mo</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Tu</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">We</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Th</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Fr</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Sa</span>
+                                <!-- Empty days -->
+                                <span></span><span></span><span></span><span></span><span></span>
+                                <!-- Calendar Days -->
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center text-sm rounded-full text-slate-300 cursor-default">1</button>
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center text-sm rounded-full text-slate-300 cursor-default">2</button>
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center text-sm rounded-full hover:bg-primary/10">3</button>
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center text-sm rounded-full hover:bg-primary/10">4</button>
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center text-sm rounded-full bg-primary text-white shadow-md font-bold">5</button>
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center text-sm rounded-full hover:bg-primary/10">6</button>
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center text-sm rounded-full hover:bg-primary/10">7</button>
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center text-sm rounded-full hover:bg-primary/10">8</button>
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center text-sm rounded-full hover:bg-primary/10">9</button>
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center text-sm rounded-full hover:bg-primary/10">10</button>
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center text-sm rounded-full hover:bg-primary/10">11</button>
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center text-sm rounded-full hover:bg-primary/10">12</button>
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center text-sm rounded-full hover:bg-primary/10">13</button>
+                                <button
+                                    class="w-8 h-8 flex items-center justify-center text-sm rounded-full hover:bg-primary/10">14</button>
+                            </div>
+                            <div class="space-y-4">
+                                <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Available Times
+                                </h5>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button
+                                        class="py-2 text-xs font-semibold bg-white dark:bg-slate-700 border border-primary/20 rounded-lg hover:border-primary transition-all">09:00
+                                        AM</button>
+                                    <button
+                                        class="py-2 text-xs font-semibold bg-primary text-white border border-primary rounded-lg shadow-sm">11:30
+                                        AM</button>
+                                    <button
+                                        class="py-2 text-xs font-semibold bg-white dark:bg-slate-700 border border-primary/20 rounded-lg hover:border-primary transition-all">02:00
+                                        PM</button>
+                                    <button
+                                        class="py-2 text-xs font-semibold bg-white dark:bg-slate-700 border border-primary/20 rounded-lg hover:border-primary transition-all">04:30
+                                        PM</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Summary Card -->
+                    <div class="bg-slate-900 text-white rounded-xl p-6 shadow-xl relative overflow-hidden">
+                        <div class="absolute -right-8 -top-8 w-32 h-32 bg-primary/20 rounded-full blur-3xl"></div>
+                        <h4 class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Booking Summary</h4>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-400 text-sm">Style</span>
+                                <span class="font-medium text-sm">Small Knotless Braids</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-400 text-sm">Duration</span>
+                                <span class="font-medium text-sm">4h 30m</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-400 text-sm">Date &amp; Time</span>
+                                <span class="font-medium text-sm">Nov 5, 11:30 AM</span>
+                            </div>
+                            <div class="pt-3 border-t border-slate-700 flex justify-between items-center">
+                                <span class="font-bold">Starting Price</span>
+                                <span class="text-xl font-bold text-primary">$180.00</span>
+                            </div>
+                        </div>
+                        <a class="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 group"
+                            href="payment.html">
+                            Confirm Appointment
+                            <span
+                                class="material-icons group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                        </a>
+                        <p class="text-[10px] text-slate-400 text-center mt-4 italic">* A non-refundable $25 deposit is
+                            required to secure your spot.</p>
+                    </div>
+                    <!-- Help Tooltip -->
+                    <div
+                        class="flex items-start gap-3 p-4 bg-white dark:bg-slate-800 rounded-lg border border-primary/5">
+                        <span class="material-icons text-primary mt-0.5">info</span>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Prices vary based on hair length and thickness. Final quote will be provided during your
+                            consultation at the start of the appointment.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Map/Location Footer Preview -->
+    <!-- Footer -->
+    <div id="app-footer"></div>
+
+    <!-- Component Loader -->
+    <script src="components.js?v=2"></script>
+</body>
+
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dede’s Braids - Appointment Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #f8f9ff;
+            color: #121c2a;
+        }
+        .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-header {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "secondary-fixed": "#ffd9e4",
+                "primary": "#6b38d4",
+                "on-secondary-fixed": "#3e0022",
+                "primary-fixed-dim": "#d0bcff",
+                "on-tertiary-container": "#fffbff",
+                "on-surface-variant": "#494454",
+                "on-surface": "#121c2a",
+                "background": "#f8f9ff",
+                "primary-container": "#8455ef",
+                "surface-container-low": "#eff4ff",
+                "tertiary-fixed-dim": "#ffb869",
+                "primary-fixed": "#e9ddff",
+                "surface-bright": "#f8f9ff",
+                "on-primary-fixed": "#23005c",
+                "inverse-primary": "#d0bcff",
+                "surface": "#f8f9ff",
+                "tertiary-container": "#a76500",
+                "surface-variant": "#d9e3f6",
+                "outline-variant": "#cbc3d7",
+                "surface-tint": "#6d3bd7",
+                "on-secondary-fixed-variant": "#8c0053",
+                "on-primary": "#ffffff",
+                "inverse-on-surface": "#eaf1ff",
+                "on-primary-fixed-variant": "#5516be",
+                "error-container": "#ffdad6",
+                "on-primary-container": "#fffbff",
+                "inverse-surface": "#27313f",
+                "surface-container-lowest": "#ffffff",
+                "secondary-container": "#fd56a7",
+                "on-tertiary-fixed-variant": "#673d00",
+                "tertiary": "#855000",
+                "on-error-container": "#93000a",
+                "surface-container-highest": "#d9e3f6",
+                "on-tertiary": "#ffffff",
+                "tertiary-fixed": "#ffdcbb",
+                "on-secondary-container": "#600037",
+                "secondary": "#b4136d",
+                "on-tertiary-fixed": "#2c1700",
+                "on-secondary": "#ffffff",
+                "secondary-fixed-dim": "#ffb0cd",
+                "surface-dim": "#d0dbed",
+                "on-error": "#ffffff",
+                "on-background": "#121c2a",
+                "surface-container-high": "#dee9fc",
+                "surface-container": "#e6eeff",
+                "error": "#ba1a1a",
+                "outline": "#7b7486"
+              },
+              fontFamily: {
+                "headline": ["Plus Jakarta Sans"],
+                "body": ["Manrope"],
+                "label": ["Manrope"]
+              },
+              borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background min-h-screen">
+<!-- Top Navigation -->
+<header class="bg-surface/80 glass-header sticky top-0 z-50 shadow-sm shadow-violet-500/5 px-6 py-3 flex justify-between items-center w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold text-violet-700 font-headline tracking-tight">Dede’s Braids</span>
+<nav class="hidden md:flex space-x-6">
+<a class="text-slate-500 hover:text-violet-600 transition-colors font-medium" href="#">Overview</a>
+<a class="text-violet-700 font-bold" href="#">Appointments</a>
+<a class="text-slate-500 hover:text-violet-600 transition-colors font-medium" href="#">Shop Sales</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center bg-surface-container-highest px-4 py-2 rounded-full border-none">
+<span class="material-symbols-outlined text-slate-500 mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-48" placeholder="Search clients..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-slate-500 p-2 hover:bg-violet-50 rounded-full transition-colors">notifications</button>
+<button class="material-symbols-outlined text-slate-500 p-2 hover:bg-violet-50 rounded-full transition-colors">settings</button>
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center overflow-hidden">
+<img alt="Manager Profile" class="w-full h-full object-cover" data-alt="close up headshot of a professional black woman with elegant braids and a confident smile in soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmIPmIH6yr9pLE1peCGyqIjVaYiOx4lUSO3i_4EYvjehCounJLFKnT8cLCM5zccCEEGCrScO0COz_P7HTFeNJAWIUtQylN08cQJHZMHTv6w8IUqbkRJRM2c3sqIsACE9wFqxFOKXD1YX_YJlzxN4yaX-g1PuZKzuHkgPBOqszlWTM-Ktx2xS8j6DYyGSXzW2pxOcdpqNTMsx1kGp0UNqklolIwlJ4jt4bLNFzmNjayPppmV8ac6W4QscZZptz4ECcZkJUed4R_Z0JA"/>
+</div>
+</div>
+</header>
+<div class="flex min-h-[calc(100vh-64px)]">
+<!-- Sidebar Navigation -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container-low py-6 space-y-2 pt-20">
+<div class="px-6 mb-8">
+<h2 class="font-headline text-lg font-extrabold text-violet-700">The Atelier</h2>
+<p class="text-xs text-slate-500">Salon Management</p>
+</div>
+<div class="space-y-1">
+<a class="flex items-center px-6 py-3 text-slate-500 hover:bg-violet-50 hover:text-violet-600 mx-2 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="text-sm font-medium">Overview</span>
+</a>
+<a class="flex items-center px-6 py-3 text-violet-700 font-bold border-r-4 border-violet-500 bg-violet-50/50 mx-2 rounded-full" href="#">
+<span class="material-symbols-outlined mr-3">calendar_today</span>
+<span class="text-sm font-medium">Appointments</span>
+</a>
+<a class="flex items-center px-6 py-3 text-slate-500 hover:bg-violet-50 hover:text-violet-600 mx-2 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined mr-3">shopping_bag</span>
+<span class="text-sm font-medium">Shop Sales</span>
+</a>
+<a class="flex items-center px-6 py-3 text-slate-500 hover:bg-violet-50 hover:text-violet-600 mx-2 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined mr-3">group</span>
+<span class="text-sm font-medium">Affiliates</span>
+</a>
+</div>
+<div class="mt-auto px-6 pb-20">
+<button class="w-full bg-gradient-to-r from-primary to-primary-container text-white py-3 px-4 rounded-full font-bold shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                    New Booking
+                </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 p-6 md:p-10">
+<!-- Header Section -->
+<div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="font-headline text-4xl font-bold tracking-tight text-on-surface">Appointments</h1>
+<p class="text-slate-500 mt-1">Manage your schedule and pending requests.</p>
+</div>
+<div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0">
+<button class="px-5 py-2 rounded-full bg-primary-container text-white font-bold whitespace-nowrap">Pending</button>
+<button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium whitespace-nowrap">Confirmed</button>
+<button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium whitespace-nowrap">Completed</button>
+<button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium whitespace-nowrap">Cancelled</button>
+</div>
+</div>
+<!-- Filters Bento -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center gap-4 border-none">
+<span class="material-symbols-outlined text-violet-600">event</span>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Date Range</span>
+<span class="text-sm font-semibold">Oct 24 - Oct 30</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center gap-4 border-none">
+<span class="material-symbols-outlined text-violet-600">content_cut</span>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Service</span>
+<span class="text-sm font-semibold">All Services</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center gap-4 border-none">
+<span class="material-symbols-outlined text-violet-600">person_search</span>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Client Type</span>
+<span class="text-sm font-semibold">All Clients</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center gap-4 border-none">
+<span class="material-symbols-outlined text-violet-600">payments</span>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Payment Status</span>
+<span class="text-sm font-semibold">Pending Payment</span>
+</div>
+</div>
+</div>
+<!-- Table Container -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm shadow-on-surface/5">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant text-xs uppercase font-bold tracking-widest">
+<th class="p-5 w-12"><input class="rounded text-primary focus:ring-primary border-outline-variant" type="checkbox"/></th>
+<th class="p-5">Client</th>
+<th class="p-5">Service</th>
+<th class="p-5">Date &amp; Time</th>
+<th class="p-5">Status</th>
+<th class="p-5 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y-0">
+<tr class="hover:bg-violet-50/30 transition-colors group">
+<td class="p-5"><input class="rounded text-primary focus:ring-primary border-outline-variant" type="checkbox"/></td>
+<td class="p-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-bold text-xs">AW</div>
+<div>
+<div class="font-bold text-sm">Amani Williams</div>
+<div class="text-xs text-slate-500">amani.w@email.com</div>
+</div>
+</div>
+</td>
+<td class="p-5">
+<div class="text-sm font-medium">Knotless Braids - Mid Back</div>
+<div class="text-xs text-slate-400">Add-on: Washing</div>
+</td>
+<td class="p-5">
+<div class="text-sm font-semibold">Oct 26, 2023</div>
+<div class="text-xs text-slate-500">10:30 AM (4h)</div>
+</td>
+<td class="p-5">
+<span class="px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-tight">Pending Payment</span>
+</td>
+<td class="p-5 text-right">
+<button class="text-primary hover:bg-primary-fixed p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-violet-50/30 transition-colors group">
+<td class="p-5"><input class="rounded text-primary focus:ring-primary border-outline-variant" type="checkbox"/></td>
+<td class="p-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-bold text-xs">JM</div>
+<div>
+<div class="font-bold text-sm">Jordan Miller</div>
+<div class="text-xs text-slate-500">j.miller@gmail.com</div>
+</div>
+</div>
+</td>
+<td class="p-5">
+<div class="text-sm font-medium">Stitch Braids (6-8)</div>
+<div class="text-xs text-slate-400">Regular Session</div>
+</td>
+<td class="p-5">
+<div class="text-sm font-semibold">Oct 27, 2023</div>
+<div class="text-xs text-slate-500">02:00 PM (2h)</div>
+</td>
+<td class="p-5">
+<span class="px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-tight">Pending Payment</span>
+</td>
+<td class="p-5 text-right">
+<button class="text-primary hover:bg-primary-fixed p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+<!-- Overlay Drawer (Appointment Detail) -->
+<div class="fixed inset-0 z-[60] bg-on-surface/20 backdrop-blur-sm flex justify-end">
+<div class="w-full max-w-lg bg-surface-container-lowest h-full shadow-2xl flex flex-col relative animate-slide-in">
+<!-- Drawer Header -->
+<div class="p-6 flex items-center justify-between border-b border-surface-container-high">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined p-2 hover:bg-surface-container-high rounded-full">close</button>
+<h3 class="font-headline font-bold text-xl">Booking Details</h3>
+</div>
+<div class="flex items-center gap-2 bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-xs font-bold">
+<span class="material-symbols-outlined text-sm">lock_clock</span>
+                    Slot Locked: 12:45
+                </div>
+</div>
+<div class="flex-1 overflow-y-auto p-8">
+<!-- Client Card -->
+<div class="bg-surface-container-low p-6 rounded-lg mb-8 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4">
+<span class="px-3 py-1 rounded-full bg-primary-container text-white text-[10px] font-bold uppercase">Loyalty Client</span>
+</div>
+<div class="flex items-center gap-4 mb-4">
+<div class="w-16 h-16 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="vibrant portrait of a stylish woman with long knotless braids wearing gold jewelry against a soft lavender background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzihHq5P7e6PEaIrfLE_Jv_Jdar6eFohgzBYrC9JR_HMH8pAALNgafWJAIUrNykVfwlyWoFs13EQ1kcfD6uupK1bMecR9k-r20TLFdemfjFepkYQC9LJ7HGqQdUTpPXRflEENffOllHEDconhKIRpy6qjMl4Z_TSOC3O_4Sc-kmwZcafQahgC_hSCHp0W4bCsHYsYh2L01R2bNmPK1UyjRw7vcnubR3pRqn4dYA07ceMvG2qlCLHEnLtfXF8EcGUwE49oxRgQzHlrd"/>
+</div>
+<div>
+<h4 class="text-lg font-bold">Amani Williams</h4>
+<p class="text-sm text-slate-500">3 prior appointments • Last: Sep 12</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex items-center gap-2 text-xs text-slate-600">
+<span class="material-symbols-outlined text-sm">call</span> +1 (555) 012-3456
+                        </div>
+<div class="flex items-center gap-2 text-xs text-slate-600">
+<span class="material-symbols-outlined text-sm">mail</span> amani.w@email.com
+                        </div>
+</div>
+</div>
+<!-- Service Breakdown -->
+<div class="space-y-6">
+<section>
+<h5 class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-4">Service Details</h5>
+<div class="bg-surface-container-lowest p-4 rounded-lg flex justify-between items-center ring-1 ring-surface-container-high">
+<div>
+<p class="font-bold">Knotless Braids - Mid Back</p>
+<p class="text-xs text-slate-500">Duration: 4 Hours</p>
+</div>
+<span class="font-bold text-primary">$200.00</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg flex justify-between items-center mt-2 ring-1 ring-surface-container-high">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-violet-400">check_circle</span>
+<div>
+<p class="text-sm font-medium">Hair Washing &amp; Prep</p>
+<p class="text-[10px] text-slate-400">Add-on service</p>
+</div>
+</div>
+<span class="font-bold text-primary">$25.00</span>
+</div>
+</section>
+<section>
+<h5 class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-4">Client Notes</h5>
+<p class="text-sm text-on-surface-variant bg-surface p-4 rounded-lg leading-relaxed">
+                            "Please ensure edges are handled gently. Looking for a soft mahogany color blend if available."
+                        </p>
+</section>
+<section class="border-t border-surface-container-high pt-6">
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm font-medium text-slate-500">Payment Status</span>
+<span class="text-sm font-bold text-amber-600">Deposit Pending</span>
+</div>
+<div class="bg-amber-50 p-4 rounded-lg border-none flex items-center justify-between">
+<span class="text-xs font-semibold text-amber-800">$50.00 via Stripe</span>
+<button class="text-xs font-bold text-amber-900 underline">Update Amount</button>
+</div>
+</section>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="p-6 bg-surface-container-low grid grid-cols-2 gap-4">
+<button class="col-span-1 bg-surface-container-lowest border border-outline-variant text-on-surface font-bold py-3 rounded-full hover:bg-slate-50 transition-all">Cancel</button>
+<button class="col-span-1 bg-primary text-white font-bold py-3 rounded-full shadow-lg shadow-primary/20 hover:opacity-90 transition-all">Mark Confirmed</button>
+<button class="col-span-2 bg-gradient-to-r from-secondary to-secondary-container text-white font-bold py-4 rounded-full flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">link</span>
+                    Send Payment Link
+                </button>
+</div>
+</div>
+</div>
+<!-- Payment Link Modal (Overlay) -->
+<div class="fixed inset-0 z-[70] bg-on-surface/40 backdrop-blur-md flex items-center justify-center p-4">
+<div class="w-full max-w-md bg-surface-container-lowest rounded-lg overflow-hidden shadow-2xl animate-fade-in">
+<div class="p-8">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-headline text-2xl font-bold">Send Payment Link</h3>
+<p class="text-slate-500 text-sm mt-1">Request payment from Amani Williams.</p>
+</div>
+<button class="material-symbols-outlined p-2 bg-surface-container-low rounded-full">close</button>
+</div>
+<!-- Provider Toggle -->
+<div class="grid grid-cols-2 gap-3 mb-8">
+<button class="flex items-center justify-center gap-2 p-4 rounded-lg ring-2 ring-primary bg-primary-fixed text-primary font-bold">
+<span class="material-symbols-outlined">payments</span> Stripe
+                    </button>
+<button class="flex items-center justify-center gap-2 p-4 rounded-lg ring-1 ring-surface-container-high bg-white text-slate-500 font-bold opacity-60">
+<span class="material-symbols-outlined">account_balance_wallet</span> PayPal
+                    </button>
+</div>
+<!-- Amount Toggle -->
+<div class="bg-surface-container-low p-1 rounded-full flex mb-8">
+<button class="flex-1 py-2 text-sm font-bold text-primary bg-surface-container-lowest rounded-full shadow-sm">Deposit Only ($50)</button>
+<button class="flex-1 py-2 text-sm font-semibold text-slate-500">Full Payment ($225)</button>
+</div>
+<!-- Template Preview -->
+<div class="mb-8">
+<label class="text-[10px] uppercase font-bold text-slate-400 tracking-widest block mb-2 px-1">Message Preview</label>
+<div class="bg-surface p-4 rounded-lg border border-surface-container-high text-xs text-on-surface-variant italic leading-relaxed">
+                        "Hi Amani! Your slot for Oct 26 at 10:30 AM is reserved. Please complete your $50 deposit within the next 15 mins to confirm: https://stripe.com/pay/dedes_braids_xyz"
+                    </div>
+</div>
+<button class="w-full bg-primary text-white font-bold py-4 rounded-full flex items-center justify-center gap-2 shadow-lg shadow-primary/30 text-lg">
+<span class="material-symbols-outlined">send</span>
+                    Send Link
+                </button>
+</div>
+</div>
+</div>
+<!-- Success State Toast -->
+<div class="fixed top-8 left-1/2 -translate-x-1/2 z-[80] bg-green-600 text-white px-6 py-4 rounded-full shadow-2xl flex items-center gap-4 animate-bounce-in">
+<span class="material-symbols-outlined bg-white/20 p-1 rounded-full">check</span>
+<div class="font-bold text-sm tracking-wide">Payment Link Sent Successfully</div>
+</div>
+<!-- Activity Log in Drawer (Snippet Update) -->
+<!-- This would normally be visible inside the detail drawer -->
+<div class="fixed bottom-32 right-12 z-[65] pointer-events-none">
+<div class="w-64 bg-surface-container-lowest p-4 rounded-lg shadow-lg border-l-4 border-primary">
+<h6 class="text-[10px] uppercase font-bold text-slate-400 mb-2">Recent Activity</h6>
+<div class="flex gap-3">
+<div class="min-w-[8px] h-2 rounded-full bg-primary mt-1"></div>
+<p class="text-xs text-on-surface">Payment link sent to customer at <span class="font-bold">2:30 PM</span></p>
+</div>
+</div>
+</div>
+</body></html>

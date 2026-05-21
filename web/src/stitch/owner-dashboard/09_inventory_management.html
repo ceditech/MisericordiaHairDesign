@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Inventory Management | Dede’s Braids</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed": "#ffdcbb",
+              "secondary-container": "#fd56a7",
+              "on-background": "#121c2a",
+              "on-tertiary-container": "#fffbff",
+              "primary-fixed": "#e9ddff",
+              "on-tertiary": "#ffffff",
+              "surface-container-highest": "#d9e3f6",
+              "outline": "#7b7486",
+              "inverse-on-surface": "#eaf1ff",
+              "inverse-primary": "#d0bcff",
+              "surface-dim": "#d0dbed",
+              "surface-bright": "#f8f9ff",
+              "error": "#ba1a1a",
+              "on-error": "#ffffff",
+              "on-surface": "#121c2a",
+              "surface": "#f8f9ff",
+              "secondary": "#b4136d",
+              "surface-container-low": "#eff4ff",
+              "outline-variant": "#cbc3d7",
+              "on-primary": "#ffffff",
+              "on-error-container": "#93000a",
+              "secondary-fixed-dim": "#ffb0cd",
+              "primary-fixed-dim": "#d0bcff",
+              "surface-tint": "#6d3bd7",
+              "error-container": "#ffdad6",
+              "secondary-fixed": "#ffd9e4",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed-variant": "#673d00",
+              "inverse-surface": "#27313f",
+              "primary": "#6b38d4",
+              "tertiary": "#855000",
+              "surface-variant": "#d9e3f6",
+              "on-secondary-fixed": "#3e0022",
+              "on-secondary-container": "#600037",
+              "on-secondary": "#ffffff",
+              "on-primary-fixed-variant": "#5516be",
+              "surface-container": "#e6eeff",
+              "on-primary-container": "#fffbff",
+              "surface-container-high": "#dee9fc",
+              "tertiary-container": "#a76500",
+              "background": "#f8f9ff",
+              "tertiary-fixed-dim": "#ffb869",
+              "on-secondary-fixed-variant": "#8c0053",
+              "primary-container": "#8455ef",
+              "on-surface-variant": "#494454",
+              "on-tertiary-fixed": "#2c1700",
+              "on-primary-fixed": "#23005c"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .font-plus-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f8f9ff; }
+        ::-webkit-scrollbar-thumb { background: #d0bcff; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-fixed selection:text-primary">
+<aside class="hidden lg:flex flex-col fixed left-0 top-0 h-full py-8 gap-4 bg-slate-50 dark:bg-slate-950 h-screen w-64 rounded-r-3xl z-40 transition-transform duration-300 ease-in-out">
+<div class="px-6 mb-8">
+<h1 class="font-['Plus_Jakarta_Sans'] font-extrabold text-violet-600 text-2xl">Dede’s Braids</h1>
+<p class="text-xs font-medium text-slate-400 mt-1 uppercase tracking-widest">Management Portal</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center text-slate-500 dark:text-slate-400 px-4 py-2 mx-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+<span class="font-['Manrope'] font-medium text-sm">Overview</span>
+</a>
+<a class="flex items-center text-slate-500 dark:text-slate-400 px-4 py-2 mx-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="calendar_today">calendar_today</span>
+<span class="font-['Manrope'] font-medium text-sm">Appointments</span>
+</a>
+<a class="flex items-center text-slate-500 dark:text-slate-400 px-4 py-2 mx-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="content_cut">content_cut</span>
+<span class="font-['Manrope'] font-medium text-sm">Service Styles</span>
+</a>
+<a class="flex items-center text-violet-700 dark:text-violet-300 bg-white dark:bg-slate-900 shadow-sm rounded-full mx-2 px-4 py-2" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="inventory_2" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-['Manrope'] font-medium text-sm">Inventory</span>
+</a>
+<a class="flex items-center text-slate-500 dark:text-slate-400 px-4 py-2 mx-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="payments">payments</span>
+<span class="font-['Manrope'] font-medium text-sm">Shop Sales</span>
+</a>
+<a class="flex items-center text-slate-500 dark:text-slate-400 px-4 py-2 mx-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="group_add">group_add</span>
+<span class="font-['Manrope'] font-medium text-sm">Affiliates</span>
+</a>
+<a class="flex items-center text-slate-500 dark:text-slate-400 px-4 py-2 mx-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="person">person</span>
+<span class="font-['Manrope'] font-medium text-sm">Customers</span>
+</a>
+<a class="flex items-center text-slate-500 dark:text-slate-400 px-4 py-2 mx-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="analytics">analytics</span>
+<span class="font-['Manrope'] font-medium text-sm">Reports</span>
+</a>
+<a class="flex items-center text-slate-500 dark:text-slate-400 px-4 py-2 mx-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="settings">settings</span>
+<span class="font-['Manrope'] font-medium text-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-4">
+<button class="w-full py-4 px-6 bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white rounded-full font-semibold shadow-lg shadow-violet-200 active:scale-95 transition-all">
+                Book Appointment
+            </button>
+</div>
+</aside>
+<header class="fixed top-0 right-0 left-0 lg:left-64 z-30 bg-white/80 backdrop-blur-md px-8 py-4 flex justify-between items-center shadow-sm shadow-violet-100/20">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" data-icon="search">search</span>
+<input class="w-full pl-12 pr-4 py-3 bg-surface-container-high border-none rounded-full text-sm focus:ring-2 focus:ring-primary-fixed transition-all" placeholder="Search inventory products..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-slate-100">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold text-on-surface">Dede’s Braids Admin</p>
+<p class="text-xs text-slate-400">Inventory Lead</p>
+</div>
+<img alt="Dede's Braids Admin" class="w-10 h-10 rounded-full border-2 border-primary-fixed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZe9dGB3BfrzAVHlwSMUSMZPTmZYDSwAXmE7H_77l1VvFWdbcmaikjdahQMTKuLBcRk_6cFVM56Wc7aRg-DuxFoDCosy5ulbZ-vHpe5us8AfZJh25PYPbtKbqK419Uq8caJ3SieDYlx8SmnA_IB7frzvOknA52DbEmM1HSwDUXAqamsfzpiSiWr_fLVFTryXpQ93zaXYNhq1fO3-HXMGYgrjtMjL1FnUPnmlpe6oXwMyKt0gHtsx33T4d4kidDCiAy7P8v6lTPXcJ9"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-12 lg:pl-72 pr-8 min-h-screen">
+<div class="max-w-7xl mx-auto space-y-8">
+<div class="flex items-end justify-between">
+<div>
+<h2 class="text-4xl font-extrabold font-headline tracking-tight text-on-surface">Inventory</h2>
+<p class="text-on-surface-variant mt-2">Manage your luxury product catalog and supply levels.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center px-6 py-3 rounded-full bg-surface-container-lowest text-primary font-bold shadow-sm hover:bg-surface-container transition-all active:scale-95">
+<span class="material-symbols-outlined mr-2" data-icon="file_upload">file_upload</span> Bulk Import
+                    </button>
+<button class="flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-bold shadow-lg shadow-primary-container/20 active:scale-95 transition-all">
+<span class="material-symbols-outlined mr-2" data-icon="add">add</span> Add Product
+                    </button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="md:col-span-1 bg-white p-6 rounded-lg shadow-sm border border-transparent hover:shadow-md transition-all">
+<div class="flex items-center justify-between mb-4">
+<span class="p-3 bg-secondary-fixed rounded-full text-secondary">
+<span class="material-symbols-outlined" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</span>
+<span class="text-xs font-bold text-secondary-fixed-dim uppercase tracking-wider">Alerts</span>
+</div>
+<p class="text-3xl font-black font-headline">05</p>
+<p class="text-sm text-slate-500 mt-1">Low stock items</p>
+<div class="mt-4 p-3 bg-secondary-fixed/30 rounded-lg text-xs font-medium text-on-secondary-fixed flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-secondary rounded-full animate-pulse"></span>
+                        Silk Edge Control - 5 left
+                    </div>
+</div>
+<div class="md:col-span-1 bg-white p-6 rounded-lg shadow-sm border border-transparent hover:shadow-md transition-all">
+<div class="flex items-center justify-between mb-4">
+<span class="p-3 bg-primary-fixed rounded-full text-primary">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+</span>
+<span class="text-xs font-bold text-primary-fixed-dim uppercase tracking-wider">Top Seller</span>
+</div>
+<p class="text-3xl font-black font-headline tracking-tight">Kinky Twist 24"</p>
+<p class="text-sm text-slate-500 mt-1">124 units sold this month</p>
+</div>
+<div class="md:col-span-2 bg-white p-6 rounded-lg shadow-sm border border-transparent overflow-hidden">
+<div class="flex items-center justify-between mb-4">
+<p class="font-bold text-on-surface">Categories Distribution</p>
+<span class="material-symbols-outlined text-slate-300" data-icon="category">category</span>
+</div>
+<div class="flex gap-2 h-20 items-end">
+<div class="flex-1 bg-primary-container/20 rounded-t-lg relative group transition-all hover:bg-primary-container/30">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-lg h-[80%]"></div>
+<span class="absolute -bottom-6 left-0 right-0 text-[10px] text-center uppercase font-bold text-slate-400">Hair</span>
+</div>
+<div class="flex-1 bg-primary-container/20 rounded-t-lg relative group transition-all hover:bg-primary-container/30">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-lg h-[45%]"></div>
+<span class="absolute -bottom-6 left-0 right-0 text-[10px] text-center uppercase font-bold text-slate-400">Wigs</span>
+</div>
+<div class="flex-1 bg-primary-container/20 rounded-t-lg relative group transition-all hover:bg-primary-container/30">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-lg h-[65%]"></div>
+<span class="absolute -bottom-6 left-0 right-0 text-[10px] text-center uppercase font-bold text-slate-400">Gels</span>
+</div>
+<div class="flex-1 bg-primary-container/20 rounded-t-lg relative group transition-all hover:bg-primary-container/30">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-lg h-[30%]"></div>
+<span class="absolute -bottom-6 left-0 right-0 text-[10px] text-center uppercase font-bold text-slate-400">Beauty</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-lg shadow-sm overflow-hidden relative">
+<div class="p-6 flex items-center justify-between border-b border-surface-container-high/30">
+<div class="flex gap-4">
+<button class="px-6 py-2 rounded-full bg-primary-fixed text-primary text-sm font-bold">All Products</button>
+<button class="px-6 py-2 rounded-full text-on-surface-variant text-sm font-medium hover:bg-surface-container transition-all">Low Stock</button>
+<button class="px-6 py-2 rounded-full text-on-surface-variant text-sm font-medium hover:bg-surface-container transition-all">Out of Stock</button>
+</div>
+<div class="flex gap-2">
+<button class="p-2 text-slate-400 hover:text-primary hover:bg-primary-fixed/20 rounded-lg transition-all">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-primary hover:bg-primary-fixed/20 rounded-lg transition-all">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Product &amp; SKU</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Category</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Variants</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Stock Status</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Price</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Updated</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high overflow-hidden">
+<img alt="Silk Edge Control" class="w-full h-full object-cover" data-alt="close-up shot of a professional hair styling gel tub with violet labeling on a clean white vanity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYX8qnC_vCS5RevyqIszYZ4a8Nm-rB1LSYB1k4RzUcatRVcDPqmOxDBD4uECU0dFY0ILTQn3hP-wkjk9aFRFs2W5xtwFbhB5UTjeqxPj37H90Fcpi-0WniFtkyOqps1SMQMkNEB0-R51jxEr6NKblnGhhWM_VUy83Gpau3cr6FXj_WpQDZLvYs3w3M9FojI2QL9MzQbNsorrZJEF51nMrvmZWSxcV8ggH9pVttizCpYV4kqRTnbCyAyGn1h3da8OxgLCWFf3Tu55Cf"/>
+</div>
+<div>
+<p class="font-bold text-on-surface">Silk Edge Control</p>
+<p class="text-xs text-slate-400 font-mono uppercase tracking-tighter">SKU-2983-V</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 bg-surface-container-high rounded-full text-[10px] font-bold uppercase tracking-wide">Gels</span>
+</td>
+<td class="px-6 py-5 text-sm font-medium text-slate-600">4oz, Lavender</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-sm font-bold text-secondary">Low (5 left)</span>
+</div>
+</td>
+<td class="px-6 py-5 font-bold text-on-surface">$14.99</td>
+<td class="px-6 py-5 text-xs text-slate-400 font-medium tracking-tight">Today, 10:24 AM</td>
+<td class="px-6 py-5 text-right">
+<button class="p-2 text-slate-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high overflow-hidden">
+<img alt="Pre-stretched Braiding Hair" class="w-full h-full object-cover" data-alt="vibrant synthetic braiding hair bundles in shades of ombre violet and pink arranged neatly" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWLp_pC7k7m2tQv7PbItm5FBQuAD0OIp9FfcwSdq5w9ogkWahCQb-5It9RSmDCjtaipfk2Vs1uTXQVSn3iBl9WpNJEC3NyXHLtBGK3Q84VqnjLZ6gsPAeeRiwFL-OSDTfDsVKd5_ndTtFZLtz91XTga2yenrJfOdudRxOjCEWiudiLv1BU_oTP3hEG1pkuwgEVIkfayqixsY-Ww6nl2T44QS6Cee_6zJQ6ozp7p88CGVM1Z18o093rOce-42nae1pcQva0KAtGCef9"/>
+</div>
+<div>
+<p class="font-bold text-on-surface">Kinky Twist 24"</p>
+<p class="text-xs text-slate-400 font-mono uppercase tracking-tighter">SKU-7721-H</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 bg-surface-container-high rounded-full text-[10px] font-bold uppercase tracking-wide">Hair</span>
+</td>
+<td class="px-6 py-5 text-sm font-medium text-slate-600">24", Ombre Violet</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="text-sm font-bold text-emerald-600">In Stock (42)</span>
+</div>
+</td>
+<td class="px-6 py-5 font-bold text-on-surface">$9.50</td>
+<td class="px-6 py-5 text-xs text-slate-400 font-medium tracking-tight">Yesterday</td>
+<td class="px-6 py-5 text-right">
+<button class="p-2 text-slate-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high overflow-hidden">
+<img alt="Rose Water Mist" class="w-full h-full object-cover" data-alt="elegant frosted glass spray bottle with soft pink liquid and gold details on a marble surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxC2EFqo2GLtdOAeZ56Ato5pnF2Q1Oz7Iwma1VZU0h7TMll5bl_GKLLnSc2Vj0u7h5r0vOvwGNax9iF2Wo5FiYDdKtdhZiXgdTJ6K_SNROtQcua3TGZYxzb_zo7mUa0nqj-mnwPa67N3oALvx2YGLtWCy98UuuPAY7YXAGwM0OR-IFyJlzS6lqO4dzTqy2xGTy8a1xkiIcN38BDDTzKR5tKlsy5AcJ0aC9XZu64dalIAFWhopTcLb7a1TUaIm4ZidNd4fvPH2R5Exr"/>
+</div>
+<div>
+<p class="font-bold text-on-surface">Hydrating Mist</p>
+<p class="text-xs text-slate-400 font-mono uppercase tracking-tighter">SKU-1102-B</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-3 py-1 bg-surface-container-high rounded-full text-[10px] font-bold uppercase tracking-wide">Beauty</span>
+</td>
+<td class="px-6 py-5 text-sm font-medium text-slate-600">Rose, 250ml</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-slate-300"></span>
+<span class="text-sm font-bold text-slate-400">Out of Stock</span>
+</div>
+</td>
+<td class="px-6 py-5 font-bold text-on-surface">$22.00</td>
+<td class="px-6 py-5 text-xs text-slate-400 font-medium tracking-tight">Oct 12, 2023</td>
+<td class="px-6 py-5 text-right">
+<button class="p-2 text-slate-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-surface-container-low/30 border-t border-surface-container flex items-center justify-between">
+<p class="text-xs font-bold text-slate-400">Showing 1-10 of 248 products</p>
+<div class="flex gap-1">
+<button class="w-8 h-8 rounded-full flex items-center justify-center bg-white shadow-sm text-slate-400"><span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span></button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center bg-primary text-white text-xs font-bold shadow-md shadow-primary/20">1</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-slate-500 text-xs font-bold hover:bg-primary-fixed">2</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-slate-500 text-xs font-bold hover:bg-primary-fixed">3</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center bg-white shadow-sm text-slate-400"><span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span></button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 opacity-0 pointer-events-none transition-opacity duration-300 group-[.modal-open]:opacity-100 group-[.modal-open]:pointer-events-auto">
+<div class="bg-white w-full max-w-2xl rounded-lg shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300 group-[.modal-open]:scale-100">
+<div class="p-8 border-b border-slate-100 flex justify-between items-center bg-gradient-to-br from-white to-primary-fixed/10">
+<div>
+<h3 class="text-2xl font-black font-headline text-on-surface">Add New Product</h3>
+<p class="text-sm text-slate-500">Register a new item in your digital showroom.</p>
+</div>
+<button class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-slate-400 hover:text-primary transition-all">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<div class="p-8 grid grid-cols-2 gap-6">
+<div class="col-span-2">
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Product Name</label>
+<input class="w-full px-6 py-4 bg-surface-container-highest rounded-lg border-none focus:ring-2 focus:ring-primary focus:bg-white transition-all" placeholder="e.g. Ultra Hold Styling Mousse" type="text"/>
+</div>
+<div class="col-span-1">
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Category</label>
+<select class="w-full px-6 py-4 bg-surface-container-highest rounded-lg border-none focus:ring-2 focus:ring-primary focus:bg-white transition-all appearance-none">
+<option>Hair</option>
+<option>Gels</option>
+<option>Wigs</option>
+<option>Beauty</option>
+</select>
+</div>
+<div class="col-span-1">
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Price ($)</label>
+<input class="w-full px-6 py-4 bg-surface-container-highest rounded-lg border-none focus:ring-2 focus:ring-primary focus:bg-white transition-all" placeholder="29.99" type="number"/>
+</div>
+<div class="col-span-1">
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">SKU Number</label>
+<input class="w-full px-6 py-4 bg-surface-container-highest rounded-lg border-none focus:ring-2 focus:ring-primary focus:bg-white transition-all" placeholder="SKU-XXXX" type="text"/>
+</div>
+<div class="col-span-1">
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Initial Stock</label>
+<input class="w-full px-6 py-4 bg-surface-container-highest rounded-lg border-none focus:ring-2 focus:ring-primary focus:bg-white transition-all" placeholder="0" type="number"/>
+</div>
+<div class="col-span-2">
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Product Image</label>
+<div class="border-2 border-dashed border-primary-fixed/50 rounded-lg p-8 flex flex-col items-center justify-center text-slate-400 hover:border-primary transition-colors cursor-pointer bg-slate-50/50">
+<span class="material-symbols-outlined text-4xl mb-2" data-icon="cloud_upload">cloud_upload</span>
+<p class="text-sm font-medium">Click to upload product photography</p>
+<p class="text-[10px] mt-1">PNG, JPG up to 10MB</p>
+</div>
+</div>
+</div>
+<div class="px-8 py-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
+<button class="px-8 py-3 rounded-full text-sm font-bold text-slate-500 hover:bg-slate-100 transition-all">Cancel</button>
+<button class="px-10 py-3 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-bold shadow-lg shadow-primary/20 active:scale-95 transition-all">Save Product</button>
+</div>
+</div>
+</div>
+<!-- Mobile Bottom NavBar (Suppressed on large screens by default) -->
+<nav class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md px-6 py-3 flex justify-around items-center border-t border-slate-100">
+<button class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px] mt-1 font-bold">Home</span>
+</button>
+<button class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined" data-icon="inventory_2" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="text-[10px] mt-1 font-bold">Inventory</span>
+</button>
+<button class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="text-[10px] mt-1 font-bold">Schedule</span>
+</button>
+<button class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="text-[10px] mt-1 font-bold">Profile</span>
+</button>
+</nav>
+</body></html>

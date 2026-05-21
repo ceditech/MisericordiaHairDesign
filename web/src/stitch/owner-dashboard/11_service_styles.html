@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Service Styles | Dede’s Braids</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed": "#ffdcbb",
+              "secondary-container": "#fd56a7",
+              "on-background": "#121c2a",
+              "on-tertiary-container": "#fffbff",
+              "primary-fixed": "#e9ddff",
+              "on-tertiary": "#ffffff",
+              "surface-container-highest": "#d9e3f6",
+              "outline": "#7b7486",
+              "inverse-on-surface": "#eaf1ff",
+              "inverse-primary": "#d0bcff",
+              "surface-dim": "#d0dbed",
+              "surface-bright": "#f8f9ff",
+              "error": "#ba1a1a",
+              "on-error": "#ffffff",
+              "on-surface": "#121c2a",
+              "surface": "#f8f9ff",
+              "secondary": "#b4136d",
+              "surface-container-low": "#eff4ff",
+              "outline-variant": "#cbc3d7",
+              "on-primary": "#ffffff",
+              "on-error-container": "#93000a",
+              "secondary-fixed-dim": "#ffb0cd",
+              "primary-fixed-dim": "#d0bcff",
+              "surface-tint": "#6d3bd7",
+              "error-container": "#ffdad6",
+              "secondary-fixed": "#ffd9e4",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed-variant": "#673d00",
+              "inverse-surface": "#27313f",
+              "primary": "#6b38d4",
+              "tertiary": "#855000",
+              "surface-variant": "#d9e3f6",
+              "on-secondary-fixed": "#3e0022",
+              "on-secondary-container": "#600037",
+              "on-secondary": "#ffffff",
+              "on-primary-fixed-variant": "#5516be",
+              "surface-container": "#e6eeff",
+              "on-primary-container": "#fffbff",
+              "surface-container-high": "#dee9fc",
+              "tertiary-container": "#a76500",
+              "background": "#f8f9ff",
+              "tertiary-fixed-dim": "#ffb869",
+              "on-secondary-fixed-variant": "#8c0053",
+              "primary-container": "#8455ef",
+              "on-surface-variant": "#494454",
+              "on-tertiary-fixed": "#2c1700",
+              "on-primary-fixed": "#23005c"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Manrope', sans-serif; }
+        .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen">
+<!-- TopNavBar (Shared Component Execution) -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm shadow-violet-100/20 font-['Plus_Jakarta_Sans'] tracking-tight">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent">Dede’s Braids</span>
+<div class="hidden md:flex items-center bg-surface-container rounded-full px-4 py-1.5 gap-2 border-none">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-64 placeholder:text-on-surface-variant" placeholder="Search styles..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-5 py-2 rounded-full bg-primary text-on-primary text-sm font-semibold hover:opacity-90 active:scale-95 transition-all">Live Data</button>
+<div class="flex gap-2">
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Shared Component Execution) -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-0 h-full py-8 gap-4 bg-slate-50 dark:bg-slate-950 h-screen w-64 rounded-r-3xl z-40 border-none">
+<div class="px-8 mb-6">
+<h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-violet-600 text-lg">Dede’s Braids</h2>
+<p class="text-xs text-slate-500 uppercase tracking-widest font-bold">Management Portal</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-8 py-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-['Manrope'] font-medium text-sm">Overview</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-8 py-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-['Manrope'] font-medium text-sm">Appointments</span>
+</a>
+<!-- Active State Navigation -->
+<a class="flex items-center gap-3 text-violet-700 dark:text-violet-300 bg-white dark:bg-slate-900 shadow-sm rounded-full mx-2 px-6 py-2 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">content_cut</span>
+<span class="font-['Manrope'] font-semibold text-sm">Service Styles</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-8 py-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-['Manrope'] font-medium text-sm">Inventory</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-8 py-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-['Manrope'] font-medium text-sm">Shop Sales</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-8 py-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">group_add</span>
+<span class="font-['Manrope'] font-medium text-sm">Affiliates</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-8 py-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Manrope'] font-medium text-sm">Customers</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-8 py-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-['Manrope'] font-medium text-sm">Reports</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-8 py-2 hover:text-violet-600 dark:hover:text-violet-300 hover:translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-['Manrope'] font-medium text-sm">Settings</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full py-4 rounded-xl bg-gradient-to-br from-primary to-primary-container text-white font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-base">add</span>
+                Book Appointment
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-64 pt-24 pb-12 px-6 md:px-10 max-w-[1600px] mx-auto">
+<!-- Header & Top Filter Section -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<h1 class="text-4xl font-headline font-extrabold tracking-tight text-on-surface mb-2">Service Styles</h1>
+<p class="text-on-surface-variant max-w-lg">Curate and manage your signature braiding styles, pricing, and availability across your digital lookbook.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-6 py-3 bg-secondary-fixed text-on-secondary-fixed rounded-full font-bold transition-all hover:scale-105">
+<span class="material-symbols-outlined">filter_list</span>
+                    Filters
+                </button>
+<button class="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-full font-bold shadow-xl shadow-primary/30 transition-all hover:scale-105 active:scale-95">
+<span class="material-symbols-outlined">add_circle</span>
+                    Add New Style
+                </button>
+</div>
+</section>
+<!-- Horizontal Service Ribbon (Lookbook style) -->
+<div class="mb-12 overflow-x-auto pb-4 no-scrollbar">
+<div class="flex gap-4 w-max">
+<div class="flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-24 h-24 rounded-full border-4 border-primary p-1 transition-transform group-hover:scale-105">
+<div class="w-full h-full rounded-full overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="close-up of intricate box braids on a black woman with gold hair jewelry accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwRutkt8E-cGOCQas6Th49yQDL63gZq9abf29Azp2btiMDJX1o588wzmH1TuchgC1T-KXuwdlo5jr0xiQnii2YuUORQF1tV2tZ3CgezCDXSmo4X5jC0Knweibwbdtb55pz2xUQB4732G7L4Y3_YUpB0qWa6N9Qk2bOkl7GZOa09fnlHm3wwXwTgYZCFnvNJrFP6cpXCBTmnq2iuX8Y5qZTrN300iSYccyzxzaWSU0jKhxoH1Ggp3Q2uctb6R-SgCMLUxV0AiEgC_DA"/>
+</div>
+</div>
+<span class="text-sm font-bold text-primary">All Styles</span>
+</div>
+<div class="flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-24 h-24 rounded-full p-1 transition-transform group-hover:scale-105">
+<div class="w-full h-full rounded-full overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="close-up of long goddess braids with curly loose ends on a woman with warm skin tone" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhjOEmyVXE3EIR0UrSFXxfXfGlCNgqpjDJHgfY4BrX1qfqe-l9Jlgb3o4jtL2KSOAepPqkPoeqcxuSoeNJC5VnixMccPWCUaO6jA6r5AJdh2Pu4xOP1QW6QQR8rXqf_QP2qAy9RfDPQNHltZkCWqYFCtbLka98CcjX_v8nwnIe_IrC6gDSZu8Y-a50E8dPLvDa6nrWm8ilMKTkvwd7FAXd6BeZmBmLp92Ao8kOBtKbKWKo3rvfxEnfeRcPAKSOvsiT8zra9gGY6FqJ"/>
+</div>
+</div>
+<span class="text-sm font-medium text-on-surface-variant">Knotless</span>
+</div>
+<div class="flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-24 h-24 rounded-full p-1 transition-transform group-hover:scale-105">
+<div class="w-full h-full rounded-full overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="vibrant blue and purple ombre box braids styled in a high bun" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5-XyhbU16vT03TyH37XCFw9upIaWDfoAnh8-yeNS1oS8R1HrHSJh9ecDUi-GvsF5VItDSSSf3HGK4rSrKqcSiEGQR-5OMXrSstJLmsHyAArSzzFlCAl6KoGl_u6J3kIkhzAn1j-rxqL8vKyso9izcQgHNjx9OJ2J9AT3Yud88QcNtWYj1s94qQ67JIExQDyP9oBRJpqVStJ3kYa3msbg21mqwTmn-03YoDoPaDjvu3afihgKOcuuwej0xLZO4c8AjnoMALMFG-hBA"/>
+</div>
+</div>
+<span class="text-sm font-medium text-on-surface-variant">Locs</span>
+</div>
+<div class="flex flex-col items-center gap-3 group cursor-pointer">
+<div class="w-24 h-24 rounded-full p-1 transition-transform group-hover:scale-105">
+<div class="w-full h-full rounded-full overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="highly detailed cornrows braided in a unique geometric pattern on a model" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3JJ6-_2DHPqN8b1Gw5YJquPe-_jraxfpSo4L_dFfiRAvTU4nBRQa8m5p5LYkspSeNsRNn9zTdC8kGqBeQpnUgPn21yOMuhIlRtgjpX-OkioqVUMcx_Yg0dqoiC0JL9hDUS8u3bGDY3XJ_-DZ1nxuM_ZoM49-tme_loKelBPjMaxEkoITUEuxnDuBDVKi66e0egLFMy53Ai8ONnJytBgmqHWzuYAX4ainexaGudQD7vLnnhOvy8WZKFcqZ0tKKeLuKu8zAm_54ANL1"/>
+</div>
+</div>
+<span class="text-sm font-medium text-on-surface-variant">Fulani</span>
+</div>
+</div>
+</div>
+<!-- Filters Grid (Asymmetric Layout) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+<div class="md:col-span-3 grid grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-surface-container-low p-4 rounded-2xl flex flex-col justify-between">
+<span class="text-xs font-bold text-primary uppercase tracking-tighter mb-4">Total Styles</span>
+<span class="text-3xl font-headline font-extrabold">24</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-2xl flex flex-col justify-between">
+<span class="text-xs font-bold text-secondary uppercase tracking-tighter mb-4">Most Popular</span>
+<span class="text-3xl font-headline font-extrabold text-secondary">Knotless</span>
+</div>
+<div class="bg-white p-4 rounded-2xl border-none shadow-sm flex flex-col gap-2">
+<label class="text-[10px] font-bold text-on-surface-variant uppercase">Category</label>
+<select class="bg-transparent border-none p-0 text-sm font-semibold focus:ring-0">
+<option>All Categories</option>
+<option>Braids</option>
+<option>Locs</option>
+<option>Wigs</option>
+</select>
+</div>
+<div class="bg-white p-4 rounded-2xl border-none shadow-sm flex flex-col gap-2">
+<label class="text-[10px] font-bold text-on-surface-variant uppercase">Price Range</label>
+<select class="bg-transparent border-none p-0 text-sm font-semibold focus:ring-0">
+<option>Any Price</option>
+<option>$0 - $100</option>
+<option>$100 - $250</option>
+<option>$250+</option>
+</select>
+</div>
+</div>
+<div class="bg-primary/5 p-4 rounded-2xl flex items-center justify-center border-2 border-dashed border-primary/20">
+<button class="text-primary font-bold text-sm flex items-center gap-2">
+<span class="material-symbols-outlined">restart_alt</span> Reset All
+                </button>
+</div>
+</div>
+<!-- Service Styles Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+<!-- Card 1: Goddess Braids -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden group hover:shadow-xl transition-all duration-500 flex flex-col">
+<div class="relative h-72 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Professional close-up of Goddess Braids with intricate parting and flowing curly ends on a sunlit background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC468bt6taoIN8QXygJQ7Mzj3kn6g-7lDyPvW0oYB0bLkE_aFzzSe8gOtWhRqCgFJ-1Tvd3NU8mnoRFS44enx2UYz-pUOq8etYHugkVmI_L-fpG_6yDAqRWVSA63aGERTRq9ViAx6oeTLgAKIniE5waTD2lsbKiBsVnRbl4_SJSAwcdE-F-nRZQa3PdtgWp4R48RPShC1OAU3aRn2x4Aami3MYFVNOFQQ38p371YNFM1rENq1sURrQyiX8g8yHGS3IiCPpicU9sZDCZ"/>
+<div class="absolute top-4 left-4">
+<span class="bg-secondary-container text-on-tertiary-container px-4 py-1.5 rounded-full text-xs font-bold shadow-lg">Trending</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+<div class="flex justify-between items-end">
+<div class="text-white">
+<p class="text-xs font-medium opacity-80 uppercase tracking-widest mb-1">Braids</p>
+<h3 class="text-2xl font-headline font-bold">Goddess Braids</h3>
+</div>
+<span class="text-2xl font-headline font-extrabold text-white">$220+</span>
+</div>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex items-center gap-4 text-sm text-on-surface-variant mb-6">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg text-primary">schedule</span>
+                            5-6 hrs
+                        </div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg text-primary">check_circle</span>
+                            In Stock
+                        </div>
+</div>
+<div class="mt-auto pt-6 flex items-center justify-between border-t border-slate-100">
+<div class="flex gap-1">
+<button class="p-2.5 rounded-full hover:bg-slate-50 text-slate-500 transition-colors" title="Edit"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2.5 rounded-full hover:bg-slate-50 text-slate-500 transition-colors" title="Duplicate"><span class="material-symbols-outlined">content_copy</span></button>
+<button class="p-2.5 rounded-full hover:bg-slate-50 text-slate-500 transition-colors" title="Deactivate"><span class="material-symbols-outlined">visibility_off</span></button>
+</div>
+<button class="p-2.5 rounded-full hover:bg-error/10 text-error transition-colors" title="Delete"><span class="material-symbols-outlined">delete</span></button>
+</div>
+</div>
+</div>
+<!-- Card 2: Boho Knotless -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden group hover:shadow-xl transition-all duration-500 flex flex-col">
+<div class="relative h-72 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Artistic shot of boho knotless braids styled with delicate accessories and soft romantic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrQQnygdAAiuF4SO_U_hqBqCOQeQLTg3kkXJ6fc5-2IwxDjzJBDfDMHW2uYtPWoX9zNXZhKAR_ZOdSDSY-1vtONJ-KrUkrXjIvXvmj1xYiZPAe5VeR6AMdo7PkSUbdKRNcn0Ie5G5ZK4EtLajbPrrZstj5ptLN20NGW5fINnl7lpOTNnNug_LYi4ct-6Zu4AxsWVwxAXz6m1FcQKDVCyE2uGKy6F5u-4eRj3dr1bRYNAin706TabmxiqXx9w5CnDXTR7mLEicMKIUQ"/>
+<div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+<div class="flex justify-between items-end">
+<div class="text-white">
+<p class="text-xs font-medium opacity-80 uppercase tracking-widest mb-1">Knotless</p>
+<h3 class="text-2xl font-headline font-bold">Boho Knotless</h3>
+</div>
+<span class="text-2xl font-headline font-extrabold text-white">$280+</span>
+</div>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex items-center gap-4 text-sm text-on-surface-variant mb-6">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg text-primary">schedule</span>
+                            7-8 hrs
+                        </div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg text-primary">auto_awesome</span>
+                            Premium
+                        </div>
+</div>
+<div class="mt-auto pt-6 flex items-center justify-between border-t border-slate-100">
+<div class="flex gap-1">
+<button class="p-2.5 rounded-full hover:bg-slate-50 text-slate-500 transition-colors"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2.5 rounded-full hover:bg-slate-50 text-slate-500 transition-colors"><span class="material-symbols-outlined">content_copy</span></button>
+<button class="p-2.5 rounded-full hover:bg-slate-50 text-slate-500 transition-colors"><span class="material-symbols-outlined">visibility_off</span></button>
+</div>
+<button class="p-2.5 rounded-full hover:bg-error/10 text-error transition-colors"><span class="material-symbols-outlined">delete</span></button>
+</div>
+</div>
+</div>
+<!-- Card 3: Soft Locs -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden group hover:shadow-xl transition-all duration-500 flex flex-col">
+<div class="relative h-72 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Modern soft locs hairstyle with textured finish and subtle mahogany highlights in professional studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPoeZDhiBSEBiZWpE41NSEcWwUjjVSu6KaPuvcGnLLo62EKUCxJLM6RHr1ovpWierSoJeiA4R7n2iQfNREYf4n7X2DNON-1CGLhHBHLhClA1OePonCkkFe00_pfeHucpqi7JKszQwNvyPtrzSTA-Mu6skpbaRTyCIZekiEe6_3tZgJca3d4RfKarA53xp4e3qDtWzJjU7ZA3JuAc1g2LB6KEHTMrHcyFAesaNoeH5tXghOQ32JOnRYDxWhsEP2QttuzC6XW2T-sig1"/>
+<div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+<div class="flex justify-between items-end">
+<div class="text-white">
+<p class="text-xs font-medium opacity-80 uppercase tracking-widest mb-1">Locs</p>
+<h3 class="text-2xl font-headline font-bold">Soft Locs</h3>
+</div>
+<span class="text-2xl font-headline font-extrabold text-white">$180+</span>
+</div>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex items-center gap-4 text-sm text-on-surface-variant mb-6">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg text-primary">schedule</span>
+                            4 hrs
+                        </div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg text-primary">history</span>
+                            Returning Fav
+                        </div>
+</div>
+<div class="mt-auto pt-6 flex items-center justify-between border-t border-slate-100">
+<div class="flex gap-1">
+<button class="p-2.5 rounded-full hover:bg-slate-50 text-slate-500 transition-colors"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2.5 rounded-full hover:bg-slate-50 text-slate-500 transition-colors"><span class="material-symbols-outlined">content_copy</span></button>
+<button class="p-2.5 rounded-full hover:bg-slate-50 text-slate-500 transition-colors"><span class="material-symbols-outlined">visibility_off</span></button>
+</div>
+<button class="p-2.5 rounded-full hover:bg-error/10 text-error transition-colors"><span class="material-symbols-outlined">delete</span></button>
+</div>
+</div>
+</div>
+<!-- Card 4: Fulani Braids -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden group hover:shadow-xl transition-all duration-500 flex flex-col">
+<div class="relative h-72 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Symmetric Fulani braids with traditional bead decorations and gold rings on a high-fashion model" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZa1CnDP9m5peIPAVvQRL0BZvbUX3yeYtvj0dKk1F_DqEJyOgCo-93gE6PZGCjzFFSBD_i48g6EU3fXMG2iHeh6lOLXQR9t-vU7D9DdSEp-Lf-_nU-l9gop0pMrdFAiTmtCYMZepFnpit6tlhcUuPyVNjn7swtAhtfr8LP41TJbklGmIkHb9XP0G1y6mqNBR_rO-yFXJIyxdFLWDPtdvcuFXhTVZB_k90HNITocyCs-4vZG50HSOb4U6RZDTpQz-rS7SVSz1YglQmF"/>
+<div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+<div class="flex justify-between items-end">
+<div class="text-white">
+<p class="text-xs font-medium opacity-80 uppercase tracking-widest mb-1">Braids</p>
+<h3 class="text-2xl font-headline font-bold">Fulani Braids</h3>
+</div>
+<span class="text-2xl font-headline font-extrabold text-white">$150+</span>
+</div>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex items-center gap-4 text-sm text-on-surface-variant mb-6">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg text-primary">schedule</span>
+                            3-4 hrs
+                        </div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg text-primary">diamond</span>
+                            Classic
+                        </div>
+</div>
+<div class="mt-auto pt-6 flex items-center justify-between border-t border-slate-100">
+<div class="flex gap-1">
+<button class="p-2.5 rounded-full hover:bg-slate-50 text-slate-500 transition-colors"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2.5 rounded-full hover:bg-slate-50 text-slate-500 transition-colors"><span class="material-symbols-outlined">content_copy</span></button>
+<button class="p-2.5 rounded-full hover:bg-slate-50 text-slate-500 transition-colors"><span class="material-symbols-outlined">visibility_off</span></button>
+</div>
+<button class="p-2.5 rounded-full hover:bg-error/10 text-error transition-colors"><span class="material-symbols-outlined">delete</span></button>
+</div>
+</div>
+</div>
+<!-- Card 5: Add New Style Placeholder (Bento Style) -->
+<div class="border-2 border-dashed border-violet-200 rounded-lg flex flex-col items-center justify-center p-12 group cursor-pointer hover:bg-white hover:border-primary transition-all duration-300">
+<div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center text-primary mb-6 transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-3xl">add</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-on-surface mb-2">Create New Style</h3>
+<p class="text-sm text-center text-on-surface-variant">Add photos, descriptions, and custom pricing for a new service.</p>
+</div>
+</div>
+<!-- Floating Action Button for Mobile/Tablet -->
+<button class="fixed bottom-8 right-8 lg:hidden w-16 h-16 bg-primary text-white rounded-full shadow-2xl shadow-primary/40 flex items-center justify-center z-50">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</main>
+<!-- Bottom Navigation for Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-lg px-6 py-3 flex justify-between items-center z-50 shadow-[0_-4px_20px_rgba(107,56,212,0.1)]">
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-bold uppercase">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px] font-bold uppercase">Book</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">content_cut</span>
+<span class="text-[10px] font-bold uppercase">Styles</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase">Client</span>
+</button>
+</nav>
+</body></html>

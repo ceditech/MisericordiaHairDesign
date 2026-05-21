@@ -1,0 +1,1 @@
+﻿app/our-styles/page.tsx(89,48): error TS2339: Property 'label' does not exist on type '{ id: string; name: string; price: number; deposit: number; }'.

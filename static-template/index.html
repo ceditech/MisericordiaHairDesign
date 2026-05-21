@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Dede's Braids Home | Professional Braiding Services</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#a319c5",
+            "background-light": "#f8f6f7",
+            "background-dark": "#221019",
+            "accent-dark": "#1a0b13",
+          },
+          fontFamily: {
+            "display": ["Plus Jakarta Sans"]
+          },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+</head>
+
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+  <!-- Navigation -->
+  <!-- Navigation -->
+  <div id="app-header"></div>
+  <!-- Hero Section -->
+  <header class="relative overflow-hidden bg-background-light dark:bg-background-dark">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 lg:pt-32 lg:pb-40">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="z-10 text-center lg:text-left">
+          <div
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-6">
+            <span class="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+            Expert Braiding Studio
+          </div>
+          <h1 class="text-5xl lg:text-7xl font-extrabold text-slate-900 dark:text-white leading-[1.1] mb-6">
+            Braids that <br /><span class="text-primary">Speak Your</span> Language
+          </h1>
+          <p class="text-lg text-slate-600 dark:text-slate-400 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            Experience the artistry of professional African American braiding. From knotless styles to intricate
+            cornrows, we weave confidence and beauty into every strand.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <a class="bg-primary hover:bg-primary/90 text-white px-10 py-4 rounded-xl font-bold text-lg transition-all shadow-xl shadow-primary/30 flex items-center justify-center gap-2"
+              href="booking.html">
+              Book Your Session <span class="material-icons">calendar_today</span>
+            </a>
+            <a class="bg-white dark:bg-accent-dark border border-slate-200 dark:border-primary/20 px-10 py-4 rounded-xl font-bold text-lg transition-all hover:border-primary"
+              href="#services">
+              View Styles
+            </a>
+          </div>
+          <div class="mt-12 flex items-center justify-center lg:justify-start gap-6">
+            <div class="flex -space-x-3">
+              <img class="w-12 h-12 rounded-full border-2 border-white dark:border-background-dark object-cover"
+                data-alt="Satisfied client portrait"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAb04Qk9XCBchHD3EpgkMfXFoq2Va-i2WOq2TsTeD5quInGv6SQJGBoJuwuQdHs5nNHtIdDZ5WV97p19g7zCGZcYcwwlMxEKsmNhhuhuoV3SN3I4UbUu_-lZsKQIkoW9w_s4iRqpR6YJTNqRnC0XfUt672BBykoh_LaYLdlia6oA8d7Sp6bWwkLujg9MkFLX-Q4GDBBwvHTy_ry0bEfCU2DTBGRvWaK8mRuP3_koDry7Tm53lfvx3IzAux0wkO3dPSaUilqcglbGA" />
+              <img class="w-12 h-12 rounded-full border-2 border-white dark:border-background-dark object-cover"
+                data-alt="Client with braided hair"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOkcvO4o8XJawZRpRvpKE7cee3zCVOrz644ElUdBxzf6g5lFWssyiJxpxyX1oKgJTO7psDVb3NHNRJ00aNzQTPj21TJbtSGnZAxad2xsAhUt_KTgRG7AqAdu8ul01wVJs5OiLwyrvbd9S_eRvD7iH683gpQG9cN3A6Yo3a2Nw17pLH7XRuoqPsy9P-YglrOIw4A1iDFVenypxt3MSdMHp98Gw3lV0f6Aig4XKmTTHxrG14ZTyZ-EoU22srnDYrm8Cv-89zGPCIjQ" />
+              <img class="w-12 h-12 rounded-full border-2 border-white dark:border-background-dark object-cover"
+                data-alt="Professional stylist portrait"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEgoQJPgXdINCxkIjeYF1hiLK3wdLYHfrjSzDaJmWKlCrW7FCE_PVimyPDSOaShobemWI_y2WkdOT1ovsQNnfyjewey2F_BbcygOsMTta_r_vMcMwImkFQND1B75KYUolv1swM8Yh-t3qjdCr_n-Zr_orFvIEoaF1QQTym3XpCgATlsxxXdiS7le7tzELGH3jbTPpTJjVavbsWN7oN2GrXc6RdnfOPX59xynA_kLZ1PGcdyhBxqdsRlXEFhCcWoGFOcM2h8iqdlQ" />
+            </div>
+            <div class="text-sm font-medium">
+              <span class="block text-slate-900 dark:text-white font-bold">500+ Happy Clients</span>
+              <span class="text-slate-500">★★★★★ Rated Studio</span>
+            </div>
+          </div>
+        </div>
+        <div class="relative">
+          <div class="absolute inset-0 bg-primary/20 rounded-full blur-3xl -z-10 scale-75"></div>
+          <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-accent-dark">
+            <img class="w-full aspect-[4/5] object-cover" data-alt="Close up of high quality knotless braids"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtJcynaXsFttco_LddTlL38eHNQNHBV1WODfv54_sxy2s6pT4tA6g8KfhkkYVyP9GwFYUGYW89SthiDSbJ-9VqAU_NNxP2lFbJ2N0pc8gxdfNFYtFzb_gWp0xE_ksJJXNCrTPlIUs2xqWi2dUHU9yNQJ-rCwIlxe4CzSYlXmWoA5N07oQutT2hWF3nMQKMoPhUTLJlVC8i_3ILiKdp9srh3qlefPI7wKXwB1QwWQti4-Rwtx4UysWra6V5-tio8W7n2iFR9-Ghag" />
+            <div
+              class="absolute bottom-6 right-6 bg-white dark:bg-accent-dark p-4 rounded-2xl shadow-xl border-l-4 border-primary">
+              <p class="text-xs font-bold text-primary uppercase tracking-tighter">Featured Style</p>
+              <p class="text-lg font-extrabold text-slate-900 dark:text-white">Long Knotless</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- Why Choose Us -->
+  <section class="py-24 bg-white dark:bg-accent-dark" id="about">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-20">
+        <h2 class="text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Why Choose Dede's?</h2>
+        <p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">At Dede's Braids, our mission is to empower
+          individuals through beautiful and personalized hairstyles. We believe that every client deserves to feel
+          confident and stylish with their unique look.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-12">
+        <div
+          class="p-8 rounded-2xl bg-background-light dark:bg-background-dark/50 border border-slate-100 dark:border-white/5 transition-transform hover:-translate-y-2">
+          <div class="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
+            <span class="material-icons text-primary text-3xl">star</span>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-slate-900 dark:text-white">Expert Stylists</h3>
+          <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Years of mastery in traditional and modern
+            braiding techniques to give you a flawless look every time.</p>
+        </div>
+        <div
+          class="p-8 rounded-2xl bg-background-light dark:bg-background-dark/50 border border-slate-100 dark:border-white/5 transition-transform hover:-translate-y-2">
+          <div class="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
+            <span class="material-icons text-primary text-3xl">verified_user</span>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-slate-900 dark:text-white">Protective Styling</h3>
+          <p class="text-slate-600 dark:text-slate-400 leading-relaxed">We prioritize hair health, ensuring tension-free
+            methods that promote growth and protect your edges.</p>
+        </div>
+        <div
+          class="p-8 rounded-2xl bg-background-light dark:bg-background-dark/50 border border-slate-100 dark:border-white/5 transition-transform hover:-translate-y-2">
+          <div class="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
+            <span class="material-icons text-primary text-3xl">favorite</span>
+          </div>
+          <h3 class="text-xl font-bold mb-4 text-slate-900 dark:text-white">Confidence Boost</h3>
+          <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Step out with a hairstyle that makes you feel
+            powerful, beautiful, and ready to take on the world.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Services Gallery -->
+  <section class="py-24 bg-background-light dark:bg-background-dark" id="services">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div>
+          <h2 class="text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Our Popular Styles</h2>
+          <p class="text-slate-600 dark:text-slate-400">Discover our most requested braiding styles and book your
+            transformation.</p>
+        </div>
+        <div class="flex gap-2">
+          <button
+            class="w-12 h-12 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all">
+            <span class="material-icons">chevron_left</span>
+          </button>
+          <button
+            class="w-12 h-12 rounded-full border border-primary/20 flex items-center justify-center hover:bg-primary hover:text-white transition-all">
+            <span class="material-icons">chevron_right</span>
+          </button>
+        </div>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Service 1 -->
+        <div
+          class="group bg-white dark:bg-accent-dark rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-white/5 transition-all hover:shadow-xl hover:shadow-primary/5">
+          <div class="relative overflow-hidden aspect-[4/3]">
+            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              data-alt="Intricate box braids hairstyle"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBILPKOcYhd2Fnm7BAoRGKAtESs_CT40jquvUJMAfFH5ipbZlhHCaDiTMgrijyVcJF0grj8wQUME7_YO5CKF-yNdoZCClg4AOg1lb9qnjjA6CXcehWjYcJAWO8adgGMSdM6PMtVluQrwvTPauDsVda9G5cRhvwA0NvM1nP3JdtmUMl9nmqJHi2Tr6ym9hK99QrnsDZ5_OIEUVCbxx2AdcN9KCbaQBKwSif_2RrBEAWeYqwmtXlREiDfZjt8IMsM2tea6_X_T6vcCA" />
+            <div class="absolute top-4 left-4">
+              <span
+                class="bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Most
+                Popular</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-xl font-bold text-slate-900 dark:text-white">Knotless Braids</h3>
+              <span class="text-primary font-bold">from $180</span>
+            </div>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Seamless, lightweight braids that offer natural
+              scalp exposure and maximum comfort.</p>
+            <div class="flex items-center justify-between pt-6 border-t border-slate-100 dark:border-white/5">
+              <span class="flex items-center gap-1 text-xs font-semibold text-slate-500"><span
+                  class="material-icons text-sm">schedule</span> 4-6 Hours</span>
+              <a class="text-primary text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all"
+                href="booking.html">Book Now <span class="material-icons text-sm">arrow_forward</span></a>
+            </div>
+          </div>
+        </div>
+        <!-- Service 2 -->
+        <div
+          class="group bg-white dark:bg-accent-dark rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-white/5 transition-all hover:shadow-xl hover:shadow-primary/5">
+          <div class="relative overflow-hidden aspect-[4/3]">
+            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              data-alt="Classic neat cornrows style"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9W0FPV1RN_n7tTNLXcDKa3G4iAamGP2aO2jXo6jxkrL2FYopMM9vINapkUNI2Inuk8sibYvMLe4queNf-myrH66sCCiW-oop6sfum2sBYi6i84Ou3fgunEv1LjSL5yVuziW1Oo7Qhj96_8vUqTJziNAWnHTo1TvThUimKh9u56CyaY9l7-s6z8VLEJFUmF7pFcSen3BWqvSCXIuGCgn1h7Fi0yCy_yYsF5_POzmMf3Z2f3MPwVseOedYo779-zTUCeGIIx-7jEQ" />
+          </div>
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-xl font-bold text-slate-900 dark:text-white">Custom Cornrows</h3>
+              <span class="text-primary font-bold">from $120</span>
+            </div>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Intricate patterns and designs tailored to your
+              head shape and personal aesthetic preference.</p>
+            <div class="flex items-center justify-between pt-6 border-t border-slate-100 dark:border-white/5">
+              <span class="flex items-center gap-1 text-xs font-semibold text-slate-500"><span
+                  class="material-icons text-sm">schedule</span> 2-4 Hours</span>
+              <a class="text-primary text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all"
+                href="booking.html">Book Now <span class="material-icons text-sm">arrow_forward</span></a>
+            </div>
+          </div>
+        </div>
+        <!-- Service 3 -->
+        <div
+          class="group bg-white dark:bg-accent-dark rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-white/5 transition-all hover:shadow-xl hover:shadow-primary/5">
+          <div class="relative overflow-hidden aspect-[4/3]">
+            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              data-alt="Traditional box braids"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkzpglDAdtqXhrybUoW-2JBQJ9V3WlCNUIn9JaJGDyFlfmW7tB61-arPqm3eVn6Y2PmaZatZpshoHxz5V7zhvOWDz45nmE_w6CSOjQa_Pu90YhndWmsuV-AIAC1Jp2vL5NS8sIaKxPpMEzvaeahujRSM8kgzkQQydh6lp-rbxXpbWjMo0bwBe7CIjh7fXEOAzGWvdUD8pv6FK6cUR9wH8251NP3_SByqpCNRjDwNj_otANedI-qvF16EW7v4ZnbyO6Ucmz9oc5JA" />
+          </div>
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-xl font-bold text-slate-900 dark:text-white">Classic Box Braids</h3>
+              <span class="text-primary font-bold">from $150</span>
+            </div>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Versatile and iconic. Our box braids are
+              tension-free and finished with perfected ends.</p>
+            <div class="flex items-center justify-between pt-6 border-t border-slate-100 dark:border-white/5">
+              <span class="flex items-center gap-1 text-xs font-semibold text-slate-500"><span
+                  class="material-icons text-sm">schedule</span> 5-7 Hours</span>
+              <a class="text-primary text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all"
+                href="booking.html">Book Now <span class="material-icons text-sm">arrow_forward</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-16 text-center">
+        <a class="inline-flex items-center gap-2 text-slate-900 dark:text-white font-bold hover:text-primary transition-colors"
+          href="#">
+          Explore All Styles &amp; Pricing <span class="material-icons">east</span>
+        </a>
+      </div>
+    </div>
+  </section><!-- Review Carousel Section -->
+  <section class="relative py-24 overflow-hidden">
+    <!-- Background Image with Overlay -->
+    <div class="absolute inset-0 z-0">
+      <img alt="Salon Background" class="w-full h-full object-cover" src="{{DATA:IMAGE:IMAGE_2}}" />
+      <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
+    </div>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <!-- Google Rating Summary -->
+      <div class="mb-12 text-white">
+        <h2 class="text-4xl font-extrabold mb-6">Reviews</h2>
+        <div class="flex flex-col items-center justify-center gap-2">
+          <div
+            class="flex items-center gap-4 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/20">
+            <img alt="Google Logo" class="w-6 h-6"
+              src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" />
+            <span class="text-3xl font-bold">4.8</span>
+            <div class="flex flex-col items-start">
+              <p class="text-xs font-bold text-white/80">Dede's Braids</p>
+              <div class="flex text-yellow-400 text-xs">
+                <span class="material-icons text-sm">star</span>
+                <span class="material-icons text-sm">star</span>
+                <span class="material-icons text-sm">star</span>
+                <span class="material-icons text-sm">star</span>
+                <span class="material-icons text-sm">star</span>
+              </div>
+              <p class="text-[10px] text-white/60">77 Reviews</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Carousel Container -->
+      <div class="relative">
+        <!-- Navigation Arrows -->
+        <button
+          class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 w-10 h-10 flex items-center justify-center text-white/70 hover:text-white transition-colors">
+          <span class="material-icons text-3xl">chevron_left</span>
+        </button>
+        <button
+          class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-12 w-10 h-10 flex items-center justify-center text-white/70 hover:text-white transition-colors">
+          <span class="material-icons text-3xl">chevron_right</span>
+        </button>
+        <!-- Testimonial Cards -->
+        <div class="grid md:grid-cols-3 gap-6">
+          <!-- Card 1 -->
+          <div class="bg-white rounded-none p-8 flex flex-col items-center shadow-2xl">
+            <div
+              class="w-20 h-20 rounded-full bg-[#a855f7] flex items-center justify-center text-white text-3xl font-bold mb-6">
+              N</div>
+            <div class="flex text-yellow-400 mb-4">
+              <span class="material-icons text-sm">star</span>
+              <span class="material-icons text-sm">star</span>
+              <span class="material-icons text-sm">star</span>
+              <span class="material-icons text-sm">star</span>
+              <span class="material-icons text-sm">star</span>
+            </div>
+            <p class="text-slate-700 text-sm leading-relaxed mb-6 italic">"Love my braids by DeDe, I messaged her for a
+              last mi..."</p>
+            <a class="text-slate-900 text-xs font-bold flex items-center gap-1 mb-8 hover:text-primary" href="#">Read
+              full review <span class="material-icons text-xs">chevron_right</span></a>
+            <div class="flex items-center gap-2 mt-auto border-t border-slate-100 pt-6 w-full justify-center">
+              <img alt="Google" class="w-4 h-4"
+                src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" />
+              <p class="text-slate-500 text-[10px] font-bold">Nique P - 10/12/2025</p>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="bg-white rounded-none p-8 flex flex-col items-center shadow-2xl">
+            <div
+              class="w-20 h-20 rounded-full bg-[#6366f1] flex items-center justify-center text-white text-3xl font-bold mb-6">
+              B</div>
+            <div class="flex text-yellow-400 mb-4">
+              <span class="material-icons text-sm">star</span>
+              <span class="material-icons text-sm">star</span>
+              <span class="material-icons text-sm">star</span>
+              <span class="material-icons text-sm">star</span>
+              <span class="material-icons text-sm">star</span>
+            </div>
+            <p class="text-slate-700 text-sm leading-relaxed mb-6 italic">"Dede's is by far the best overall braider I
+              have bee..."</p>
+            <a class="text-slate-900 text-xs font-bold flex items-center gap-1 mb-8 hover:text-primary" href="#">Read
+              full review <span class="material-icons text-xs">chevron_right</span></a>
+            <div class="flex items-center gap-2 mt-auto border-t border-slate-100 pt-6 w-full justify-center">
+              <img alt="Google" class="w-4 h-4"
+                src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" />
+              <p class="text-slate-500 text-[10px] font-bold">Briana Price - 9/25/2025</p>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="bg-white rounded-none p-8 flex flex-col items-center shadow-2xl">
+            <div
+              class="w-20 h-20 rounded-full bg-[#7c3aed] flex items-center justify-center text-white text-3xl font-bold mb-6">
+              D</div>
+            <div class="flex text-yellow-400 mb-4">
+              <span class="material-icons text-sm">star</span>
+              <span class="material-icons text-sm">star</span>
+              <span class="material-icons text-sm">star</span>
+              <span class="material-icons text-sm">star</span>
+              <span class="material-icons text-sm">star</span>
+            </div>
+            <p class="text-slate-700 text-sm leading-relaxed mb-6 italic">"I highly recommend Dede's Braid. I received
+              welcomin..."</p>
+            <a class="text-slate-900 text-xs font-bold flex items-center gap-1 mb-8 hover:text-primary" href="#">Read
+              full review <span class="material-icons text-xs">chevron_right</span></a>
+            <div class="flex items-center gap-2 mt-auto border-t border-slate-100 pt-6 w-full justify-center">
+              <img alt="Google" class="w-4 h-4"
+                src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" />
+              <p class="text-slate-500 text-[10px] font-bold">Denise Scott - 9/25/2025</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Pagination Dots -->
+      <div class="flex justify-center gap-2 mt-12">
+        <div class="w-2 h-2 rounded-full bg-white/40"></div>
+        <div class="w-2 h-2 rounded-full bg-white/40"></div>
+        <div class="w-2 h-2 rounded-full bg-white/40"></div>
+        <div class="w-2 h-2 rounded-full bg-white"></div>
+        <div class="w-2 h-2 rounded-full bg-white/40"></div>
+        <div class="w-2 h-2 rounded-full bg-white/40"></div>
+        <div class="w-2 h-2 rounded-full bg-white/40"></div>
+        <div class="w-2 h-2 rounded-full bg-white/40"></div>
+        <div class="w-2 h-2 rounded-full bg-white/40"></div>
+        <div class="w-2 h-2 rounded-full bg-white/40"></div>
+      </div>
+    </div>
+  </section>
+  <!-- Testimonial / Social Proof -->
+  <section class="py-24 bg-white dark:bg-accent-dark border-y border-slate-100 dark:border-white/5 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <span class="material-icons text-primary text-6xl opacity-20 mb-6">format_quote</span>
+          <h2 class="text-4xl font-extrabold text-slate-900 dark:text-white mb-8 leading-tight">"Dede is the only person
+            I trust with my hair. Every time I leave, I feel like a queen."</h2>
+          <div class="flex items-center gap-4">
+            <img class="w-16 h-16 rounded-full object-cover ring-4 ring-primary/10"
+              data-alt="Testimonial author portrait"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXHDJdIz_beHk4yU94SdnsuXls4rT7aXd1QxAZk6Hw884hHlLbvUx0mfznq_g42w3YoVr4pg_hxwMUdSObvyMmzR16f0yxn2xF79YMqdpRqfQFKVHIgB-2xViSj2eibeYUjHl6_1GgWsParX-IAhhwdECAo9w7_Uv6eE0Pu7NsJf_Cv7ZcZcR1o9dU1fXLSkK8aYzRt6wdfjVW-Ym4Fxt9EvEUfxSH7FfOjzxXj89AdvjxTxZhr6FS2DT_5C_G__-U2RBqbOrPGQ" />
+            <div>
+              <p class="font-bold text-lg text-slate-900 dark:text-white">Jasmine Thompson</p>
+              <p class="text-primary text-sm font-medium">Regular Client for 3 Years</p>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-4">
+            <img class="rounded-2xl w-full aspect-[3/4] object-cover" data-alt="Intricate braiding close up"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0vjgxRgJWlAsrEqRMCymVKMm17no2F7IYzBvkAOVte_ohXVGmmaR8_w4-1WeJ70uq4BN26_C6qZR1Nna2hQwFjvtbCYa7YZwj3lpS5AaKi22R_MVbIpYr_O7DW80qQx0WmLBMwamLQ_MTy0x41OwY3Z9GvvhmATjJCg5P8ydXXpcvGFy7wUyvZuDLJcmI-N_6dsDMBCif4XFU6kJWhEqKBgxTBmFsIQ6YnHXVP0AnTbI9HFv7Waw-fDujT5-pntulAMEJhrzKzA" />
+            <img class="rounded-2xl w-full aspect-[4/3] object-cover" data-alt="Braided hairstyle profile view"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQasvwAoPl5fPzX6Q9CswpNAK0CjI0UZTqFfecs0Y5SGdjItQsYgedNeUGqGZGLIOXM7VGEspm1wbrZ1P1BzhRHpEmwr8JXqCbsWEodWcec8-QXNTahf2DsSZ-ktWz2nLk7d6pZLDNg_iCTNMqDgoEWNNSYXPZyAdV8igWtHURwUzl63jOuYp3peKn9DtF9D90HpB4gO06MeBub19ayvZ5n8pCfPCLHvy_vW9hB8txnEXxLz0HlM8ExxoOinEGObTylHsp2MSuqQ" />
+          </div>
+          <div class="space-y-4 pt-8">
+            <img class="rounded-2xl w-full aspect-[4/3] object-cover" data-alt="Braids with hair accessories"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRNEcuF3cccdy0yOALHS_y3DZtQMySVQjWNVosGWDOpJq4taKUy0p5GLt2mBcMMsIaSVp_EuQ2LiiXRXHamNc4A8w96tUxWZd0AjIcM3yQJLuhWoIh6Z3FYRSjCcNLeKbZgZ2vvjLD5oVAmkCc2--GZEdLVQ0Fnn6HCQB3oQmm8I6vFCjfduUurOiywCnRMjrVJrdm891kuyZSifQbrve3Wk_CBe_qR-J7mTj_W6OmGYbP3ia4NG5P1YARytOIJWh9_ZhgDfCmKw" />
+            <img class="rounded-2xl w-full aspect-[3/4] object-cover" data-alt="Top view of neat braids"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBc0BfMgrwY3bkfDm6NA2gr5TbtgBxNEH_V1bmdmc1hvD2L-QsQ6CQr-FWHaStNW0bAEBtCWITAxhfG_9gTkmF9ZOKuef7xNU-gNsXOYPbAiSd1PEM_Zs2if-N2U_oapdZLK6TAyYFa9d7DbatpP08t482sYEYNHQIW7WIYsPBK2LT51aFo9TPgNCf-g5FQyi2C_0W5nkQk2MP71f3lvMLExeMPSv0WeCefvKBRs_OX0BO8bpR5FbdtfuOWC5uKa_p4uNfI7-BFdA" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Booking CTA -->
+  <section class="py-24 bg-primary relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl">
+      </div>
+      <div class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/3 translate-y-1/3 blur-3xl">
+      </div>
+    </div>
+    <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+      <h2 class="text-4xl lg:text-5xl font-extrabold text-white mb-6">Ready for Your New Look?</h2>
+      <p class="text-white/80 text-lg mb-12 max-w-2xl mx-auto">Book your appointment online today and experience the
+        best braiding service in the city. Spots fill up fast!</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a class="bg-white text-primary px-10 py-4 rounded-xl font-extrabold text-lg transition-all hover:scale-105 shadow-2xl"
+          href="booking.html">
+          Schedule Appointment
+        </a>
+        <a class="bg-primary/20 backdrop-blur-md border border-white/30 text-white px-10 py-4 rounded-xl font-extrabold text-lg transition-all hover:bg-white/10"
+          href="contact.html">
+          Contact Us
+        </a>
+      </div>
+      <p class="mt-8 text-white/60 text-sm font-medium">No pre-payment required for most services.</p>
+    </div>
+  </section>
+  <!-- Footer -->
+  <!-- Footer -->
+  <div id="app-footer"></div>
+
+  <!-- Component Loader -->
+  <script src="components.js?v=2"></script>
+</body>
+
+</html>

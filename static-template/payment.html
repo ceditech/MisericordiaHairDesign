@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Secure Booking | Dede's Braids</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a319c5",
+                        "background-light": "#f8f6f7",
+                        "background-dark": "#221019",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .step-active {
+            color: #a319c5;
+            border-bottom: 2px solid #a319c5;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 min-h-screen font-display">
+    <!-- Navigation Header -->
+    <!-- Navigation -->
+    <div id="app-header"></div>
+    <main class="max-w-7xl mx-auto px-4 py-8 lg:py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Left Column: Booking Summary -->
+            <div class="lg:col-span-5 space-y-6">
+                <div class="bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-primary/5 shadow-sm">
+                    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                        <span class="material-icons text-primary">event_note</span>
+                        Booking Summary
+                    </h2>
+                    <div class="flex items-start gap-4 mb-6">
+                        <img alt="Braiding Service" class="w-24 h-24 rounded-lg object-cover"
+                            data-alt="Detailed close up of professional knotless braids"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdKVSR1W2STMIVNfZ_XwwHSmh6MbNkymo_29CjVXtRl-vXoGh6oF1Ft6GJBIvLiK20JEoGR3E0UYYUFcb-B1NnNja_63igNR1IgbC1t_YeybJ6HkT_URs3CRZHMebuG-rzICOiMFHbyGuos37eOgMuNTMNdSZs4JanPxLMcHsDr8v3K8IrKPlc6ip0uwqbz7JUnCABitCceLiUPlcyvbpFTX77GJR91iXoiwW35DnfTMnLLR0KiD6TQtKrcIKgUQ3u63xjfddMKQ" />
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold">Knotless Braids - Medium</h3>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm">Waist length, includes hair prep</p>
+                            <div class="mt-2 flex items-center text-sm font-medium text-primary">
+                                <span class="material-icons text-sm mr-1">schedule</span>
+                                4.5 Hours
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4 border-t border-slate-100 dark:border-slate-800 pt-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                                <span class="material-icons text-sm">person</span> Stylist
+                            </span>
+                            <span class="font-semibold text-slate-900 dark:text-white">Dede Williams</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                                <span class="material-icons text-sm">calendar_today</span> Date
+                            </span>
+                            <span class="font-semibold text-slate-900 dark:text-white">Friday, Oct 25, 2024</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                                <span class="material-icons text-sm">access_time</span> Time
+                            </span>
+                            <span class="font-semibold text-slate-900 dark:text-white">10:00 AM</span>
+                        </div>
+                    </div>
+                    <div class="mt-8 p-4 bg-primary/5 rounded-lg space-y-3">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-600 dark:text-slate-300">Service Fee</span>
+                            <span>$220.00</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-600 dark:text-slate-300">Materials &amp; Prep</span>
+                            <span>$30.00</span>
+                        </div>
+                        <div
+                            class="flex justify-between text-lg font-bold text-slate-900 dark:text-white pt-2 border-t border-primary/10">
+                            <span>Total Estimated</span>
+                            <span class="text-primary">$250.00</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Trusted Badge -->
+                <div class="flex items-center justify-center gap-4 text-slate-400 text-xs uppercase tracking-widest">
+                    <span class="flex items-center gap-1"><span class="material-icons text-sm">verified_user</span>
+                        Secure SSL</span>
+                    <span class="flex items-center gap-1"><span class="material-icons text-sm">lock</span>
+                        Encrypted</span>
+                    <span class="flex items-center gap-1"><span class="material-icons text-sm">payment</span> PCI
+                        Compliant</span>
+                </div>
+            </div>
+            <!-- Right Column: Payment Form -->
+            <div class="lg:col-span-7 space-y-6">
+                <div class="bg-white dark:bg-slate-900/50 p-8 rounded-xl border border-primary/5 shadow-sm">
+                    <h2 class="text-xl font-bold mb-6">Payment Method</h2>
+                    <!-- Segmented Control -->
+                    <div class="flex p-1 bg-slate-100 dark:bg-slate-800 rounded-lg mb-8">
+                        <button
+                            class="flex-1 py-2 text-sm font-semibold rounded-md bg-white dark:bg-slate-700 shadow-sm text-primary">
+                            Credit Card
+                        </button>
+                        <button class="flex-1 py-2 text-sm font-semibold text-slate-500 hover:text-slate-700">
+                            Digital Wallet
+                        </button>
+                    </div>
+                    <form class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Cardholder
+                                Name</label>
+                            <input
+                                class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 focus:ring-primary focus:border-primary"
+                                placeholder="John Doe" type="text" />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Card Number</label>
+                            <div class="relative">
+                                <input
+                                    class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 focus:ring-primary focus:border-primary"
+                                    placeholder="**** **** **** 4421" type="text" />
+                                <div class="absolute right-3 top-3 flex gap-1 opacity-60">
+                                    <span class="material-icons text-xl">credit_card</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Expiry
+                                    Date</label>
+                                <input
+                                    class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 focus:ring-primary focus:border-primary"
+                                    placeholder="MM / YY" type="text" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">CVV</label>
+                                <input
+                                    class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 focus:ring-primary focus:border-primary"
+                                    placeholder="123" type="text" />
+                            </div>
+                        </div>
+                        <button
+                            class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 group"
+                            type="button">
+                            Confirm Booking
+                            <span
+                                class="material-icons group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                        </button>
+                    </form>
+                    <!-- Cancellation Policy -->
+                    <div class="mt-8 p-6 bg-slate-50 dark:bg-slate-800/50 rounded-xl border-l-4 border-primary/40">
+                        <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-2">
+                            <span class="material-icons text-primary text-sm">info</span>
+                            Cancellation Policy
+                        </h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            We value your time! Please note that cancellations must be made <strong>at least 24 hours in
+                                advance</strong>. No-shows or late cancellations will result in a $50 inconvenience fee
+                            charged to the card on file.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Hidden Success State (For Reference Design) - Mocked below for visual consistency -->
+        <div class="mt-20 border-t border-slate-200 dark:border-slate-800 pt-16 hidden">
+            <!-- This section would show after successful payment -->
+        </div>
+        <!-- Success/Confirmation Preview Section -->
+        <div
+            class="mt-16 bg-white dark:bg-slate-900 p-8 rounded-2xl border border-primary/10 shadow-xl overflow-hidden relative">
+            <div class="absolute top-0 right-0 p-4">
+                <span
+                    class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Preview:
+                    Confirmed State</span>
+            </div>
+            <div class="text-center mb-12">
+                <div
+                    class="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="material-icons text-green-500 text-4xl">check_circle</span>
+                </div>
+                <h2 class="text-3xl font-bold mb-2">Booking Confirmed!</h2>
+                <p class="text-slate-500 dark:text-slate-400">Your appointment at Dede's Braids is all set. We
+                    sent a confirmation to your email.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- What to do next -->
+                <div class="space-y-6">
+                    <h3 class="text-xl font-bold flex items-center gap-2">
+                        <span class="material-icons text-primary">list_alt</span>
+                        What to do next
+                    </h3>
+                    <ul class="space-y-4">
+                        <li class="flex gap-4">
+                            <div
+                                class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm shrink-0">
+                                1</div>
+                            <div>
+                                <h4 class="font-bold">Hair Preparation</h4>
+                                <p class="text-sm text-slate-600 dark:text-slate-400">Please arrive with your hair
+                                    washed, blown out, and completely free of any products or oils.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div
+                                class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm shrink-0">
+                                2</div>
+                            <div>
+                                <h4 class="font-bold">Be on Time</h4>
+                                <p class="text-sm text-slate-600 dark:text-slate-400">Aim to arrive 10 minutes early.
+                                    Late arrivals beyond 15 minutes may need to be rescheduled.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div
+                                class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm shrink-0">
+                                3</div>
+                            <div>
+                                <h4 class="font-bold">Inspiration Photos</h4>
+                                <p class="text-sm text-slate-600 dark:text-slate-400">Have your reference photos ready
+                                    to show Dede for the best results.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Location details -->
+                <div class="space-y-6">
+                    <h3 class="text-xl font-bold flex items-center gap-2">
+                        <span class="material-icons text-primary">location_on</span>
+                        Getting There
+                    </h3>
+                    <div
+                        class="rounded-xl overflow-hidden h-48 bg-slate-200 relative group border border-slate-100 dark:border-slate-800">
+                        <div class="absolute inset-0 bg-slate-300 animate-pulse"></div>
+                        <img alt="Map location" class="absolute inset-0 w-full h-full object-cover"
+                            data-alt="Abstract map showing city grid layout with a pink pin"
+                            data-location="Brooklyn, New York"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZ8Kx5EGELPGsLTfwEl4xMIDnsVZgGhmxcg1psqhhrR_Ks6jHjfjHVV12BHKALKpyxkiCfPu44BKiV_cHQo_RviCWxTAEm4lg22NdZx4wHR_YFuR7AzCLCkMVOkfJ8Ya-GtYPIKyK3AyRVbJwAouUSPlFgcz0TDrz52aguJWpcbaWCJdzLhBXvu2oeBdCVUtMipOuN0AecbMimVk8SJ8GFjFD_WqCkfeV7yVXw9ACzLIPFKqAAOHQeNNZqY-mIeoJwR6IqmE90UA" />
+                        <a class="absolute bottom-4 right-4 bg-white text-slate-900 px-4 py-2 rounded-lg font-bold text-sm shadow-lg flex items-center gap-2 hover:bg-slate-50"
+                            href="#">
+                            Open in Maps <span class="material-icons text-sm">open_in_new</span>
+                        </a>
+                    </div>
+                    <div>
+                        <p class="font-bold">Dede's Braids Salon</p>
+                        <p class="text-slate-500 text-sm">123 Style Avenue, Suite 400<br />Brooklyn, NY 11201</p>
+                        <div class="mt-4 flex items-center gap-4">
+                            <button class="text-primary font-bold text-sm flex items-center gap-1">
+                                <span class="material-icons text-sm">phone</span> (555) 123-4567
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="mt-12 pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row gap-4 justify-between items-center">
+                <button
+                    class="text-slate-500 hover:text-primary font-semibold transition-colors flex items-center gap-2">
+                    <span class="material-icons">download</span> Save Confirmation PDF
+                </button>
+                <div class="flex gap-4">
+                    <button
+                        class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-6 py-2 rounded-lg font-bold">Add
+                        to Calendar</button>
+                    <a class="bg-primary text-white px-6 py-2 rounded-lg font-bold shadow-md" href="index.html">Back to
+                        Home</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <div id="app-footer"></div>
+    <script src="components.js?v=2"></script>
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="flex items-center gap-2 opacity-50">
+            <span class="material-icons">content_cut</span>
+            <span class="font-bold">Dede's Braids</span>
+        </div>
+        <p class="text-slate-400 text-sm">© 2024 Dede's Braids. All rights reserved.</p>
+        <div class="flex gap-6 text-slate-400">
+            <span class="material-icons hover:text-primary cursor-pointer">facebook</span>
+            <span class="material-icons hover:text-primary cursor-pointer">camera_alt</span>
+            <span class="material-icons hover:text-primary cursor-pointer">email</span>
+        </div>
+    </div>
+    </footer>
+</body>
+
+</html>
