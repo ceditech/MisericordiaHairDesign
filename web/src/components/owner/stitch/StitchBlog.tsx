@@ -23,7 +23,7 @@ export default function StitchBlog() {
     const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
     const [viewingPost, setViewingPost] = useState<BlogPost | null>(null);
     const [formData, setFormData] = useState<Partial<BlogPost>>({
-        title: "", content: "", author: "Dede", status: "draft", category: "Styling Tips", views: 0, reads: 0
+        title: "", content: "", author: "Misericordia Team", status: "draft", category: "Styling Tips", views: 0, reads: 0
     });
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [saving, setSaving] = useState(false);
@@ -70,7 +70,7 @@ export default function StitchBlog() {
             await upsertBlogPost(postData as BlogPost);
             setIsAdding(false);
             setEditingPost(null);
-            setFormData({ title: "", content: "", author: "Dede", status: "draft", category: "Styling Tips", views: 0, reads: 0 });
+            setFormData({ title: "", content: "", author: "Misericordia Team", status: "draft", category: "Styling Tips", views: 0, reads: 0 });
             setImageFile(null);
         } catch (err) {
             console.error("Error saving blog post:", err);
@@ -105,7 +105,7 @@ export default function StitchBlog() {
                     <p className="text-slate-500 dark:text-slate-400 mt-1">Create and manage your shop's content, styling tips, and updates.</p>
                 </div>
                 <button 
-                    onClick={() => { setIsAdding(true); setFormData({ title: "", content: "", author: "Dede", status: "draft", category: "Styling Tips" }); }}
+                    onClick={() => { setIsAdding(true); setFormData({ title: "", content: "", author: "Misericordia Team", status: "draft", category: "Styling Tips" }); }}
                     className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#6b38d4] to-[#8455ef] text-white font-bold shadow-lg shadow-[#8455ef]/20 hover:scale-105 active:scale-95 transition-all w-fit"
                 >
                     <Plus size={18} /> New Blog Post

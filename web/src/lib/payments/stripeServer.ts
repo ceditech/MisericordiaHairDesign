@@ -44,7 +44,7 @@ export function getStripeServer(): Stripe {
         stripeInstance = new Stripe(secretKey, {
             typescript: true,
             appInfo: {
-                name: "Dede's Braids",
+                name: "Misericordia Hair Design",
                 version: "1.0.0",
             },
             // Use fetch-based client for better performance/compatibility in Next.js

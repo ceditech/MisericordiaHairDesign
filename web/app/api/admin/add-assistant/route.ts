@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
                 // Generate a password reset link for the new user to set their password
                 // continueUrl brings them back to login after setting their password
-                const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://dedesbraids.com";
+                const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://misericordiahairdesign.com";
                 resetLink = await adminAuth.generatePasswordResetLink(email, {
                     url: `${appUrl}/login?email=${encodeURIComponent(email)}&welcome=true`,
                 });
@@ -59,13 +59,13 @@ export async function POST(req: NextRequest) {
         let emailError = null;
 
         try {
-            const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://dedesbraids.com";
+            const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://misericordiahairdesign.com";
             const subject = "You've been added as an Admin!";
             
             let bodyHtml = `
                 <div style="font-family: sans-serif; max-w-lg mx-auto p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
-                    <h2 style="color: #6b38d4; margin-bottom: 16px;">Welcome to the Dede's Braids Dashboard, ${name}!</h2>
-                    <p style="color: #475569; line-height: 1.6;">You have been granted Assistant access to the Dede's Braids Studio management dashboard.</p>
+                    <h2 style="color: #6b38d4; margin-bottom: 16px;">Welcome to the Misericordia Hair Designs Dashboard, ${name}!</h2>
+                    <p style="color: #475569; line-height: 1.6;">You have been granted Assistant access to the Misericordia Hair Designs management dashboard.</p>
             `;
 
             if (isNewUser) {
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
             bodyHtml += `
                     <p style="color: #475569; line-height: 1.6; font-size: 14px; margin-top: 24px; border-top: 1px solid #e2e8f0; padding-top: 16px;">
                         If you have any questions, please contact the Super Admin.<br/>
-                        Dede's Braids Studio
+                        Misericordia Hair Designs
                     </p>
                 </div>
             `;

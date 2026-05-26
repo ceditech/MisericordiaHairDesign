@@ -13,7 +13,7 @@ const POLICIES = `
 `;
 
 export function buildClientConfirmationEmail(booking: ConfirmedBooking): EmailData {
-    const subject = `Confirmed: Your Braiding Appointment with Dede's Braids`;
+    const subject = `Confirmed: Your Braiding Appointment with Misericordia Hair Design`;
 
     const text = `
 Hello ${booking.clientName},
@@ -33,7 +33,7 @@ ${booking.takeDownAddon ? `- Add-on: Take Down Service` : ''}
 Policies:
 ${POLICIES}
 
-Location: Dede's Braids, Manor, TX
+Location: Misericordia Hair Design, Manor, TX
 We look forward to seeing you!
 `;
 
@@ -41,7 +41,7 @@ We look forward to seeing you!
 <div style="font-family: sans-serif; line-height: 1.5; color: #333;">
     <h1 style="color: #a319c5;">Booking Confirmed!</h1>
     <p>Hello <strong>${booking.clientName}</strong>,</p>
-    <p>Your appointment at Dede's Braids is locked in. We're excited to see you!</p>
+    <p>Your appointment at Misericordia Hair Design is locked in. We're excited to see you!</p>
     
     <div style="background: #f9f9f9; padding: 20px; border-radius: 12px; margin: 20px 0;">
         <h2 style="margin-top: 0; font-size: 18px;">Appointment Details</h2>
@@ -70,7 +70,7 @@ We look forward to seeing you!
     </ul>
 
     <p style="margin-top: 30px; font-size: 14px; color: #888;">
-        Location: Dedes Braids, Manor, TX<br>
+        Location: Misericordia Hair Design, Manor, TX<br>
         Questions? Reply to this email or call us.
     </p>
 </div>
@@ -83,7 +83,7 @@ export function buildProviderConfirmationEmail(booking: ConfirmedBooking): Email
     const subject = `New Booking: ${booking.clientName} - ${booking.styleName}`;
 
     const text = `
-Dede, you have a new appointment!
+Marie, you have a new appointment!
 
 Client Details:
 - Name: ${booking.clientName}
@@ -137,7 +137,7 @@ Payment Info:
 }
 
 export function buildReminderEmail(booking: any): EmailData {
-    const subject = `Reminder: Your appointment tomorrow at Dede's Braids`;
+    const subject = `Reminder: Your appointment tomorrow at Misericordia Hair Design`;
     
     // Fallback logic for date/time if coming from Firestore doc directly
     const dateStr = booking.date;
@@ -154,7 +154,7 @@ Details:
 - Time: ${timeStr}
 - Date: ${dateStr}
 
-Location: Dede's Braids, Manor, TX
+Location: Misericordia Hair Design, Manor, TX
 
 If you need to reschedule or cancel, please let us know at least 24 hours in advance as per our policy.
 
@@ -165,23 +165,23 @@ We look forward to seeing you!
 <div style="font-family: sans-serif; line-height: 1.5; color: #333;">
     <h1 style="color: #a319c5;">Appointment Tomorrow!</h1>
     <p>Hello <strong>${clientName}</strong>,</p>
-    <p>We're looking forward to your appointment tomorrow at Dede's Braids.</p>
+    <p>We're looking forward to your appointment tomorrow at Misericordia Hair Design.</p>
     
     <div style="background: #f9f9f9; padding: 20px; border-radius: 12px; margin: 20px 0;">
         <h2 style="margin-top: 0; font-size: 18px;">Appointment Reminder</h2>
         <ul style="list-style: none; padding: 0;">
             <li><strong>Service:</strong> ${booking.styleName || booking.service}</li>
             <li><strong>When:</strong> ${dateStr} at ${timeStr}</li>
-            <li><strong>Location:</strong> Dede's Braids, Manor, TX</li>
+            <li><strong>Location:</strong> Misericordia Hair Design, Manor, TX</li>
         </ul>
     </div>
 
     <p style="font-size: 14px; color: #666;">
-        If you need to reschedule, please refer to our <a href="https://dedesbraids.com/policies" style="color: #a319c5;">cancellation policy</a>.
+        If you need to reschedule, please refer to our <a href="https://misericordiahairdesign.com/policies" style="color: #a319c5;">cancellation policy</a>.
     </p>
 
     <p style="margin-top: 30px; font-size: 14px; color: #888;">
-        Dedes Braids, Manor, TX<br>
+        Misericordia Hair Design, Manor, TX<br>
         Questions? Reply to this email.
     </p>
 </div>

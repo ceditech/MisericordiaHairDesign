@@ -123,7 +123,7 @@ export default function StitchProfileSettings() {
                     <div className="text-center">
                         <p className="text-sm font-bold text-slate-900 dark:text-white">{user?.email}</p>
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 text-[10px] font-black uppercase tracking-widest mt-2">
-                            <UserCheck size={10} /> {profile?.role || (user?.email === "info@dedesbraids.com" ? "Super Admin" : "User")}
+                            <UserCheck size={10} /> {profile?.role || (user?.email === "sales@edxstore.com" ? "Super Admin" : "User")}
                         </span>
                     </div>
                 </div>

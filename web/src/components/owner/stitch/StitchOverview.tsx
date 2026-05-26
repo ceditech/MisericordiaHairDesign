@@ -110,7 +110,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export default function StitchOverview() {
     const { user, profile } = useAuth();
-    const isSuperAdmin = user?.email === "info@dedesbraids.com";
+    const isSuperAdmin = user?.email === "sales@edxstore.com";
     const [showSeedData, setShowSeedData] = useState(false);
     
     const { metrics, loading: salesLoading, bookings, orders } = useAggregateSales(showSeedData);

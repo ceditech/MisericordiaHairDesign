@@ -1,105 +1,311 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Mail, Settings, AlertCircle, CheckCircle2, Lock } from "lucide-react";
-import { getDb } from "@/src/lib/firebase/client";
-import { doc, onSnapshot } from "firebase/firestore";
+import { Mail, AlertCircle, CheckCircle2, Lock, Trash2, Plus, Sparkles, RefreshCw } from "lucide-react";
 import { useAuth } from "@/src/providers/AuthProvider";
+
+interface EmailSender {
+    email: string;
+    name: string;
+    isPrimary: boolean;
+    connected: boolean;
+    updatedAt?: any;
+}
 
 export default function StitchEmailSettings() {
     const { isSuperAdmin } = useAuth();
-    const [connectedEmail, setConnectedEmail] = useState<string | null>(null);
+    const [senders, setSenders] = useState<EmailSender[]>([]);
     const [loading, setLoading] = useState(true);
+    const [actionLoading, setActionLoading] = useState<string | null>(null);
+    const [newEmail, setNewEmail] = useState("");
+    const [newName, setNewName] = useState("");
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
+
+    // Fetch all configured email senders from our secure API
+    const fetchSenders = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const res = await fetch("/api/admin/email/senders");
+            const data = await res.json();
+            if (data.success) {
+                // Ensure primary is always sorted first, followed by others
+                const sortedSenders = [...data.senders].sort((a, b) => {
+                    if (a.isPrimary) return -1;
+                    if (b.isPrimary) return 1;
+                    return a.email.localeCompare(b.email);
+                });
+                setSenders(sortedSenders);
+            } else {
+                setError(data.error || "Failed to load email configurations.");
+            }
+        } catch (err: any) {
+            setError(err.message || "Failed to fetch email configurations.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        // We listen to the emailSenders/primary_gmail document to see if an email is connected.
-        // The user must be an owner for this to succeed (handled by firestore rules).
-        const db = getDb();
-        const unsub = onSnapshot(doc(db, "emailSenders", "primary_gmail"), (docSnap) => {
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                setConnectedEmail(data.email || "Connected Account");
-            } else {
-                setConnectedEmail(null);
-            }
-            setLoading(false);
-        }, (error) => {
-            console.error("Error fetching email settings:", error);
-            setLoading(false);
-        });
+        fetchSenders();
 
-        return () => unsub();
+        // Check query parameters for success/error redirection from OAuth
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("email_success") === "true") {
+            setSuccess("Google account successfully authorized!");
+            // Clean up url parameters without reloading page
+            window.history.replaceState({}, document.title, window.location.pathname);
+        } else if (params.get("email_error")) {
+            setError(`Authorization failed: ${decodeURIComponent(params.get("email_error") || "")}`);
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
     }, []);
 
-    const handleConnect = () => {
-        // Redirect to the API route that starts the Google OAuth flow
-        window.location.href = "/api/admin/email/auth";
+    const handleConnect = (email: string) => {
+        // Redirect to the auth API route with target email parameter
+        window.location.href = `/api/admin/email/auth?email=${encodeURIComponent(email)}`;
     };
+
+    const handleDelete = async (email: string) => {
+        if (!confirm(`Are you sure you want to remove the email configuration for ${email}?`)) {
+            return;
+        }
+
+        try {
+            setActionLoading(email);
+            setError(null);
+            setSuccess(null);
+            const res = await fetch(`/api/admin/email/senders?email=${encodeURIComponent(email)}`, {
+                method: "DELETE"
+            });
+            const data = await res.json();
+            if (data.success) {
+                setSuccess(`Successfully removed email sender: ${email}`);
+                await fetchSenders();
+            } else {
+                setError(data.error || "Failed to delete sender.");
+            }
+        } catch (err: any) {
+            setError(err.message || "Failed to delete sender.");
+        } finally {
+            setActionLoading(null);
+        }
+    };
+
+    const handleAddSender = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError(null);
+        setSuccess(null);
+
+        const email = newEmail.trim().toLowerCase();
+        const name = newName.trim();
+
+        if (!email || !name) {
+            setError("Both Name and Email are required.");
+            return;
+        }
+
+        if (senders.some(s => s.email.toLowerCase() === email)) {
+            setError("An integration for this email address already exists.");
+            return;
+        }
+
+        // To add a sender to the Firestore database with pending authorization,
+        // we can trigger the OAuth connection directly for it.
+        handleConnect(email);
+    };
+
+    const primarySender = senders.find(s => s.isPrimary);
+    const customSenders = senders.filter(s => !s.isPrimary);
 
     return (
         <div className="max-w-4xl mx-auto space-y-8 pb-20 animate-in fade-in duration-700">
-            <div>
-                <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-none mb-2">Global Integrations</h2>
-                <p className="text-slate-500 font-medium">System-wide configurations managed by the Super Admin.</p>
+            <div className="flex justify-between items-end">
+                <div>
+                    <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-none mb-2 flex items-center gap-2">
+                        Global Email Integrations <Sparkles className="text-purple-500 w-6 h-6 animate-pulse" />
+                    </h2>
+                    <p className="text-slate-500 font-medium">Manage primary and custom email senders for Misericordia Hair Design.</p>
+                </div>
+                <button 
+                    onClick={fetchSenders} 
+                    className="p-3 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl hover:bg-slate-100 dark:hover:bg-slate-700 transition-all border border-slate-100 dark:border-slate-800"
+                    title="Refresh List"
+                >
+                    <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
+                </button>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-sm">
-                <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 flex items-center justify-center">
-                        <Mail size={24} />
+            {error && (
+                <div className="p-4 border border-rose-100 bg-rose-50 dark:bg-rose-950/20 dark:border-rose-900/50 rounded-2xl flex items-start gap-3">
+                    <AlertCircle className="text-rose-500 shrink-0 mt-0.5" size={20} />
+                    <div className="text-sm font-medium text-rose-800 dark:text-rose-400">{error}</div>
+                </div>
+            )}
+
+            {success && (
+                <div className="p-4 border border-emerald-100 bg-emerald-50 dark:bg-emerald-950/20 dark:border-emerald-900/50 rounded-2xl flex items-start gap-3">
+                    <CheckCircle2 className="text-emerald-500 shrink-0 mt-0.5" size={20} />
+                    <div className="text-sm font-medium text-emerald-800 dark:text-emerald-400">{success}</div>
+                </div>
+            )}
+
+            {/* PRIMARY SENDER INTEGRATION */}
+            <div className="bg-gradient-to-br from-indigo-50/30 to-purple-50/20 dark:from-indigo-950/10 dark:to-purple-950/5 p-8 rounded-[3rem] border border-indigo-100/50 dark:border-indigo-900/20 shadow-sm relative overflow-hidden">
+                <div className="absolute right-0 top-0 w-64 h-64 bg-indigo-200/10 dark:bg-indigo-900/5 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shadow-inner">
+                            <Mail size={24} />
+                        </div>
+                        <div>
+                            <div className="flex items-center gap-2">
+                                <h3 className="text-xl font-black text-slate-900 dark:text-white">Primary Sender</h3>
+                                <span className="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-[10px] font-black uppercase tracking-wider rounded-md">Primary</span>
+                            </div>
+                            <p className="text-xs text-slate-500 font-medium">Standard system email address used for automatic booking receipts and alerts.</p>
+                        </div>
                     </div>
+                    {primarySender?.connected ? (
+                        <span className="px-3 py-1 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs font-bold rounded-xl flex items-center gap-1.5 border border-emerald-500/20">
+                            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Connected
+                        </span>
+                    ) : (
+                        <span className="px-3 py-1 bg-amber-500/10 text-amber-700 dark:text-amber-400 text-xs font-bold rounded-xl flex items-center gap-1.5 border border-amber-500/20">
+                            <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span> Not Connected
+                        </span>
+                    )}
+                </div>
+
+                <div className="p-6 bg-white/70 dark:bg-slate-900/50 backdrop-blur-md rounded-2xl border border-slate-100 dark:border-slate-800/80 flex items-center justify-between shadow-sm">
                     <div>
-                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Email Integration</h2>
-                        <p className="text-sm text-slate-500 font-medium">Connect your Gmail account to send booking confirmations automatically.</p>
+                        <h4 className="font-extrabold text-slate-800 dark:text-slate-200">{primarySender?.name || "Misericordia Hair Design"}</h4>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">{primarySender?.email || "sales@edxstore.com"}</p>
                     </div>
+                    {isSuperAdmin ? (
+                        <button 
+                            onClick={() => handleConnect(primarySender?.email || "sales@edxstore.com")}
+                            className="px-5 py-2.5 bg-[#6b38d4] hover:bg-purple-700 text-white rounded-xl text-xs font-black shadow-md shadow-purple-200 dark:shadow-none transition-all flex items-center gap-2 hover:scale-[1.02] active:scale-95"
+                        >
+                            <RefreshCw size={14} className={actionLoading === (primarySender?.email || "sales@edxstore.com") ? "animate-spin" : ""} />
+                            {primarySender?.connected ? "Reconnect Account" : "Connect Primary Gmail"}
+                        </button>
+                    ) : (
+                        <div className="flex items-center gap-2 text-slate-400 font-bold text-xs">
+                            <Lock size={14} /> Only Super Admin can connect
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* CUSTOM SENDERS AND MANAGEMENT */}
+            <div className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-8">
+                <div>
+                    <h3 className="text-xl font-black text-slate-900 dark:text-white mb-1">Additional Senders</h3>
+                    <p className="text-slate-500 font-medium text-xs">Register additional staff or brand emails. Customers will receive communications from the sender selected by the booker.</p>
                 </div>
 
                 {loading ? (
-                    <div className="py-8 text-center text-slate-400 font-bold">Checking connection status...</div>
-                ) : connectedEmail ? (
-                    <div className="p-6 border border-emerald-100 bg-emerald-50 dark:bg-emerald-900/10 dark:border-emerald-800/50 rounded-3xl flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <CheckCircle2 size={24} className="text-emerald-500" />
-                            <div>
-                                <h3 className="font-bold text-emerald-900 dark:text-emerald-400">Successfully Connected</h3>
-                                <p className="text-sm text-emerald-700 dark:text-emerald-600 font-medium">Sending emails as: <strong>{connectedEmail}</strong></p>
-                            </div>
-                        </div>
-                        {isSuperAdmin ? (
-                            <button 
-                                onClick={handleConnect}
-                                className="px-4 py-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold shadow-sm hover:bg-slate-50 transition-colors"
-                            >
-                                Reconnect
-                            </button>
-                        ) : (
-                            <div className="flex items-center gap-2 text-slate-400 font-bold text-xs">
-                                <Lock size={14} /> Locked
-                            </div>
-                        )}
+                    <div className="py-8 text-center text-slate-400 font-bold">Loading email configurations...</div>
+                ) : customSenders.length === 0 ? (
+                    <div className="py-10 text-center border border-dashed border-slate-200 dark:border-slate-800 rounded-[2rem] text-slate-400 font-medium text-sm">
+                        No custom email senders configured yet. Add one below!
                     </div>
                 ) : (
-                    <div className="p-6 border border-amber-100 bg-amber-50 dark:bg-amber-900/10 dark:border-amber-800/50 rounded-3xl flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <AlertCircle size={24} className="text-amber-500" />
-                            <div>
-                                <h3 className="font-bold text-amber-900 dark:text-amber-400">Not Connected</h3>
-                                <p className="text-sm text-amber-700 dark:text-amber-600 font-medium">Your application cannot send emails until an account is linked.</p>
+                    <div className="overflow-hidden border border-slate-100 dark:border-slate-800 rounded-3xl">
+                        <table className="w-full text-left border-collapse">
+                            <thead>
+                                <tr className="bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-100 dark:border-slate-800 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                    <th className="p-4 pl-6">Display Name</th>
+                                    <th className="p-4">Email Address</th>
+                                    <th className="p-4">Connection Status</th>
+                                    <th className="p-4 pr-6 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-sm font-semibold text-slate-800 dark:text-slate-200">
+                                {customSenders.map((sender) => (
+                                    <tr key={sender.email} className="hover:bg-slate-50/30 dark:hover:bg-slate-800/20 transition-all">
+                                        <td className="p-4 pl-6 font-bold">{sender.name || "Custom Sender"}</td>
+                                        <td className="p-4 text-slate-500 dark:text-slate-400 font-medium">{sender.email}</td>
+                                        <td className="p-4">
+                                            {sender.connected ? (
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                                                    <span className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse"></span> Connected
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                                                    <span className="w-1 h-1 bg-amber-500 rounded-full animate-pulse"></span> Needs Auth
+                                                </span>
+                                            )}
+                                        </td>
+                                        <td className="p-4 pr-6 text-right space-x-2">
+                                            {isSuperAdmin ? (
+                                                <>
+                                                    <button 
+                                                        onClick={() => handleConnect(sender.email)}
+                                                        className="px-3.5 py-1.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold transition-all"
+                                                    >
+                                                        {sender.connected ? "Reconnect" : "Connect"}
+                                                    </button>
+                                                    <button 
+                                                        onClick={() => handleDelete(sender.email)}
+                                                        className="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-xl transition-all"
+                                                        disabled={actionLoading === sender.email}
+                                                        title="Delete Sender"
+                                                    >
+                                                        <Trash2 size={16} />
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <span className="text-xs text-slate-400 font-bold"><Lock size={12} className="inline mr-1" /> Locked</span>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+
+                {/* ADD SENDER FORM (ONLY SUPER ADMIN) */}
+                {isSuperAdmin && (
+                    <form onSubmit={handleAddSender} className="p-6 bg-slate-50/50 dark:bg-slate-800/20 border border-slate-100 dark:border-slate-800/80 rounded-3xl space-y-4">
+                        <h4 className="font-extrabold text-sm text-slate-850 dark:text-slate-200 flex items-center gap-2">
+                            <Plus size={16} /> Add Custom Email Integration
+                        </h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                                <label className="text-xs font-bold text-slate-500">Display Name / Name</label>
+                                <input 
+                                    type="text" 
+                                    placeholder="e.g. Booking Desk / Hairdresser Name"
+                                    value={newName}
+                                    onChange={(e) => setNewName(e.target.value)}
+                                    className="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold outline-none focus:border-purple-500 transition-colors"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-xs font-bold text-slate-500">Google Account Email</label>
+                                <input 
+                                    type="email" 
+                                    placeholder="e.g. partner@gmail.com"
+                                    value={newEmail}
+                                    onChange={(e) => setNewEmail(e.target.value)}
+                                    className="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold outline-none focus:border-purple-500 transition-colors"
+                                />
                             </div>
                         </div>
-                        {isSuperAdmin ? (
+                        <div className="flex justify-end pt-2">
                             <button 
-                                onClick={handleConnect}
-                                className="px-6 py-2 bg-[#6b38d4] hover:bg-purple-700 text-white rounded-xl text-sm font-bold shadow-md shadow-purple-200 transition-all"
+                                type="submit"
+                                className="px-5 py-2.5 bg-[#6b38d4] hover:bg-purple-700 text-white rounded-xl text-xs font-bold shadow-md shadow-purple-200 dark:shadow-none transition-all flex items-center gap-2 hover:scale-[1.02] active:scale-95"
                             >
-                                Connect Gmail
+                                <Plus size={14} /> Authorize & Link Google Account
                             </button>
-                        ) : (
-                            <div className="flex items-center gap-2 text-slate-400 font-bold text-xs">
-                                <Lock size={14} /> Only Super Admin can connect
-                            </div>
-                        )}
-                    </div>
+                        </div>
+                    </form>
                 )}
             </div>
         </div>

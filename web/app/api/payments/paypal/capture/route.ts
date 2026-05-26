@@ -141,13 +141,13 @@ export async function POST(req: NextRequest) {
           // Send Receipt
           await EmailManager.sendEmail({
             to: customerEmail,
-            subject: `Booking Confirmed - Dede's Braids #${bookingId}`,
+            subject: `Booking Confirmed - Misericordia Hair Design #${bookingId}`,
             bodyHtml: clientHtml,
           } as any);
           
           // Notify the owner
           await EmailManager.sendEmail({
-            to: "info@dedesbraids.com", // Send to owner
+            to: "sales@edxstore.com", // Send to owner
             subject: `New Booking via PayPal! ${draft.clientName} - ${draft.styleName}`,
             bodyHtml: ownerHtml,
           });

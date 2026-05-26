@@ -80,8 +80,8 @@ export async function POST(req: NextRequest) {
                         
                         <p style="font-size: 14px; color: #888; text-align: center; margin: 0;">
                             Best regards,<br/>
-                            <strong>Dede's Braids Team</strong><br/>
-                            <a href="https://dedesbraids.com" style="color: #a319c5; text-decoration: none;">dedesbraids.com</a>
+                            <strong>Misericordia Hair Design Team</strong><br/>
+                            <a href="https://misericordiahairdesign.com" style="color: #a319c5; text-decoration: none;">misericordiahairdesign.com</a>
                         </p>
                     </div>
                 `

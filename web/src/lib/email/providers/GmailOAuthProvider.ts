@@ -1,6 +1,6 @@
 import { google } from "googleapis";
 import { EmailProvider, SendEmailOptions } from "../EmailProvider";
-import { SenderRepository } from "../SenderRepository";
+import { SenderRepository, GmailSenderConfig } from "../SenderRepository";
 
 export class GmailOAuthProvider implements EmailProvider {
     readonly providerId = 'gmail_oauth';
@@ -26,7 +26,7 @@ export class GmailOAuthProvider implements EmailProvider {
             if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
                 return false;
             }
-            // Must have saved tokens in Firestore
+            // Must have primary sender configured
             const sender = await SenderRepository.getPrimarySender();
             return !!sender && !!sender.refreshToken;
         } catch (error) {
@@ -35,15 +35,19 @@ export class GmailOAuthProvider implements EmailProvider {
     }
 
     async sendEmail(options: SendEmailOptions): Promise<void> {
-        const configured = await this.isConfigured();
-        if (!configured) {
-            console.error("[GmailOAuthProvider] Cannot send email. Provider is not configured.");
-            throw new Error("Email provider not configured. Please connect Gmail in the dashboard.");
+        // Resolve target sender
+        const targetEmail = options.fromEmail ? options.fromEmail.toLowerCase().trim() : "sales@edxstore.com";
+        
+        let sender: GmailSenderConfig | null = null;
+        if (targetEmail === "sales@edxstore.com") {
+            sender = await SenderRepository.getPrimarySender();
+        } else {
+            sender = await SenderRepository.getSender(targetEmail);
         }
 
-        const sender = await SenderRepository.getPrimarySender();
-        if (!sender) {
-            throw new Error("Sender configuration missing");
+        if (!sender || !sender.refreshToken) {
+            console.error(`[GmailOAuthProvider] Sender ${targetEmail} is not configured or missing refresh token.`);
+            throw new Error(`Email sender ${targetEmail} is not configured. Please authorize this account first.`);
         }
 
         const oauth2Client = this.getOAuthClient();
@@ -53,23 +57,25 @@ export class GmailOAuthProvider implements EmailProvider {
             expiry_date: sender.expiryDate
         });
 
-        // Whenever googleapis refreshes the token, we should technically save it.
-        // We can attach a listener to 'tokens' event on the client.
+        // Whenever googleapis refreshes the token, save it to the correct sender document in Firestore
         oauth2Client.on('tokens', (tokens) => {
-            if (tokens.refresh_token) {
-                SenderRepository.savePrimarySender({
-                    email: sender.email,
-                    accessToken: tokens.access_token!,
-                    refreshToken: tokens.refresh_token,
-                    expiryDate: tokens.expiry_date!
-                }).catch((err: any) => console.error("Failed to save refreshed token", err));
+            const updatedConfig = {
+                email: sender!.email,
+                name: sender!.name || '',
+                accessToken: tokens.access_token!,
+                refreshToken: tokens.refresh_token || sender!.refreshToken, // Keep existing refresh token if not returned
+                expiryDate: tokens.expiry_date!,
+                isPrimary: sender!.isPrimary || false
+            };
+
+            if (sender!.isPrimary) {
+                SenderRepository.savePrimarySender(updatedConfig).catch((err: any) => 
+                    console.error("[GmailOAuthProvider] Failed to save primary sender refreshed token", err)
+                );
             } else {
-                SenderRepository.savePrimarySender({
-                    email: sender.email,
-                    accessToken: tokens.access_token!,
-                    refreshToken: sender.refreshToken, // keep old refresh token
-                    expiryDate: tokens.expiry_date!
-                }).catch((err: any) => console.error("Failed to save refreshed token", err));
+                SenderRepository.saveSender(sender!.email, updatedConfig).catch((err: any) => 
+                    console.error(`[GmailOAuthProvider] Failed to save sender ${sender!.email} refreshed token`, err)
+                );
             }
         });
 
@@ -77,11 +83,14 @@ export class GmailOAuthProvider implements EmailProvider {
 
         // Construct raw email according to RFC 2822
         const boundary = 'foo123'; // Unique boundary
+        const messageId = `<${Date.now()}-${Math.random().toString(36).substring(2)}@misericordiahairdesign.com>`;
         
         let rawMessage = [
-            `From: "${options.fromName || 'Dedes Braids'}" <${sender.email}>`,
+            `From: "${options.fromName || sender.name || 'Misericordia Hair Design'}" <${sender.email}>`,
             `To: ${options.to}`,
             `Subject: ${options.subject}`,
+            `Date: ${new Date().toUTCString()}`,
+            `Message-ID: ${messageId}`,
             `MIME-Version: 1.0`,
             `Content-Type: multipart/alternative; boundary="${boundary}"`,
             '',
@@ -112,10 +121,10 @@ export class GmailOAuthProvider implements EmailProvider {
                     raw: encodedMessage
                 }
             });
-            console.log(`[GmailOAuthProvider] Successfully sent email to ${options.to}`);
+            console.log(`[GmailOAuthProvider] Successfully sent email to ${options.to} from ${sender.email}`);
         } catch (error) {
-            console.error("[GmailOAuthProvider] Failed to send email via Gmail API:", error);
-            throw new Error("Failed to send email");
+            console.error(`[GmailOAuthProvider] Failed to send email via Gmail API from ${sender.email}:`, error);
+            throw new Error(`Failed to send email via Gmail API: ${error instanceof Error ? error.message : String(error)}`);
         }
     }
 }

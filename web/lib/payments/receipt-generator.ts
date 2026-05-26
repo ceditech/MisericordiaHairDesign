@@ -65,7 +65,7 @@ export function generateHtmlReceipt(data: ReceiptData): string {
     <body>
         <div class="container">
             <div class="header">
-                <h1>Dede's Braids</h1>
+                <h1>Misericordia Hair Design</h1>
                 <p>Payment Receipt</p>
             </div>
             <div class="content">
@@ -104,7 +104,7 @@ export function generateHtmlReceipt(data: ReceiptData): string {
                 </p>
             </div>
             <div class="footer">
-                <p>&copy; ${new Date().getFullYear()} Dede's Braids. All rights reserved.</p>
+                <p>&copy; ${new Date().getFullYear()} Misericordia Hair Design. All rights reserved.</p>
                 <p style="margin-top: 5px;">This is an automated receipt, please do not reply to this email.</p>
             </div>
         </div>

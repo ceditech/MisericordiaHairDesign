@@ -4,6 +4,7 @@ export interface SendEmailOptions {
     bodyHtml: string;
     bodyText?: string;
     fromName?: string;
+    fromEmail?: string;
 }
 
 export interface EmailProvider {

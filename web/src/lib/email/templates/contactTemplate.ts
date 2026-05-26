@@ -33,7 +33,7 @@ export function generateContactInquiryEmail(
 <body>
     <div class="container">
         <div class="header">
-            <h1 style="color: white;">Dede's Braids</h1>
+            <h1 style="color: white;">Misericordia Hair Design</h1>
         </div>
         
         <div class="content">
@@ -61,7 +61,7 @@ ${message}
         </div>
         
         <div class="footer">
-            Sent from dedesbraids.com contact form
+            Sent from misericordiahairdesign.com contact form
         </div>
     </div>
 </body>

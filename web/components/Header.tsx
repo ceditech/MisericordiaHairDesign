@@ -67,8 +67,7 @@ export default function Header() {
 
     const Logo = () => (
         <Link href="/" className="text-2xl font-extrabold tracking-tighter text-brand-secondary">
-            DEDE&apos;S
-            <span className="text-text-primary">BRAIDS</span>
+            MHDESIGNS
         </Link>
     );
 
@@ -192,8 +191,7 @@ export default function Header() {
                 {/* Drawer Header */}
                 <div className="flex items-center justify-between p-6 border-b border-border">
                     <span className="text-xl font-extrabold tracking-tighter text-brand-primary">
-                        DEDE&apos;S
-                        <span className="text-text-primary">BRAIDS</span>
+                        MHDESIGNS
                     </span>
                     {/* The close button is handled by the Drawer component */}
                 </div>

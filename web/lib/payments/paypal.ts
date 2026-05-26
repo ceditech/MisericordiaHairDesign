@@ -126,7 +126,7 @@ export async function createOrder(params: CreateOrderParams) {
             return_url: returnUrl,
             cancel_url: cancelUrl,
             user_action: "PAY_NOW",
-            brand_name: "Dede's Braids",
+            brand_name: "Misericordia Hair Design",
             shipping_preference: "NO_SHIPPING",
         };
     }
