@@ -37,7 +37,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
         <div className="px-8 mb-8 flex justify-between items-center">
           <div>
           <h1 className="font-headline font-extrabold text-[#6b38d4] dark:text-[#d0bcff] text-2xl tracking-tight">
-            Dede's Braids
+            Misericordia Hair Design
           </h1>
           <p className="text-xs text-slate-500 font-medium uppercase tracking-widest mt-1">
             Management Portal

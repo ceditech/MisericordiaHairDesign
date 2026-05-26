@@ -2,11 +2,11 @@
 // Import these everywhere policy text appears so wording stays consistent.
 
 export const LAST_UPDATED = "3/26/2026";
-export const CONTACT_EMAIL = "info@dedesbraids.com";
+export const CONTACT_EMAIL = "info@misericordiahairdesign.com";
 export const CONTACT_PHONE = "(469) 773-9973";
 export const LOCATION = "Manor, TX";
 export const FULL_ADDRESS = "12901 Fireside Chat St, Manor, TX 78653";
-export const BUSINESS_NAME = "Dede's Braids";
+export const BUSINESS_NAME = "Misericordia Hair Design";
 
 // ─── Deposit ──────────────────────────────────────────────────────────────────
 export const DEPOSIT_AMOUNT = "$50";

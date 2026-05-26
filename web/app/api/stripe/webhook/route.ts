@@ -193,7 +193,7 @@ async function handleBookingPayment(session: Stripe.Checkout.Session, eventId: s
       const clientHtml = generateElegantReceiptEmail(draft, bookingId, "client", formattedAmount);
       await EmailManager.sendEmail({
         to: customerEmail,
-        subject: `Booking Confirmed - Dede's Braids #${bookingId}`,
+        subject: `Booking Confirmed - Misericordia Hair Design #${bookingId}`,
         bodyHtml: clientHtml,
       } as any);
       console.log("[Stripe Webhook] Receipt sent to:", customerEmail);
@@ -201,7 +201,7 @@ async function handleBookingPayment(session: Stripe.Checkout.Session, eventId: s
       // Notify the owner of the new booking
       const ownerHtml = generateElegantReceiptEmail(draft, bookingId, "owner", formattedAmount);
       await EmailManager.sendEmail({
-        to: "info@dedesbraids.com", // Send to owner
+        to: "sales@edxstore.com", // Send to owner
         subject: `New Booking! ${draft.clientName} - ${draft.styleName}`,
         bodyHtml: ownerHtml,
       });

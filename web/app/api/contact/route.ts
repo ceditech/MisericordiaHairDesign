@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
         try {
             const emailHtml = generateContactInquiryEmail(name, email, service, message);
             await EmailManager.sendEmail({
-                to: "info@dedesbraids.com",
+                to: "sales@edxstore.com",
                 subject: `New Contact Inquiry: ${name} - ${service}`,
                 bodyHtml: emailHtml,
             } as any);

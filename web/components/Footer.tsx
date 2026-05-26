@@ -9,8 +9,8 @@ export default function Footer() {
                 <div className="grid md:grid-cols-4 gap-12 mb-16">
                     <div className="col-span-2">
                         <span className="text-2xl font-extrabold tracking-tighter text-brand-secondary mb-6 block">
-                            DEDE&apos;S
-                            <span className="text-text-primary">BRAIDS</span>
+                            MISERICORDIA
+                            <span className="text-text-primary"> HAIR DESIGNS</span>
                         </span>
                         <p className="text-text-secondary max-w-xs mb-8">
                             Professional African American braiding service focusing on hair health, creativity, and customer
@@ -139,7 +139,7 @@ export default function Footer() {
                 </div>
                 <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-text-secondary text-sm">
                     <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-center md:text-left">
-                        <p>© {new Date().getFullYear()} Dede&apos;s Braids. All rights reserved.</p>
+                        <p>© {new Date().getFullYear()} Misericordia Hair Designs. All rights reserved.</p>
                         <span className="hidden md:inline opacity-20">|</span>
                         <p>
                             Designed and Developed by{" "}

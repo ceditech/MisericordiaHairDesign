@@ -8,7 +8,7 @@ export function generateElegantReceiptEmail(
     const title = isOwner ? "New Booking Received! 🎉" : "Your Booking is Confirmed!";
     const preheader = isOwner
         ? `New appointment for ${draft.clientName} on ${draft.date}.`
-        : `Thank you for booking with Dede's Braids. Here are your appointment details.`;
+        : `Thank you for booking with Misericordia Hair Design. Here are your appointment details.`;
 
     const accentColor = "#a319c5";
     const bgColor = "#f8f6f7";
@@ -47,7 +47,7 @@ export function generateElegantReceiptEmail(
     
     <div class="container">
         <div class="header">
-            <h1 style="color: white; margin-bottom: 8px;">Dede's Braids</h1>
+            <h1 style="color: white; margin-bottom: 8px;">Misericordia Hair Design</h1>
             <p style="margin: 0; color: #94a3b8; font-size: 14px;">Booking Reference: ${bookingId.split('_').pop()?.toUpperCase() || bookingId}</p>
         </div>
         
@@ -135,19 +135,19 @@ export function generateElegantReceiptEmail(
             ${!isOwner ? `
             <div style="text-align: center; margin-top: 40px;">
                 <p style="font-size: 14px; color: #64748b; margin-bottom: 20px;">Need to make changes to your appointment?</p>
-                <a href="https://dedesbraids.com/contact" class="button" style="color: white;">Contact Us</a>
+                <a href="https://misericordiahairdesign.com/contact" class="button" style="color: white;">Contact Us</a>
             </div>
             ` : `
             <div style="text-align: center; margin-top: 40px;">
-                <a href="https://dedesbraids.com/owner/dashboard" class="button" style="color: white;">View in Dashboard</a>
+                <a href="https://misericordiahairdesign.com/owner/dashboard" class="button" style="color: white;">View in Dashboard</a>
             </div>
             `}
         </div>
         
         <div class="footer">
-            <p style="margin: 0 0 10px 0;"><strong>Dede's Braids</strong></p>
+            <p style="margin: 0 0 10px 0;"><strong>Misericordia Hair Design</strong></p>
             <p style="margin: 0;">12901 Fireside Chat St, Manor, TX 78653</p>
-            <p style="margin: 10px 0 0 0;">(469) 773-9973 • info@dedesbraids.com</p>
+            <p style="margin: 10px 0 0 0;">(469) 773-9973 • info@misericordiahairdesign.com</p>
         </div>
     </div>
 </body>

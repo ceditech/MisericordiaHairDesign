@@ -25,7 +25,7 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-const CART_STORAGE_KEY = "dedes_braids_shop_cart";
+const CART_STORAGE_KEY = "misericordia_hair_designs_shop_cart";
 
 export function CartProvider({ children }: { children: ReactNode }) {
     const [cart, setCart] = useState<CartItem[]>([]);

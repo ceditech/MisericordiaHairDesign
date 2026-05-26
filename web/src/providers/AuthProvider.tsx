@@ -73,8 +73,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const signOut = async () => {
         // 1. Clear any saved booking drafts BEFORE signing out
         try {
-            sessionStorage.removeItem("dedes_booking_draft");
-            localStorage.removeItem("dedes_confirmed_booking");
+            sessionStorage.removeItem("misericordia_booking_draft");
+            localStorage.removeItem("misericordia_confirmed_booking");
         } catch (err) {
             console.error("Failed to clear booking storage", err);
         }
@@ -88,7 +88,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const role = profile?.role || null;
-    const isSuperAdmin = user?.email === "info@dedesbraids.com";
+    const isSuperAdmin = user?.email === "sales@edxstore.com";
     const isLoading = loading || profileLoading;
     const roleLoading = profileLoading;
 
