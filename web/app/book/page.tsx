@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -1112,10 +1112,10 @@ function BookingPageInner() {
                             <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800 space-y-4">
                                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                                     <span className="font-bold text-slate-700 dark:text-slate-300">Need a special time slot or have a special request?</span><br />
-                                    <a href="tel:+14697739973" className="font-bold text-[#9F2D5C] hover:underline">Call (469) 773-9973</a>.
+                                    <a href="tel:+19452754778" className="font-bold text-[#9F2D5C] hover:underline">Call (945) 275-4778</a>.
                                 </p>
                                 <div className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed bg-amber-50 dark:bg-amber-900/10 p-4 rounded-xl border border-amber-100 dark:border-amber-900/30 text-amber-800 dark:text-amber-300">
-                                    <strong className="block mb-1">Closed on Sundays.</strong> For special Sunday requests or appointments outside regular hours (including after 9:00 PM), call <strong>(469) 773-9973</strong>.
+                                    <strong className="block mb-1">Closed on Sundays.</strong> For special Sunday requests or appointments outside regular hours (including after 9:00 PM), call <strong>(945) 275-4778</strong>.
                                 </div>
                             </div>
                         </div>

@@ -21,7 +21,7 @@ export default function Footer() {
                             {/* Facebook */}
                             <Tooltip content="Follow on Facebook" position="top">
                                 <a
-                                    href="https://www.facebook.com/108665884265377"
+                                    href="https://www.facebook.com/profile.php?id=61585347691705&sk=map"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#9F2D5C] hover:text-white transition-all duration-300"
