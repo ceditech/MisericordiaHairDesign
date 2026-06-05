@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
@@ -49,7 +49,7 @@ export default function BraidsMap({ address, coordinates }: MapProps) {
                 <Marker position={coordinates} icon={brandIcon}>
                     <Popup>
                         <div className={styles.popup}>
-                            <strong>Dede&apos;s Braids</strong>
+                            <strong>MHDESIGNS</strong>
                             <span>{address}</span>
                             <a
                                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
