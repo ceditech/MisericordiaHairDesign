@@ -475,22 +475,24 @@ export default function StitchOverview() {
                                 <ResponsiveContainer width="100%" height="100%">
                                     <PieChart>
                                         <Pie
-                                            data={revenueData}
-                                            innerRadius={60}
-                                            outerRadius={80}
-                                            paddingAngle={5}
+                                            data={revenueData.filter(d => d.value > 0)}
+                                            cx="50%"
+                                            cy="50%"
+                                            innerRadius={52}
+                                            outerRadius={68}
+                                            paddingAngle={revenueData.filter(d => d.value > 0).length > 1 ? 4 : 0}
                                             dataKey="value"
                                         >
-                                            {revenueData.map((entry, index) => (
+                                            {revenueData.filter(d => d.value > 0).map((entry, index) => (
                                                 <Cell key={`cell-${index}`} fill={entry.color} />
                                             ))}
                                         </Pie>
                                         <Tooltip />
                                     </PieChart>
                                 </ResponsiveContainer>
-                                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-3">
-                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Services</span>
-                                    <span className="text-2xl font-black text-brand-primary">
+                                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Services</span>
+                                    <span className="text-xl font-black text-brand-primary">
                                         {stats.totalRevenue > 0 
                                             ? Math.round((stats.serviceRevenue / stats.totalRevenue) * 100) 
                                             : 0}%
