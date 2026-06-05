@@ -192,8 +192,8 @@ export default function StitchOverview() {
     [chartData]);
 
     const revenueData = [
-        { name: 'Salon Services', value: stats.serviceRevenue, color: '#6b38d4' },
-        { name: 'Product Sales', value: stats.shopRevenue, color: '#ff5c8e' },
+        { name: 'Salon Services', value: stats.serviceRevenue, color: '#9F2D5C' },
+        { name: 'Product Sales', value: stats.shopRevenue, color: '#B8326A' },
     ];
 
     const runSeed = async () => {
@@ -359,14 +359,14 @@ export default function StitchOverview() {
                     value={`$${stats.totalRevenue.toLocaleString()}`} 
                     trend="+12.5%" 
                     icon={<TrendingUp size={24} />} 
-                    color="bg-purple-500 text-purple-600"
+                    color="bg-brand-primary text-brand-primary"
                 />
                 <StatCard 
                     label="Bookings" 
                     value={stats.bookingsCount} 
                     suffix="Target: 1,500" 
                     icon={<Calendar size={24} />} 
-                    color="bg-pink-500 text-pink-600"
+                    color="bg-brand-secondary text-brand-secondary"
                 />
                 <StatCard 
                     label="New Clients" 
@@ -400,11 +400,11 @@ export default function StitchOverview() {
                         </div>
                         <div className="flex items-center gap-6">
                             <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 rounded-full bg-[#6b38d4]" />
+                                <div className="w-3 h-3 rounded-full bg-[#9F2D5C]" />
                                 <span className="text-xs font-bold text-slate-500">Completed</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 rounded-full bg-[#e9ddff]" />
+                                <div className="w-3 h-3 rounded-full bg-[#fceef3]" />
                                 <span className="text-xs font-bold text-slate-500">Cancelled</span>
                             </div>
                         </div>
@@ -427,8 +427,8 @@ export default function StitchOverview() {
                                     tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 700 }}
                                 />
                                 <Tooltip content={<CustomTooltip />} />
-                                <Bar dataKey="completed" fill="#6b38d4" radius={[10, 10, 0, 0]} barSize={40} />
-                                <Bar dataKey="cancelled" fill="#e9ddff" radius={[10, 10, 0, 0]} barSize={40} />
+                                <Bar dataKey="completed" fill="#9F2D5C" radius={[10, 10, 0, 0]} barSize={40} />
+                                <Bar dataKey="cancelled" fill="#fceef3" radius={[10, 10, 0, 0]} barSize={40} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
@@ -437,7 +437,7 @@ export default function StitchOverview() {
                 {/* Sidebar Cards */}
                 <div className="xl:col-span-4 space-y-6">
                     {/* Business Health */}
-                    <div className="bg-gradient-to-br from-[#6b38d4] to-[#9d50bb] p-8 rounded-[3rem] text-white shadow-xl shadow-purple-200 dark:shadow-none relative overflow-hidden group">
+                    <div className="bg-gradient-to-br from-brand-primary to-brand-secondary p-8 rounded-[3rem] text-white shadow-xl shadow-brand-primary/10 dark:shadow-none relative overflow-hidden group">
                         <div className="absolute top-0 right-0 p-8 opacity-20 transform group-hover:scale-110 transition-transform">
                             <Zap size={80} />
                         </div>
@@ -490,7 +490,7 @@ export default function StitchOverview() {
                                 </ResponsiveContainer>
                                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none translate-y-3">
                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Services</span>
-                                    <span className="text-2xl font-black text-[#6b38d4]">
+                                    <span className="text-2xl font-black text-brand-primary">
                                         {stats.totalRevenue > 0 
                                             ? Math.round((stats.serviceRevenue / stats.totalRevenue) * 100) 
                                             : 0}%
@@ -534,7 +534,7 @@ export default function StitchOverview() {
                                     {service.img ? <img src={service.img} alt={service.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center bg-purple-50 text-purple-400"><Scissors size={20} /></div>}
                                 </div>
                                 <div className="flex-1">
-                                    <h4 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-[#6b38d4] transition-colors">{service.name}</h4>
+                                    <h4 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-brand-primary transition-colors">{service.name}</h4>
                                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{service.count} Total Bookings</p>
                                 </div>
                                 <div className="text-right">
@@ -564,7 +564,7 @@ export default function StitchOverview() {
                                     {product.img ? <img src={product.img} alt={product.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center bg-pink-50 text-pink-400"><ShoppingBag size={20} /></div>}
                                 </div>
                                 <div className="flex-1">
-                                    <h4 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-pink-500 transition-colors">{product.name}</h4>
+                                    <h4 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-brand-secondary transition-colors">{product.name}</h4>
                                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{product.count} Total Sales</p>
                                 </div>
                                 <div className="text-right">
@@ -616,7 +616,7 @@ export default function StitchOverview() {
                         <h3 className="text-xl font-bold text-slate-900 dark:text-white">Affiliate Performance</h3>
                         <p className="text-sm text-slate-400 font-medium">Tracking usage by category</p>
                     </div>
-                    <Link href="/owner/affiliates" className="text-xs font-bold text-[#6b38d4] hover:underline flex items-center gap-1">
+                    <Link href="/owner/affiliates" className="text-xs font-bold text-brand-primary hover:underline flex items-center gap-1">
                         View Details <ArrowRight size={12} />
                     </Link>
                 </div>
