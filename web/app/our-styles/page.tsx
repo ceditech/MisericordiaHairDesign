@@ -146,6 +146,19 @@ export default function OurStylesPage() {
         return () => unsubscribe();
     }, []);
 
+    useEffect(() => {
+        if (!loading && styles.length > 0) {
+            const params = new URLSearchParams(window.location.search);
+            const styleId = params.get("style");
+            if (styleId) {
+                const found = styles.find(s => s.id === styleId);
+                if (found) {
+                    setSelectedStyle(found);
+                }
+            }
+        }
+    }, [loading, styles]);
+
     const scroll = (direction: "left" | "right") => {
         if (scrollContainerRef.current) {
             const scrollAmount = 400;

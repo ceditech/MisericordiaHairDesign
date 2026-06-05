@@ -22,7 +22,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         name: "Knotless Braids",
         duration: "4-6 hours",
         price: "$200 and up",
-        image: "https://img1.wsimg.com/isteam/ip/bdf6ba35-495f-402b-9add-1d7fe5046011/web2.JPG/:/cr=t:9.98%25,l:0%25,w:100%25,h:80.04%25/rs=w:360,h:360,cg:true",
+        image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Knotless-Braids.png",
         description: "Natural-looking, tension-free braids starting at the root.",
         popular: true,
         prepChecklist: [...DEFAULT_PREP, "Hair must be at least 4 inches long for this style."]
@@ -32,7 +32,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         name: "Single Braids",
         duration: "6-8 hours",
         price: "$180 and up",
-        image: "https://img1.wsimg.com/isteam/ip/bdf6ba35-495f-402b-9add-1d7fe5046011/single.JPG/:/cr=t:33.3%25,l:0%25,w:100%25,h:66.7%25/rs=w:360,h:360,cg:true",
+        image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Single-Braids.png",
         description: "Classic single braids for a versatile and long-lasting look.",
         prepChecklist: DEFAULT_PREP
     },
@@ -41,7 +41,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         name: "Bohemian Braids",
         duration: "5-6 hours",
         price: "$220 and up",
-        image: "https://img1.wsimg.com/isteam/ip/bdf6ba35-495f-402b-9add-1d7fe5046011/web%20bohe.jpg/:/cr=t:0%25,l:5.66%25,w:94.34%25,h:76.49%25/rs=w:360,h:360,cg:true,m",
+        image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Boho.png",
         description: "Soft, curly box braids for an effortless, boho aesthetic.",
         prepChecklist: [...DEFAULT_PREP, "Confirm desired curl pattern (Human or Synthetic hair provided)."]
     },
@@ -50,7 +50,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         name: "Box Braids",
         duration: "5-7 hours",
         price: "$180 and up",
-        image: "https://img1.wsimg.com/isteam/ip/bdf6ba35-495f-402b-9add-1d7fe5046011/web%20box.jpg/:/rs=w:360,h:360,cg:true,m/cr=w:360,h:360",
+        image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Box-braids-style.png",
         description: "Timeless protective style with clean, square sections.",
         prepChecklist: DEFAULT_PREP
     },
@@ -59,7 +59,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         name: "Micro Braids",
         duration: "8-12 hours",
         price: "$180 and up",
-        image: "https://img1.wsimg.com/isteam/ip/bdf6ba35-495f-402b-9add-1d7fe5046011/EliteHair-Braids-41-1.webp/:/cr=t:0%25,l:0%25,w:100%25,h:95.49%25/rs=w:360,h:360,cg:true",
+        image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Micro-Braids.png",
         description: "Exquisite, tiny braids for maximum flow and styling options.",
         prepChecklist: [...DEFAULT_PREP, "Please bring snacks/entertainment for this long-duration style."]
     },
@@ -68,7 +68,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         name: "Cornrows",
         duration: "2-4 hours",
         price: "$120 and up",
-        image: "https://img1.wsimg.com/isteam/ip/bdf6ba35-495f-402b-9add-1d7fe5046011/cornrow-Ponytail-with-Bangs.jpg/:/cr=t:3.48%25,l:0%25,w:100%25,h:80.09%25/rs=w:360,h:360,cg:true",
+        image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Cornrows-Braids.png",
         description: "Traditional scalp-braid designs, perfect for any occasion.",
         prepChecklist: DEFAULT_PREP
     },
@@ -77,7 +77,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         name: "Kinky Twist",
         duration: "4-6 hours",
         price: "$160 and up",
-        image: "https://img1.wsimg.com/isteam/ip/bdf6ba35-495f-402b-9add-1d7fe5046011/kinky2.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:360,h:360,cg:true",
+        image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Kinky-Twist.png",
         description: "Textured, natural-looking twists with a kinky finish.",
         prepChecklist: DEFAULT_PREP
     },
@@ -86,7 +86,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         name: "Crochet",
         duration: "2-3 hours",
         price: "$100 and up",
-        image: "https://img1.wsimg.com/isteam/ip/bdf6ba35-495f-402b-9add-1d7fe5046011/3-crochet-a-line-bob-CWCDfiKF8Y9.webp/:/cr=t:0%25,l:0%25,w:100%25,h:98.09%25/rs=w:360,h:360,cg:true",
+        image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Crochet-Braids.png",
         description: "Quick and versatile install using a crochet hook method.",
         prepChecklist: DEFAULT_PREP
     },
@@ -95,7 +95,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         name: "Kids Braids",
         duration: "2-4 hours",
         price: "$100 and up",
-        image: "https://img1.wsimg.com/isteam/ip/bdf6ba35-495f-402b-9add-1d7fe5046011/kikid.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:360,h:360,cg:true",
+        image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Kids-Braids.png",
         description: "Gentle and beautiful braiding styles tailored for children.",
         prepChecklist: DEFAULT_PREP
     },
