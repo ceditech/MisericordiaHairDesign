@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useAuth } from "@/src/providers/AuthProvider";
@@ -40,7 +40,7 @@ export default function SetOwnerPage() {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
-                <span className="material-icons animate-spin text-[#a319c5] text-4xl">autorenew</span>
+                <span className="material-icons animate-spin text-[#9F2D5C] text-4xl">autorenew</span>
             </div>
         );
     }
@@ -49,8 +49,8 @@ export default function SetOwnerPage() {
         <main className="min-h-screen bg-slate-50 dark:bg-slate-900 py-20 px-6">
             <div className="max-w-2xl mx-auto bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100 dark:border-slate-700">
                 <div className="p-12">
-                    <div className="w-16 h-16 rounded-2xl bg-[#a319c5]/10 flex items-center justify-center mb-8">
-                        <span className="material-icons text-[#a319c5] text-3xl">admin_panel_settings</span>
+                    <div className="w-16 h-16 rounded-2xl bg-[#9F2D5C]/10 flex items-center justify-center mb-8">
+                        <span className="material-icons text-[#9F2D5C] text-3xl">admin_panel_settings</span>
                     </div>
 
                     <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
@@ -70,7 +70,7 @@ export default function SetOwnerPage() {
                             <p className="text-sm">
                                 Please sign in first to use this utility.
                             </p>
-                            <a href="/login" className="mt-4 inline-block text-[#a319c5] font-bold text-sm hover:underline">
+                            <a href="/login" className="mt-4 inline-block text-[#9F2D5C] font-bold text-sm hover:underline">
                                 Go to Login →
                             </a>
                         </div>
@@ -85,7 +85,7 @@ export default function SetOwnerPage() {
                                     <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Current Role</p>
                                     <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide ${role === "owner"
                                         ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                                        : "bg-[#a319c5]/10 text-[#a319c5]"
+                                        : "bg-[#9F2D5C]/10 text-[#9F2D5C]"
                                         }`}>
                                         {role || "client"}
                                     </span>
@@ -115,7 +115,7 @@ export default function SetOwnerPage() {
                                 <button
                                     onClick={handleSetOwner}
                                     disabled={status === "loading"}
-                                    className="w-full py-5 bg-[#a319c5] hover:bg-[#8b15a8] text-white font-bold rounded-2xl shadow-xl shadow-[#a319c5]/30 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-3"
+                                    className="w-full py-5 bg-[#9F2D5C] hover:bg-[#B8326A] text-white font-bold rounded-2xl shadow-xl shadow-[#9F2D5C]/30 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-3"
                                 >
                                     {status === "loading" ? (
                                         <span className="material-icons animate-spin">autorenew</span>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { ShieldAlert, Home, Mail } from "lucide-react";
@@ -28,7 +28,7 @@ export default function RestrictedPage() {
                         </Button>
                     </Link>
                     <Link href="/contact" className="flex-1">
-                        <Button className="w-full h-16 rounded-2xl gap-2 font-black bg-[#a319c5] hover:bg-[#8b15a8]">
+                        <Button className="w-full h-16 rounded-2xl gap-2 font-black bg-[#9F2D5C] hover:bg-[#B8326A]">
                             <Mail size={20} />
                             Contact Us
                         </Button>

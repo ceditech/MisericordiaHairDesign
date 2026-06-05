@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter } from "next/navigation";
@@ -201,7 +201,7 @@ function ShopCheckoutInner() {
 
     return (
         <main className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto">
-            <Link href="/cart" className="inline-flex items-center gap-2 text-slate-400 font-bold mb-12 hover:text-[#a319c5] transition-colors group">
+            <Link href="/cart" className="inline-flex items-center gap-2 text-slate-400 font-bold mb-12 hover:text-[#9F2D5C] transition-colors group">
                 <ArrowLeft size={16} />
                 Back to Cart
             </Link>
@@ -216,7 +216,7 @@ function ShopCheckoutInner() {
                     {/* Customer Info */}
                     <section>
                         <div className="flex items-center gap-3 mb-8">
-                            <div className="w-8 h-8 rounded-full bg-[#a319c5] text-white flex items-center justify-center font-bold text-sm">1</div>
+                            <div className="w-8 h-8 rounded-full bg-[#9F2D5C] text-white flex items-center justify-center font-bold text-sm">1</div>
                             <h2 className="text-xl font-bold text-slate-900 dark:text-white">Customer Information</h2>
                         </div>
                         <div className="grid sm:grid-cols-2 gap-6">
@@ -259,43 +259,43 @@ function ShopCheckoutInner() {
                     {/* Delivery Method */}
                     <section>
                         <div className="flex items-center gap-3 mb-8">
-                            <div className="w-8 h-8 rounded-full bg-[#a319c5] text-white flex items-center justify-center font-bold text-sm">2</div>
+                            <div className="w-8 h-8 rounded-full bg-[#9F2D5C] text-white flex items-center justify-center font-bold text-sm">2</div>
                             <h2 className="text-xl font-bold text-slate-900 dark:text-white">Fulfillment Method</h2>
                         </div>
                         <div className="space-y-4">
                             <button
                                 onClick={() => setFulfillmentType('pickup')}
-                                className={`w-full p-6 pb-2 rounded-[2rem] border-2 text-left transition-all ${fulfillmentType === 'pickup' ? "border-[#a319c5] bg-[#a319c5]/5" : "border-slate-100 dark:border-slate-800"}`}
+                                className={`w-full p-6 pb-2 rounded-[2rem] border-2 text-left transition-all ${fulfillmentType === 'pickup' ? "border-[#9F2D5C] bg-[#9F2D5C]/5" : "border-slate-100 dark:border-slate-800"}`}
                             >
                                 <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-4">
-                                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${fulfillmentType === 'pickup' ? "border-[#a319c5]" : "border-slate-300"}`}>
-                                            {fulfillmentType === 'pickup' && <div className="w-3 h-3 rounded-full bg-[#a319c5]" />}
+                                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${fulfillmentType === 'pickup' ? "border-[#9F2D5C]" : "border-slate-300"}`}>
+                                            {fulfillmentType === 'pickup' && <div className="w-3 h-3 rounded-full bg-[#9F2D5C]" />}
                                         </div>
                                         <div>
                                             <p className="font-bold text-slate-900 dark:text-white">In-Studio Pickup</p>
                                             <p className="text-sm text-slate-500">Pick up at Manor, TX location</p>
                                         </div>
                                     </div>
-                                    <Badge className="bg-[#a319c5]/10 text-[#a319c5] border-none font-bold">Free</Badge>
+                                    <Badge className="bg-[#9F2D5C]/10 text-[#9F2D5C] border-none font-bold">Free</Badge>
                                 </div>
                             </button>
                             
                             <button
                                 onClick={() => setFulfillmentType('shipping')}
-                                className={`w-full p-6 pb-2 rounded-[2rem] border-2 text-left transition-all ${fulfillmentType === 'shipping' ? "border-[#a319c5] bg-[#a319c5]/5" : "border-slate-100 dark:border-slate-800"}`}
+                                className={`w-full p-6 pb-2 rounded-[2rem] border-2 text-left transition-all ${fulfillmentType === 'shipping' ? "border-[#9F2D5C] bg-[#9F2D5C]/5" : "border-slate-100 dark:border-slate-800"}`}
                             >
                                 <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-4">
-                                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${fulfillmentType === 'shipping' ? "border-[#a319c5]" : "border-slate-300"}`}>
-                                            {fulfillmentType === 'shipping' && <div className="w-3 h-3 rounded-full bg-[#a319c5]" />}
+                                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${fulfillmentType === 'shipping' ? "border-[#9F2D5C]" : "border-slate-300"}`}>
+                                            {fulfillmentType === 'shipping' && <div className="w-3 h-3 rounded-full bg-[#9F2D5C]" />}
                                         </div>
                                         <div>
                                             <p className="font-bold text-slate-900 dark:text-white">Standard Shipping</p>
                                             <p className="text-sm text-slate-500">Delivered to your door</p>
                                         </div>
                                     </div>
-                                    <Badge className="bg-[#a319c5]/10 text-[#a319c5] border-none font-bold">{formatCents(SHIPPING_FLAT_RATE_CENTS)}</Badge>
+                                    <Badge className="bg-[#9F2D5C]/10 text-[#9F2D5C] border-none font-bold">{formatCents(SHIPPING_FLAT_RATE_CENTS)}</Badge>
                                 </div>
                             </button>
                         </div>
@@ -350,9 +350,9 @@ function ShopCheckoutInner() {
 
                     {/* Account Creation for Guest Users */}
                     {!user && (
-                        <div className="p-8 rounded-3xl bg-[#a319c5]/5 border border-[#a319c5]/10 space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
+                        <div className="p-8 rounded-3xl bg-[#9F2D5C]/5 border border-[#9F2D5C]/10 space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-[#a319c5] flex items-center justify-center shadow-lg shadow-[#a319c5]/20">
+                                <div className="w-10 h-10 rounded-xl bg-[#9F2D5C] flex items-center justify-center shadow-lg shadow-[#9F2D5C]/20">
                                     <span className="material-icons text-white text-base">person_add</span>
                                 </div>
                                 <div>
@@ -386,7 +386,7 @@ function ShopCheckoutInner() {
                                                 onChange={(e) => setCheckoutData(prev => ({ ...prev, createAccount: e.target.checked }))}
                                                 className="peer hidden"
                                             />
-                                            <div className="w-6 h-6 rounded-lg border-2 border-slate-200 dark:border-slate-700 peer-checked:bg-[#a319c5] peer-checked:border-[#a319c5] transition-all flex items-center justify-center">
+                                            <div className="w-6 h-6 rounded-lg border-2 border-slate-200 dark:border-slate-700 peer-checked:bg-[#9F2D5C] peer-checked:border-[#9F2D5C] transition-all flex items-center justify-center">
                                                 <span className="material-icons text-white text-[14px]">check</span>
                                             </div>
                                         </div>
@@ -403,18 +403,18 @@ function ShopCheckoutInner() {
                     {/* Payment Method */}
                     <section>
                         <div className="flex items-center gap-3 mb-8">
-                            <div className="w-8 h-8 rounded-full bg-[#a319c5] text-white flex items-center justify-center font-bold text-sm">3</div>
+                            <div className="w-8 h-8 rounded-full bg-[#9F2D5C] text-white flex items-center justify-center font-bold text-sm">3</div>
                             <h2 className="text-xl font-bold text-slate-900 dark:text-white">Payment Method</h2>
                         </div>
                         <div className="space-y-4">
                             <button
                                 onClick={() => setProvider("stripe")}
-                                className={`w-full p-6 pb-2 rounded-[2rem] border-2 text-left transition-all ${provider === "stripe" ? "border-[#a319c5] bg-[#a319c5]/5" : "border-slate-100 dark:border-slate-800"}`}
+                                className={`w-full p-6 pb-2 rounded-[2rem] border-2 text-left transition-all ${provider === "stripe" ? "border-[#9F2D5C] bg-[#9F2D5C]/5" : "border-slate-100 dark:border-slate-800"}`}
                             >
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="flex items-center gap-4">
-                                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${provider === "stripe" ? "border-[#a319c5]" : "border-slate-300"}`}>
-                                            {provider === "stripe" && <div className="w-3 h-3 rounded-full bg-[#a319c5]" />}
+                                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${provider === "stripe" ? "border-[#9F2D5C]" : "border-slate-300"}`}>
+                                            {provider === "stripe" && <div className="w-3 h-3 rounded-full bg-[#9F2D5C]" />}
                                         </div>
                                         <p className="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-xs">Credit / Debit Card</p>
                                     </div>
@@ -424,12 +424,12 @@ function ShopCheckoutInner() {
                             </button>
                             <button
                                 onClick={() => setProvider("paypal")}
-                                className={`w-full p-6 pb-2 rounded-[2rem] border-2 text-left transition-all ${provider === "paypal" ? "border-[#a319c5] bg-[#a319c5]/5" : "border-slate-100 dark:border-slate-800"}`}
+                                className={`w-full p-6 pb-2 rounded-[2rem] border-2 text-left transition-all ${provider === "paypal" ? "border-[#9F2D5C] bg-[#9F2D5C]/5" : "border-slate-100 dark:border-slate-800"}`}
                             >
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="flex items-center gap-4">
-                                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${provider === "paypal" ? "border-[#a319c5]" : "border-slate-300"}`}>
-                                            {provider === "paypal" && <div className="w-3 h-3 rounded-full bg-[#a319c5]" />}
+                                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${provider === "paypal" ? "border-[#9F2D5C]" : "border-slate-300"}`}>
+                                            {provider === "paypal" && <div className="w-3 h-3 rounded-full bg-[#9F2D5C]" />}
                                         </div>
                                         <p className="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-xs">PayPal</p>
                                     </div>
@@ -457,7 +457,7 @@ function ShopCheckoutInner() {
                             {cart.map(item => (
                                 <div key={item.productId + item.variantId} className="flex justify-between gap-4">
                                     <div className="text-sm">
-                                        <p className="font-bold text-slate-900 dark:text-white italic">{item.name} <span className="text-[#a319c5] ml-1">x{item.quantity}</span></p>
+                                        <p className="font-bold text-slate-900 dark:text-white italic">{item.name} <span className="text-[#9F2D5C] ml-1">x{item.quantity}</span></p>
                                         {item.selectedOptions && (
                                             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
                                                 {Object.values(item.selectedOptions).join(" / ")}
@@ -494,7 +494,7 @@ function ShopCheckoutInner() {
                                 <span className="font-bold text-slate-900 dark:text-white">{formatCents(taxCents)}</span>
                             </div>
                             <div className="pt-6 flex justify-between items-end">
-                                <span className="text-xs font-black uppercase tracking-widest text-[#a319c5]">Total Amount</span>
+                                <span className="text-xs font-black uppercase tracking-widest text-[#9F2D5C]">Total Amount</span>
                                 <span className="text-4xl font-black text-slate-900 dark:text-white italic">{formatCents(finalTotalCents)}</span>
                             </div>
                         </div>
@@ -507,13 +507,13 @@ function ShopCheckoutInner() {
                                         placeholder="Promo Code"
                                         value={promoCode}
                                         onChange={(e) => setPromoCode(e.target.value)}
-                                        className="flex-1 bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#a319c5] transition-colors"
+                                        className="flex-1 bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#9F2D5C] transition-colors"
                                     />
                                     <Button
                                         onClick={handleApplyPromo}
                                         disabled={!promoCode.trim()}
                                         variant="secondary"
-                                        className="bg-[#a319c5]/10 hover:bg-[#a319c5]/20 text-[#a319c5] border-[#a319c5]/20 px-6 py-6 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-50"
+                                        className="bg-[#9F2D5C]/10 hover:bg-[#9F2D5C]/20 text-[#9F2D5C] border-[#9F2D5C]/20 px-6 py-6 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-50"
                                     >
                                         Apply
                                     </Button>

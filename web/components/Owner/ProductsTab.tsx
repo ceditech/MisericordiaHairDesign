@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { subscribeToProducts, upsertProduct, deleteProduct } from "@/src/lib/firebase/ownerService";
@@ -56,7 +56,7 @@ export default function ProductsTab() {
                 <div className="relative flex-1 w-full">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                     <input 
-                        className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border-none outline-none focus:ring-2 focus:ring-[#a319c5] text-sm"
+                        className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border-none outline-none focus:ring-2 focus:ring-[#9F2D5C] text-sm"
                         placeholder="Search products..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -79,7 +79,7 @@ export default function ProductsTab() {
                             });
                             setIsEditing(true);
                         }}
-                        className="rounded-xl font-bold bg-[#a319c5] text-white hover:bg-[#8e16ac] shadow-lg shadow-[#a319c5]/20 gap-2 px-6"
+                        className="rounded-xl font-bold bg-[#9F2D5C] text-white hover:bg-[#8e16ac] shadow-lg shadow-[#9F2D5C]/20 gap-2 px-6"
                     >
                         <Plus size={18} />
                         Add Product
@@ -104,7 +104,7 @@ export default function ProductsTab() {
                             </div>
                         </div>
                         <div className="p-6 flex flex-col flex-1">
-                            <h4 className="text-xl font-black text-slate-900 dark:text-white mb-2 leading-tight group-hover:text-[#a319c5] transition-colors line-clamp-1 italic uppercase tracking-tighter">
+                            <h4 className="text-xl font-black text-slate-900 dark:text-white mb-2 leading-tight group-hover:text-[#9F2D5C] transition-colors line-clamp-1 italic uppercase tracking-tighter">
                                 {product.name}
                             </h4>
                             <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-50 dark:border-slate-800">
@@ -114,7 +114,7 @@ export default function ProductsTab() {
                                 <div className="flex gap-2">
                                     <button 
                                         onClick={() => { setEditProduct(product); setIsEditing(true); }}
-                                        className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 flex items-center justify-center hover:bg-[#a319c5] hover:text-white transition-all shadow-sm"
+                                        className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 flex items-center justify-center hover:bg-[#9F2D5C] hover:text-white transition-all shadow-sm"
                                     >
                                         <Edit2 size={16} />
                                     </button>
@@ -219,7 +219,7 @@ export default function ProductsTab() {
                                 Cancel
                             </Button>
                             <Button 
-                                className="flex-1 bg-[#a319c5] hover:bg-[#8e16ac] text-white rounded-2xl py-6 font-bold shadow-lg shadow-[#a319c5]/20 gap-2"
+                                className="flex-1 bg-[#9F2D5C] hover:bg-[#8e16ac] text-white rounded-2xl py-6 font-bold shadow-lg shadow-[#9F2D5C]/20 gap-2"
                                 onClick={handleSave}
                             >
                                 <Save size={18} />

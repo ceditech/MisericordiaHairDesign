@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { collection, doc, writeBatch, serverTimestamp } from "firebase/firestore";
@@ -132,7 +132,7 @@ export default function MigratePage() {
     return (
         <main className="min-h-screen pt-32 pb-20 px-6 max-w-4xl mx-auto">
             <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-[#a319c5]/10 flex items-center justify-center text-[#a319c5]">
+                <div className="w-12 h-12 rounded-2xl bg-[#9F2D5C]/10 flex items-center justify-center text-[#9F2D5C]">
                     <Database size={24} />
                 </div>
                 <div>
@@ -175,7 +175,7 @@ export default function MigratePage() {
             <div className="mb-12">
                  <Button 
                     onClick={migrateAll}
-                    className="w-full h-16 rounded-3xl bg-[#a319c5] hover:bg-[#8b15a8] text-white font-black text-lg gap-3 shadow-xl shadow-[#a319c5]/20"
+                    className="w-full h-16 rounded-3xl bg-[#9F2D5C] hover:bg-[#B8326A] text-white font-black text-lg gap-3 shadow-xl shadow-[#9F2D5C]/20"
                 >
                     Run Full Migration
                     <ArrowRight size={20} />
@@ -211,7 +211,7 @@ function MigrationCard({ title, count, status, onMigrate }: any) {
             
             <div className="mb-8">
                 {status === 'idle' && <Database size={40} className="text-slate-200" />}
-                {status === 'loading' && <Loader2 size={40} className="text-[#a319c5] animate-spin" />}
+                {status === 'loading' && <Loader2 size={40} className="text-[#9F2D5C] animate-spin" />}
                 {status === 'success' && <CheckCircle2 size={40} className="text-emerald-500" />}
                 {status === 'error' && <AlertCircle size={40} className="text-rose-500" />}
             </div>

@@ -12,41 +12,50 @@ const config: Config = {
         extend: {
             colors: {
                 brand: {
-                    primary: "#a319c5",
-                    secondary: "#8b15a8",
-                    light: "#b84dd4",
-                    accent: "#d084e8",
-                    violet: "#7c3aed",
+                    // Rose Wine – primary logo/header color
+                    primary: "#9F2D5C",
+                    // Berry Rose – buttons & CTA
+                    secondary: "#B8326A",
+                    // Lighter tint for hover states
+                    light: "#C4547E",
+                    // Champagne Gold – luxury accent only
+                    accent: "#D8A75F",
+                    // Deep Burgundy – footer & dark surfaces
+                    burgundy: "#3A0F1F",
                 },
                 background: {
-                    light: "#f8f6f7",
-                    dark: "#221019",
+                    // Blush Cream – light page background
+                    light: "#FFF6F8",
+                    // Deep Burgundy – dark page background
+                    dark: "#2A0B17",
                 },
                 surface: {
                     light: "#ffffff",
-                    dark: "#1a0b13",
+                    dark: "#3A0F1F",
                 },
                 elevated: {
                     light: "#ffffff",
-                    dark: "#2a1621",
+                    dark: "#4A1828",
                 },
                 text: {
                     primary: {
-                        light: "#0f172a",
-                        dark: "#f1f5f9",
+                        // Espresso Charcoal
+                        light: "#1F1B1C",
+                        // Warm Ivory
+                        dark: "#FFF8EF",
                     },
                     muted: {
-                        light: "#64748b",
-                        dark: "#94a3b8",
+                        light: "#6B5B5E",
+                        dark: "#C9A8B2",
                     },
                     inverse: {
                         light: "#ffffff",
-                        dark: "#0f172a",
+                        dark: "#1F1B1C",
                     },
                 },
                 border: {
-                    light: "#e2e8f0",
-                    dark: "rgba(255, 255, 255, 0.05)",
+                    light: "#EDD9E0",
+                    dark: "rgba(255, 255, 255, 0.08)",
                 },
             },
             fontFamily: {
@@ -108,8 +117,8 @@ const config: Config = {
                 lg: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
                 xl: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
                 "2xl": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
-                brand: "0 10px 25px -5px rgba(163, 25, 197, 0.3)",
-                "brand-lg": "0 20px 40px -10px rgba(163, 25, 197, 0.4)",
+                brand: "0 10px 25px -5px rgba(159, 45, 92, 0.3)",
+                "brand-lg": "0 20px 40px -10px rgba(159, 45, 92, 0.4)",
             },
             transitionDuration: {
                 DEFAULT: "200ms",

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -463,13 +463,13 @@ function BookingPageInner() {
                             <button
                                 key={preset.id}
                                 onClick={() => setBookingData(prev => ({ ...prev, sizeId: preset.id }))}
-                                className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center justify-between ${bookingData.sizeId === preset.id ? 'border-[#a319c5] bg-[#a319c5]/5 dark:bg-[#a319c5]/10' : 'border-transparent bg-white dark:bg-slate-900 hover:border-slate-200 dark:hover:border-slate-700'}`}
+                                className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center justify-between ${bookingData.sizeId === preset.id ? 'border-[#9F2D5C] bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10' : 'border-transparent bg-white dark:bg-slate-900 hover:border-slate-200 dark:hover:border-slate-700'}`}
                             >
                                 <div>
-                                    <p className={`font-bold text-sm ${bookingData.sizeId === preset.id ? 'text-[#a319c5]' : 'text-slate-900 dark:text-white'}`}>{preset.label}</p>
+                                    <p className={`font-bold text-sm ${bookingData.sizeId === preset.id ? 'text-[#9F2D5C]' : 'text-slate-900 dark:text-white'}`}>{preset.label}</p>
                                     <p className="text-[10px] text-slate-500 mt-0.5">{preset.description} ({preset.priceGuidance})</p>
                                 </div>
-                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${bookingData.sizeId === preset.id ? 'border-[#a319c5] bg-[#a319c5]' : 'border-slate-300 dark:border-slate-600'}`}>
+                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${bookingData.sizeId === preset.id ? 'border-[#9F2D5C] bg-[#9F2D5C]' : 'border-slate-300 dark:border-slate-600'}`}>
                                     {bookingData.sizeId === preset.id && <span className="material-icons text-white text-[12px]">check</span>}
                                 </div>
                             </button>
@@ -485,13 +485,13 @@ function BookingPageInner() {
                             <button
                                 key={preset.id}
                                 onClick={() => setBookingData(prev => ({ ...prev, lengthId: preset.id }))}
-                                className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center justify-between ${bookingData.lengthId === preset.id ? 'border-[#a319c5] bg-[#a319c5]/5 dark:bg-[#a319c5]/10' : 'border-transparent bg-white dark:bg-slate-900 hover:border-slate-200 dark:hover:border-slate-700'}`}
+                                className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center justify-between ${bookingData.lengthId === preset.id ? 'border-[#9F2D5C] bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10' : 'border-transparent bg-white dark:bg-slate-900 hover:border-slate-200 dark:hover:border-slate-700'}`}
                             >
                                 <div>
-                                    <p className={`font-bold text-sm ${bookingData.lengthId === preset.id ? 'text-[#a319c5]' : 'text-slate-900 dark:text-white'}`}>{preset.label}</p>
+                                    <p className={`font-bold text-sm ${bookingData.lengthId === preset.id ? 'text-[#9F2D5C]' : 'text-slate-900 dark:text-white'}`}>{preset.label}</p>
                                     <p className="text-[10px] text-slate-500 mt-0.5">{preset.inches}</p>
                                 </div>
-                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${bookingData.lengthId === preset.id ? 'border-[#a319c5] bg-[#a319c5]' : 'border-slate-300 dark:border-slate-600'}`}>
+                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${bookingData.lengthId === preset.id ? 'border-[#9F2D5C] bg-[#9F2D5C]' : 'border-slate-300 dark:border-slate-600'}`}>
                                     {bookingData.lengthId === preset.id && <span className="material-icons text-white text-[12px]">check</span>}
                                 </div>
                             </button>
@@ -507,7 +507,7 @@ function BookingPageInner() {
                         type="checkbox"
                         checked={bookingData.washingAddon}
                         onChange={(e) => setBookingData(prev => ({ ...prev, washingAddon: e.target.checked }))}
-                        className="w-6 h-6 rounded-md border-slate-300 text-[#a319c5] focus:ring-[#a319c5] bg-slate-100 dark:bg-slate-800"
+                        className="w-6 h-6 rounded-md border-slate-300 text-[#9F2D5C] focus:ring-[#9F2D5C] bg-slate-100 dark:bg-slate-800"
                     />
                     <div>
                         <p className="font-bold text-sm text-slate-900 dark:text-white">Add Washing Service (+${addons.find(a => a.id === 'wash')?.price || 15})</p>
@@ -519,7 +519,7 @@ function BookingPageInner() {
                         type="checkbox"
                         checked={bookingData.takeDownAddon}
                         onChange={(e) => setBookingData(prev => ({ ...prev, takeDownAddon: e.target.checked }))}
-                        className="w-6 h-6 rounded-md border-slate-300 text-[#a319c5] focus:ring-[#a319c5] bg-slate-100 dark:bg-slate-800"
+                        className="w-6 h-6 rounded-md border-slate-300 text-[#9F2D5C] focus:ring-[#9F2D5C] bg-slate-100 dark:bg-slate-800"
                     />
                     <div>
                         <p className="font-bold text-sm text-slate-900 dark:text-white">Add Take Down Service (+${addons.find(a => a.id === 'take-down')?.price || 30})</p>
@@ -534,8 +534,8 @@ function BookingPageInner() {
         <main className="max-w-7xl mx-auto px-6 py-12">
             {/* Draft Restored Banner */}
             {draftRestored && (
-                <div className="max-w-4xl mx-auto mb-8 flex items-center gap-4 bg-[#a319c5]/8 dark:bg-[#a319c5]/10 border border-[#a319c5]/20 rounded-2xl px-6 py-4">
-                    <span className="material-icons text-[#a319c5] text-base">restore</span>
+                <div className="max-w-4xl mx-auto mb-8 flex items-center gap-4 bg-[#9F2D5C]/8 dark:bg-[#9F2D5C]/10 border border-[#9F2D5C]/20 rounded-2xl px-6 py-4">
+                    <span className="material-icons text-[#9F2D5C] text-base">restore</span>
                     <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex-1">
                         We restored your booking draft. Pick up right where you left off!
                     </p>
@@ -564,7 +564,7 @@ function BookingPageInner() {
                         <div key={item.step} className="flex flex-col items-center gap-2">
                             <div
                                 className={`w-10 h-10 rounded-full flex items-center justify-center shadow-sm z-10 transition-all ${currentStep >= item.step
-                                    ? "bg-[#a319c5] text-white"
+                                    ? "bg-[#9F2D5C] text-white"
                                     : "bg-slate-100 dark:bg-slate-800 text-slate-400"
                                     }`}
                             >
@@ -575,7 +575,7 @@ function BookingPageInner() {
                                 )}
                             </div>
                             <span
-                                className={`text-[10px] uppercase tracking-widest font-bold ${currentStep >= item.step ? "text-[#a319c5]" : "text-slate-400"
+                                className={`text-[10px] uppercase tracking-widest font-bold ${currentStep >= item.step ? "text-[#9F2D5C]" : "text-slate-400"
                                     }`}
                             >
                                 {item.label}
@@ -613,20 +613,20 @@ function BookingPageInner() {
                                                 // Reset time if duration changed (new style may have fewer slots)
                                                 setBookingData((prev) => ({ ...prev, time: "" }));
                                             }}
-                                            className={`group relative bg-white dark:bg-slate-800 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:scale-[1.03] border-4 cursor-pointer ${selectedStyle?.id === style.id ? "border-[#a319c5]" : "border-transparent"}`}
+                                            className={`group relative bg-white dark:bg-slate-800 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:scale-[1.03] border-4 cursor-pointer ${selectedStyle?.id === style.id ? "border-[#9F2D5C]" : "border-transparent"}`}
                                         >
                                             <div className="aspect-[4/5] relative overflow-hidden">
                                                 <img alt={style.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src={style.image} />
                                                 {selectedStyle?.id === style.id && (
                                                     <div className="absolute top-4 right-4 animate-in zoom-in duration-300">
-                                                        <div className="bg-[#a319c5] text-white p-2 rounded-full flex items-center justify-center shadow-xl">
+                                                        <div className="bg-[#9F2D5C] text-white p-2 rounded-full flex items-center justify-center shadow-xl">
                                                             <span className="material-icons text-base">check</span>
                                                         </div>
                                                     </div>
                                                 )}
                                             </div>
                                             <div className="p-5 text-center">
-                                                <h3 className="font-bold text-lg text-slate-900 dark:text-white group-hover:text-[#a319c5] transition-colors">{style.name}</h3>
+                                                <h3 className="font-bold text-lg text-slate-900 dark:text-white group-hover:text-[#9F2D5C] transition-colors">{style.name}</h3>
                                                 <p className="text-xs text-slate-400 mt-1">{style.duration}</p>
                                             </div>
                                         </div>
@@ -645,7 +645,7 @@ function BookingPageInner() {
                             <h2 className="text-4xl font-bold mb-2 text-slate-900 dark:text-white">Select Date &amp; Time</h2>
                             <p className="text-slate-500 dark:text-slate-400 mb-8">
                                 Available slots reflect your style's estimated duration
-                                <span className="ml-1 font-semibold text-[#a319c5]">({selectedStyle?.duration})</span>.
+                                <span className="ml-1 font-semibold text-[#9F2D5C]">({selectedStyle?.duration})</span>.
                             </p>
                             <div className="bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-800">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -756,7 +756,7 @@ function BookingPageInner() {
                                                 type="text"
                                                 value={bookingData.name}
                                                 onChange={(e) => setBookingData((prev) => ({ ...prev, name: e.target.value }))}
-                                                className="w-full bg-[#f8f6f7] dark:bg-slate-900 border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#a319c5] outline-none"
+                                                className="w-full bg-[#f8f6f7] dark:bg-slate-900 border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#9F2D5C] outline-none"
                                                 placeholder="Jane Doe"
                                             />
                                         </div>
@@ -768,7 +768,7 @@ function BookingPageInner() {
                                                 type="email"
                                                 value={bookingData.email}
                                                 onChange={(e) => setBookingData((prev) => ({ ...prev, email: e.target.value }))}
-                                                className="w-full bg-[#f8f6f7] dark:bg-slate-900 border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#a319c5] outline-none"
+                                                className="w-full bg-[#f8f6f7] dark:bg-slate-900 border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#9F2D5C] outline-none"
                                                 placeholder="jane@example.com"
                                             />
                                         </div>
@@ -786,7 +786,7 @@ function BookingPageInner() {
                                             className={`w-full rounded-2xl p-4 outline-none transition-all ${
                                                 bookingData.phone && !isValidUSPhone(bookingData.phone) 
                                                 ? 'bg-red-50 dark:bg-red-900/10 border-2 border-red-500 text-red-600 focus:ring-2 focus:ring-red-500 focus:border-red-500' 
-                                                : 'bg-[#f8f6f7] dark:bg-slate-900 border-none focus:ring-2 focus:ring-[#a319c5]'
+                                                : 'bg-[#f8f6f7] dark:bg-slate-900 border-none focus:ring-2 focus:ring-[#9F2D5C]'
                                             }`}
                                             placeholder="(555) 000-0000"
                                         />
@@ -797,9 +797,9 @@ function BookingPageInner() {
 
                                     {/* Account Creation for Guest Users */}
                                     {!user && (
-                                        <div className="p-8 rounded-3xl bg-[#a319c5]/5 border border-[#a319c5]/10 space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
+                                        <div className="p-8 rounded-3xl bg-[#9F2D5C]/5 border border-[#9F2D5C]/10 space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-xl bg-[#a319c5] flex items-center justify-center shadow-lg shadow-[#a319c5]/20">
+                                                <div className="w-10 h-10 rounded-xl bg-[#9F2D5C] flex items-center justify-center shadow-lg shadow-[#9F2D5C]/20">
                                                     <span className="material-icons text-white text-base">person_add</span>
                                                 </div>
                                                 <div>
@@ -819,7 +819,7 @@ function BookingPageInner() {
                                                         type="password"
                                                         value={bookingData.password}
                                                         onChange={(e) => setBookingData(prev => ({ ...prev, password: e.target.value }))}
-                                                        className="w-full bg-white dark:bg-slate-900 border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#a319c5] outline-none"
+                                                        className="w-full bg-white dark:bg-slate-900 border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#9F2D5C] outline-none"
                                                         placeholder="••••••••"
                                                     />
                                                 </div>
@@ -832,7 +832,7 @@ function BookingPageInner() {
                                                                 onChange={(e) => setBookingData(prev => ({ ...prev, createAccount: e.target.checked }))}
                                                                 className="peer hidden"
                                                             />
-                                                            <div className="w-6 h-6 rounded-lg border-2 border-slate-200 dark:border-slate-700 peer-checked:bg-[#a319c5] peer-checked:border-[#a319c5] transition-all flex items-center justify-center">
+                                                            <div className="w-6 h-6 rounded-lg border-2 border-slate-200 dark:border-slate-700 peer-checked:bg-[#9F2D5C] peer-checked:border-[#9F2D5C] transition-all flex items-center justify-center">
                                                                 <span className="material-icons text-white text-[14px]">check</span>
                                                             </div>
                                                         </div>
@@ -850,7 +850,7 @@ function BookingPageInner() {
                                             rows={4}
                                             value={bookingData.notes}
                                             onChange={(e) => setBookingData((prev) => ({ ...prev, notes: e.target.value }))}
-                                            className="w-full bg-[#f8f6f7] dark:bg-slate-900 border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#a319c5] outline-none resize-none"
+                                            className="w-full bg-[#f8f6f7] dark:bg-slate-900 border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#9F2D5C] outline-none resize-none"
                                             placeholder="Any specifics we should know?"
                                         />
                                     </div>
@@ -877,8 +877,8 @@ function BookingPageInner() {
                                                     onChange={(e) => handlePhotoUpload(e.target.files?.[0])}
                                                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                                 />
-                                                <div className={`border-2 border-dashed rounded-2xl p-8 text-center hover:border-[#a319c5] hover:bg-[#a319c5]/5 transition-all group ${photoError ? "border-red-300 dark:border-red-700" : "border-slate-200 dark:border-slate-700"}`}>
-                                                    <span className="material-icons text-4xl text-slate-300 dark:text-slate-600 group-hover:text-[#a319c5] mb-2 block">add_a_photo</span>
+                                                <div className={`border-2 border-dashed rounded-2xl p-8 text-center hover:border-[#9F2D5C] hover:bg-[#9F2D5C]/5 transition-all group ${photoError ? "border-red-300 dark:border-red-700" : "border-slate-200 dark:border-slate-700"}`}>
+                                                    <span className="material-icons text-4xl text-slate-300 dark:text-slate-600 group-hover:text-[#9F2D5C] mb-2 block">add_a_photo</span>
                                                     <p className="text-sm font-bold text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white">Click to upload inspiration photo</p>
                                                     <p className="text-[10px] text-slate-400 mt-1 uppercase tracking-tight">JPG, PNG, WEBP · Up to 5 MB</p>
                                                 </div>
@@ -894,7 +894,7 @@ function BookingPageInner() {
                                                     >
                                                         <span className="material-icons">delete</span>
                                                     </button>
-                                                    <label className="bg-white text-[#a319c5] p-3 rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all cursor-pointer" aria-label="Replace photo">
+                                                    <label className="bg-white text-[#9F2D5C] p-3 rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all cursor-pointer" aria-label="Replace photo">
                                                         <span className="material-icons">refresh</span>
                                                         <input
                                                             type="file"
@@ -954,8 +954,8 @@ function BookingPageInner() {
                                 </div>
 
                                 {/* Deposit Policy Notice */}
-                                <div className="flex items-start gap-5 bg-[#a319c5]/5 dark:bg-[#a319c5]/10 border border-[#a319c5]/20 rounded-[1.5rem] p-7">
-                                    <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-[#a319c5] flex items-center justify-center shadow-lg shadow-[#a319c5]/30">
+                                <div className="flex items-start gap-5 bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10 border border-[#9F2D5C]/20 rounded-[1.5rem] p-7">
+                                    <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-[#9F2D5C] flex items-center justify-center shadow-lg shadow-[#9F2D5C]/30">
                                         <span className="material-icons text-white text-base">lock</span>
                                     </div>
                                     <div>
@@ -989,7 +989,7 @@ function BookingPageInner() {
                     {currentStep > 1 && (
                         <button
                             onClick={prevStep}
-                            className="mt-8 flex items-center gap-2 text-slate-400 hover:text-[#a319c5] transition-colors font-bold uppercase tracking-widest text-xs"
+                            className="mt-8 flex items-center gap-2 text-slate-400 hover:text-[#9F2D5C] transition-colors font-bold uppercase tracking-widest text-xs"
                         >
                             <span className="material-icons text-sm">arrow_back</span>
                             Go Back
@@ -999,7 +999,7 @@ function BookingPageInner() {
 
                 {/* ── Right: Sticky Booking Summary ──────────────────────────── */}
                 <div className="lg:col-span-4 lg:sticky lg:top-28">
-                    <div className="bg-[#f8f6f7] dark:bg-slate-900/50 rounded-[2rem] p-10 border border-slate-100 dark:border-slate-800 shadow-xl shadow-[#a319c5]/5 flex flex-col min-h-[580px]">
+                    <div className="bg-[#f8f6f7] dark:bg-slate-900/50 rounded-[2rem] p-10 border border-slate-100 dark:border-slate-800 shadow-xl shadow-[#9F2D5C]/5 flex flex-col min-h-[580px]">
                         <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-10">Booking Summary</h2>
 
                         <div className="space-y-8 flex-grow">
@@ -1012,7 +1012,7 @@ function BookingPageInner() {
                                 </div>
                                 <button
                                     onClick={() => setCurrentStep(1)}
-                                    className="text-[#a319c5] hover:text-[#8b15a8] transition-colors"
+                                    className="text-[#9F2D5C] hover:text-[#B8326A] transition-colors"
                                     aria-label="Edit style"
                                 >
                                     <span className="material-icons text-base">edit</span>
@@ -1031,7 +1031,7 @@ function BookingPageInner() {
                                 </div>
                                 <button
                                     onClick={() => setCurrentStep(2)}
-                                    className="text-slate-400 hover:text-[#a319c5] transition-colors"
+                                    className="text-slate-400 hover:text-[#9F2D5C] transition-colors"
                                     aria-label="Edit date and time"
                                 >
                                     <span className="material-icons text-base">schedule</span>
@@ -1066,14 +1066,14 @@ function BookingPageInner() {
                                 </div>
                                 <div className="flex justify-between items-center pt-2 border-t border-slate-200 dark:border-slate-800">
                                     <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Estimated Total</p>
-                                    <p className="text-2xl font-bold text-[#a319c5]">{displayTotal}</p>
+                                    <p className="text-2xl font-bold text-[#9F2D5C]">{displayTotal}</p>
                                 </div>
-                                <div className="flex justify-between items-center bg-[#a319c5]/8 dark:bg-[#a319c5]/10 rounded-2xl px-5 py-4 border border-[#a319c5]/15">
+                                <div className="flex justify-between items-center bg-[#9F2D5C]/8 dark:bg-[#9F2D5C]/10 rounded-2xl px-5 py-4 border border-[#9F2D5C]/15">
                                     <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#a319c5]">Deposit Due Today</p>
+                                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#9F2D5C]">Deposit Due Today</p>
                                         <p className="text-[10px] text-slate-400 mt-0.5">Non-refundable · Applied to total</p>
                                     </div>
-                                    <p className="text-xl font-black text-[#a319c5]">{formatCents(totalDepositCents)}</p>
+                                    <p className="text-xl font-black text-[#9F2D5C]">{formatCents(totalDepositCents)}</p>
                                 </div>
                             </div>
                         </div>
@@ -1092,7 +1092,7 @@ function BookingPageInner() {
                                 } : nextStep}
                                 disabled={!isStepValid}
                                 className={`w-full py-6 rounded-full font-bold shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 group active:scale-95 ${isStepValid
-                                    ? "bg-[#a319c5] hover:bg-[#8b15a8] text-white shadow-[#a319c5]/30 cursor-pointer"
+                                    ? "bg-[#9F2D5C] hover:bg-[#B8326A] text-white shadow-[#9F2D5C]/30 cursor-pointer"
                                     : "bg-slate-200 dark:bg-slate-800 text-slate-400 shadow-none cursor-not-allowed"
                                     }`}
                             >
@@ -1112,7 +1112,7 @@ function BookingPageInner() {
                             <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800 space-y-4">
                                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                                     <span className="font-bold text-slate-700 dark:text-slate-300">Need a special time slot or have a special request?</span><br />
-                                    <a href="tel:+14697739973" className="font-bold text-[#a319c5] hover:underline">Call (469) 773-9973</a>.
+                                    <a href="tel:+14697739973" className="font-bold text-[#9F2D5C] hover:underline">Call (469) 773-9973</a>.
                                 </p>
                                 <div className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed bg-amber-50 dark:bg-amber-900/10 p-4 rounded-xl border border-amber-100 dark:border-amber-900/30 text-amber-800 dark:text-amber-300">
                                     <strong className="block mb-1">Closed on Sundays.</strong> For special Sunday requests or appointments outside regular hours (including after 9:00 PM), call <strong>(469) 773-9973</strong>.
@@ -1130,7 +1130,7 @@ export default function BookingPage() {
     return (
         <Suspense fallback={
             <div className="min-h-screen flex items-center justify-center">
-                <span className="material-icons animate-spin text-[#a319c5] text-4xl">autorenew</span>
+                <span className="material-icons animate-spin text-[#9F2D5C] text-4xl">autorenew</span>
             </div>
         }>
             <BookingPageInner />

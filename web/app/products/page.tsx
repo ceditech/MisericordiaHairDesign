@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useMemo, useEffect } from "react";
 import { Product } from "@/src/data/products";
@@ -56,11 +56,11 @@ export default function ProductsPage() {
         <main className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto">
             {/* Header */}
             <div className="text-center max-w-3xl mx-auto mb-16">
-                <Badge className="mb-4 bg-[#a319c5]/10 text-[#a319c5] border-none px-4 py-1 uppercase tracking-widest text-xs font-bold">
+                <Badge className="mb-4 bg-[#9F2D5C]/10 text-[#9F2D5C] border-none px-4 py-1 uppercase tracking-widest text-xs font-bold">
                     Professional Beauty Shop
                 </Badge>
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white mb-6 leading-tight">
-                    Shop Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a319c5] to-emerald-500">Stylist Essentials</span>
+                    Shop Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#9F2D5C] to-emerald-500">Stylist Essentials</span>
                 </h1>
                 <p className="text-lg text-slate-500 dark:text-slate-400">
                     Premium braiding hair, wigs, professional gels, and beauty essentials—available for everyone. Get the Dede&apos;s Braids look at home.
@@ -74,7 +74,7 @@ export default function ProductsPage() {
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                     <Input
                         placeholder="Search products..."
-                        className="pl-12 py-6 rounded-2xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-[#a319c5]"
+                        className="pl-12 py-6 rounded-2xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-[#9F2D5C]"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -88,7 +88,7 @@ export default function ProductsPage() {
                             key={cat}
                             onClick={() => setActiveCategory(cat)}
                             className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${activeCategory === cat
-                                    ? 'bg-[#a319c5] text-white shadow-lg shadow-[#a319c5]/20'
+                                    ? 'bg-[#9F2D5C] text-white shadow-lg shadow-[#9F2D5C]/20'
                                     : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800'
                                 }`}
                         >
@@ -143,7 +143,7 @@ export default function ProductsPage() {
                                         {product.category}
                                     </span>
                                     {product.featured && (
-                                        <span className="bg-[#a319c5] text-white text-[10px] font-black px-3 py-1 rounded-lg uppercase tracking-wider shadow-lg shadow-[#a319c5]/20">
+                                        <span className="bg-[#9F2D5C] text-white text-[10px] font-black px-3 py-1 rounded-lg uppercase tracking-wider shadow-lg shadow-[#9F2D5C]/20">
                                             Top Pick
                                         </span>
                                     )}
@@ -157,7 +157,7 @@ export default function ProductsPage() {
                                 </div>
                             </div>
                             <div className="p-6 flex flex-col flex-1">
-                                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2 leading-tight group-hover:text-[#a319c5] transition-colors">
+                                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2 leading-tight group-hover:text-[#9F2D5C] transition-colors">
                                     {product.name}
                                 </h3>
                                 <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 line-clamp-2">
@@ -172,7 +172,7 @@ export default function ProductsPage() {
                                             e.stopPropagation();
                                             openProduct(product);
                                         }}
-                                        className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center hover:bg-[#a319c5] hover:text-white transition-all duration-300 shadow-sm overflow-hidden"
+                                        className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center hover:bg-[#9F2D5C] hover:text-white transition-all duration-300 shadow-sm overflow-hidden"
                                     >
                                         <ShoppingCart size={20} />
                                     </button>
@@ -198,8 +198,8 @@ export default function ProductsPage() {
 
             {/* Information Section */}
             <div className="mt-32 grid md:grid-cols-2 gap-8">
-                <div className="bg-[#a319c5]/5 rounded-[3rem] p-10 border border-[#a319c5]/10 flex flex-col items-center text-center">
-                    <div className="w-16 h-16 rounded-2xl bg-[#a319c5]/10 text-[#a319c5] flex items-center justify-center mb-6">
+                <div className="bg-[#9F2D5C]/5 rounded-[3rem] p-10 border border-[#9F2D5C]/10 flex flex-col items-center text-center">
+                    <div className="w-16 h-16 rounded-2xl bg-[#9F2D5C]/10 text-[#9F2D5C] flex items-center justify-center mb-6">
                         <ShoppingCart size={32} />
                     </div>
                     <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">Shop Online</h2>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
@@ -102,7 +102,7 @@ function ShopSuccessInner() {
         return (
             <main className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto flex items-center justify-center">
                 <div className="text-center">
-                    <div className="w-16 h-16 border-4 border-[#a319c5] border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
+                    <div className="w-16 h-16 border-4 border-[#9F2D5C] border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
                     <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Confirming Order...</p>
                 </div>
             </main>
@@ -116,7 +116,7 @@ function ShopSuccessInner() {
                 <p className="text-slate-500 mb-12">We couldn&apos;t find an order associated with this session.</p>
                 <Link
                     href="/products"
-                    className="bg-[#a319c5] hover:bg-[#8b15a8] text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg active:scale-95 inline-flex items-center justify-center"
+                    className="bg-[#9F2D5C] hover:bg-[#B8326A] text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg active:scale-95 inline-flex items-center justify-center"
                 >
                     Return to Shop
                 </Link>
@@ -145,7 +145,7 @@ function ShopSuccessInner() {
             </div>
 
             <Card className="p-8 sm:p-12 rounded-[3rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl shadow-slate-950/10 relative overflow-hidden print:shadow-none print:border-none print:p-0">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#a319c5]/5 rounded-bl-[5rem] -mr-16 -mt-16 print:hidden" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#9F2D5C]/5 rounded-bl-[5rem] -mr-16 -mt-16 print:hidden" />
 
                 <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-10 italic border-b border-slate-100 dark:border-slate-800 pb-6">Order Details</h2>
 
@@ -163,13 +163,13 @@ function ShopSuccessInner() {
 
                     <div>
                         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Total Paid</p>
-                        <p className="text-5xl font-black text-[#a319c5] italic">{formatCents(session.amountCents)}</p>
+                        <p className="text-5xl font-black text-[#9F2D5C] italic">{formatCents(session.amountCents)}</p>
                     </div>
 
                     <div className="bg-slate-50 dark:bg-slate-950/50 p-6 rounded-3xl border border-slate-100 dark:border-slate-800">
                         {isShipping ? (
                             <>
-                                <div className="flex items-center gap-4 text-[#a319c5] mb-4">
+                                <div className="flex items-center gap-4 text-[#9F2D5C] mb-4">
                                     <ShoppingBag size={20} />
                                     <h3 className="font-black italic uppercase tracking-widest text-sm">Shipping Information</h3>
                                 </div>
@@ -182,7 +182,7 @@ function ShopSuccessInner() {
                             </>
                         ) : (
                             <>
-                                <div className="flex items-center gap-4 text-[#a319c5] mb-4">
+                                <div className="flex items-center gap-4 text-[#9F2D5C] mb-4">
                                     <ShoppingBag size={20} />
                                     <h3 className="font-black italic uppercase tracking-widest text-sm">Pickup Information</h3>
                                 </div>
@@ -197,7 +197,7 @@ function ShopSuccessInner() {
                 <div className="grid sm:grid-cols-2 gap-4 pt-8 border-t border-slate-100 dark:border-slate-800 print:hidden">
                     <Link
                         href="/products"
-                        className="w-full bg-[#a319c5] hover:bg-[#8b15a8] text-white py-7 rounded-2xl flex items-center justify-center gap-3 font-black transition-all active:scale-[0.98]"
+                        className="w-full bg-[#9F2D5C] hover:bg-[#B8326A] text-white py-7 rounded-2xl flex items-center justify-center gap-3 font-black transition-all active:scale-[0.98]"
                     >
                         Keep Shopping
                         <ArrowRight size={18} />
@@ -223,7 +223,7 @@ function ShopSuccessInner() {
 
             <div className="mt-12 text-center print:hidden">
                 <p className="text-sm text-slate-400 font-medium">
-                    Need help? Contact us at <a href={`mailto:${CONTACT_EMAIL}`} className="text-[#a319c5] font-bold">{CONTACT_EMAIL}</a>
+                    Need help? Contact us at <a href={`mailto:${CONTACT_EMAIL}`} className="text-[#9F2D5C] font-bold">{CONTACT_EMAIL}</a>
                 </p>
             </div>
         </main>

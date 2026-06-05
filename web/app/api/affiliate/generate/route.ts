@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { adminDb } from "@/src/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
 import { AffiliateType } from "@/src/lib/affiliate/types";
@@ -60,14 +60,14 @@ export async function POST(req: NextRequest) {
                 bodyHtml: `
                     <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 40px; border: 1px solid #f0f0f0; border-radius: 20px; background: #ffffff;">
                         <div style="text-align: center; margin-bottom: 30px;">
-                             <h1 style="color: #a319c5; font-size: 32px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; margin: 0;">Welcome to the Program!</h1>
+                             <h1 style="color: #9F2D5C; font-size: 32px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; margin: 0;">Welcome to the Program!</h1>
                         </div>
                         <p style="font-size: 16px; color: #444; line-height: 1.6;">Hi <strong>${name}</strong>,</p>
                         <p style="font-size: 16px; color: #444; line-height: 1.6;">We're thrilled to have you join Dede's Braids as an affiliate. Your unique referral code is now active and ready for use:</p>
                         
-                        <div style="background: #fdf6ff; border: 2px dashed #a319c5; padding: 30px; text-align: center; border-radius: 15px; margin: 30px 0;">
-                            <span style="font-size: 36px; font-weight: 900; color: #a319c5; letter-spacing: 4px;">${code}</span>
-                            <p style="font-size: 12px; color: #a319c5; font-weight: bold; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">Share this code to earn</p>
+                        <div style="background: #fdf6ff; border: 2px dashed #9F2D5C; padding: 30px; text-align: center; border-radius: 15px; margin: 30px 0;">
+                            <span style="font-size: 36px; font-weight: 900; color: #9F2D5C; letter-spacing: 4px;">${code}</span>
+                            <p style="font-size: 12px; color: #9F2D5C; font-weight: bold; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px;">Share this code to earn</p>
                         </div>
                         
                         <div style="background: #fafafa; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
                         <p style="font-size: 14px; color: #888; text-align: center; margin: 0;">
                             Best regards,<br/>
                             <strong>Misericordia Hair Design Team</strong><br/>
-                            <a href="https://misericordiahairdesign.com" style="color: #a319c5; text-decoration: none;">misericordiahairdesign.com</a>
+                            <a href="https://misericordiahairdesign.com" style="color: #9F2D5C; text-decoration: none;">misericordiahairdesign.com</a>
                         </p>
                     </div>
                 `

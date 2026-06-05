@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { Badge, Card } from "@/components/ui";
@@ -43,7 +43,7 @@ export default function FirebaseDebugPage() {
             <Card className="p-8 sm:p-12 rounded-[3rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl relative overflow-hidden">
                 <div className="flex flex-col items-center gap-8 text-center">
                     {initStatus === "pending" && (
-                        <div className="w-16 h-16 border-4 border-[#a319c5] border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-16 h-16 border-4 border-[#9F2D5C] border-t-transparent rounded-full animate-spin"></div>
                     )}
 
                     {initStatus === "success" && (

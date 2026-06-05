@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { subscribeToStyles, upsertStyle, deleteStyle } from "@/src/lib/firebase/ownerService";
@@ -54,7 +54,7 @@ export default function StylesTab() {
                 <div className="relative flex-1 w-full">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                     <input 
-                        className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border-none outline-none focus:ring-2 focus:ring-[#a319c5] text-sm"
+                        className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border-none outline-none focus:ring-2 focus:ring-[#9F2D5C] text-sm"
                         placeholder="Search styles..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -74,7 +74,7 @@ export default function StylesTab() {
                         });
                         setIsEditing(true);
                     }}
-                    className="rounded-xl font-bold bg-[#a319c5] text-white hover:bg-[#8e16ac] shadow-lg shadow-[#a319c5]/20 gap-2 px-6 w-full md:w-auto"
+                    className="rounded-xl font-bold bg-[#9F2D5C] text-white hover:bg-[#8e16ac] shadow-lg shadow-[#9F2D5C]/20 gap-2 px-6 w-full md:w-auto"
                 >
                     <Plus size={18} />
                     Add New Style
@@ -94,18 +94,18 @@ export default function StylesTab() {
                                     <h4 className="text-xl font-black italic uppercase tracking-tighter text-slate-900 dark:text-white">
                                         {style.name}
                                     </h4>
-                                    {style.popular && <Badge className="bg-[#a319c5]/10 text-[#a319c5] border-none text-[10px]">Popular</Badge>}
+                                    {style.popular && <Badge className="bg-[#9F2D5C]/10 text-[#9F2D5C] border-none text-[10px]">Popular</Badge>}
                                 </div>
                                 <div className="flex gap-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
-                                    <span className="flex items-center gap-1"><Clock size={12} className="text-[#a319c5]" /> {style.duration}</span>
-                                    <span className="flex items-center gap-1"><DollarSign size={12} className="text-[#a319c5]" /> {style.price}</span>
+                                    <span className="flex items-center gap-1"><Clock size={12} className="text-[#9F2D5C]" /> {style.duration}</span>
+                                    <span className="flex items-center gap-1"><DollarSign size={12} className="text-[#9F2D5C]" /> {style.price}</span>
                                 </div>
                                 <p className="text-xs text-slate-500 line-clamp-2">{style.description}</p>
                                 
                                 <div className="flex gap-2 pt-2">
                                     <button 
                                         onClick={() => { setEditStyle(style); setIsEditing(true); }}
-                                        className="text-[10px] font-bold uppercase tracking-widest text-[#a319c5] hover:underline"
+                                        className="text-[10px] font-bold uppercase tracking-widest text-[#9F2D5C] hover:underline"
                                     >
                                         Edit Details
                                     </button>
@@ -167,7 +167,7 @@ export default function StylesTab() {
                                         type="checkbox" 
                                         checked={editStyle.popular} 
                                         onChange={(e) => setEditStyle({...editStyle, popular: e.target.checked})}
-                                        className="w-5 h-5 rounded border-slate-300 text-[#a319c5] focus:ring-[#a319c5]"
+                                        className="w-5 h-5 rounded border-slate-300 text-[#9F2D5C] focus:ring-[#9F2D5C]"
                                     />
                                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-400">Mark as Popular</span>
                                 </label>
@@ -199,7 +199,7 @@ export default function StylesTab() {
                                 Cancel
                             </Button>
                             <Button 
-                                className="flex-1 bg-[#a319c5] hover:bg-[#8e16ac] text-white rounded-2xl py-6 font-bold shadow-lg shadow-[#a319c5]/20 gap-2"
+                                className="flex-1 bg-[#9F2D5C] hover:bg-[#8e16ac] text-white rounded-2xl py-6 font-bold shadow-lg shadow-[#9F2D5C]/20 gap-2"
                                 onClick={handleSave}
                             >
                                 <Save size={18} />

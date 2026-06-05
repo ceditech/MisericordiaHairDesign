@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { subscribeToShopOrders, updateOrderStatus } from "@/src/lib/firebase/ownerService";
@@ -51,7 +51,7 @@ export default function OrdersTab() {
                 <div className="relative flex-1 w-full">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                     <input 
-                        className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border-none outline-none focus:ring-2 focus:ring-[#a319c5] text-sm"
+                        className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border-none outline-none focus:ring-2 focus:ring-[#9F2D5C] text-sm"
                         placeholder="Search orders by customer or ID..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -67,7 +67,7 @@ export default function OrdersTab() {
                             <div className="flex-1 space-y-6">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-12 h-12 rounded-2xl bg-[#a319c5]/10 text-[#a319c5] flex items-center justify-center shrink-0">
+                                        <div className="w-12 h-12 rounded-2xl bg-[#9F2D5C]/10 text-[#9F2D5C] flex items-center justify-center shrink-0">
                                             <ShoppingBag size={24} />
                                         </div>
                                         <div>
@@ -110,7 +110,7 @@ export default function OrdersTab() {
                                     <div className="space-y-2">
                                         {order.items?.map((item: any, idx: number) => (
                                             <div key={idx} className="flex justify-between items-center text-sm p-3 rounded-xl border border-slate-50 dark:border-slate-800 bg-white dark:bg-slate-900">
-                                                <span className="font-bold text-slate-900 dark:text-white">{item.name} <span className="text-[#a319c5] ml-1">x{item.quantity}</span></span>
+                                                <span className="font-bold text-slate-900 dark:text-white">{item.name} <span className="text-[#9F2D5C] ml-1">x{item.quantity}</span></span>
                                                 <span className="font-black">${(item.priceCents * item.quantity / 100).toFixed(2)}</span>
                                             </div>
                                         ))}
@@ -120,7 +120,7 @@ export default function OrdersTab() {
 
                             <div className="lg:w-64 space-y-4 pt-6 lg:pt-0 border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-slate-800 lg:pl-8 flex flex-col justify-between">
                                 <div className="space-y-1">
-                                    <p className="text-xs font-black text-[#a319c5] uppercase tracking-widest">Total Amount</p>
+                                    <p className="text-xs font-black text-[#9F2D5C] uppercase tracking-widest">Total Amount</p>
                                     <p className="text-4xl font-black text-slate-900 dark:text-white italic tracking-tighter">
                                         ${(order.totalCents / 100).toFixed(2)}
                                     </p>
@@ -140,7 +140,7 @@ export default function OrdersTab() {
                                     ) : (
                                         <Button 
                                             onClick={() => handleUpdateStatus(order.id, "paid", "shipped")}
-                                            className="w-full rounded-2xl bg-[#a319c5] text-white hover:bg-[#8e16ac] font-bold h-12 gap-2 shadow-lg shadow-[#a319c5]/20"
+                                            className="w-full rounded-2xl bg-[#9F2D5C] text-white hover:bg-[#8e16ac] font-bold h-12 gap-2 shadow-lg shadow-[#9F2D5C]/20"
                                             disabled={order.fulfillmentStatus === 'shipped'}
                                         >
                                             <Truck size={18} />

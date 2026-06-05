@@ -3,12 +3,12 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Brand Colors - Constant across themes */
-  --color-brand-primary: #a319c5;
-  --color-brand-secondary: #8b15a8;
-  --color-brand-light: #b84dd4;
-  --color-brand-accent: #d084e8;
-  --color-brand-violet: #7c3aed;
+  /* Brand Colors – Champagne Rose Beauty Palette */
+  --color-brand-primary: #9F2D5C;      /* Rose Wine  */
+  --color-brand-secondary: #B8326A;    /* Berry Rose */
+  --color-brand-light: #C4547E;        /* Rose tint  */
+  --color-brand-accent: #D8A75F;       /* Champagne Gold (luxury accent only) */
+  --color-brand-burgundy: #3A0F1F;     /* Deep Burgundy */
 
   /* Theme-aware Semantic Colors */
   --color-background: var(--background);
@@ -19,12 +19,12 @@
   --color-input-focus: var(--input-focus);
 
   /* Explicit Theme Variants (for specific overrides) */
-  --color-background-light: #f8f6f7;
-  --color-background-dark: #221019;
+  --color-background-light: #FFF6F8;
+  --color-background-dark: #2A0B17;
   --color-surface-light: #ffffff;
-  --color-surface-dark: #1a0b13;
+  --color-surface-dark: #3A0F1F;
   --color-elevated-light: #ffffff;
-  --color-elevated-dark: #2a1621;
+  --color-elevated-dark: #4A1828;
 
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
@@ -46,31 +46,33 @@
 }
 
 :root {
-  --background: #f8f6f7;
+  /* Light mode: Blush Cream & Espresso Charcoal */
+  --background: #FFF6F8;
   --surface: #ffffff;
   --elevated: #ffffff;
-  --border: #e2e8f0;
-  --input-border: #cbd5e1;
-  --input-focus: #a319c5;
+  --border: #EDD9E0;
+  --input-border: #D4B4C0;
+  --input-focus: #9F2D5C;
 
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
+  --text-primary: #1F1B1C;
+  --text-secondary: #5A4A4E;
+  --text-muted: #8A6E75;
   --text-inverse: #ffffff;
 }
 
 .dark {
-  --background: #221019;
-  --surface: #1a0b13;
-  --elevated: #2a1621;
-  --border: rgba(255, 255, 255, 0.05);
-  --input-border: rgba(255, 255, 255, 0.1);
-  --input-focus: #b84dd4;
+  /* Dark mode: Deep Burgundy & Warm Ivory */
+  --background: #2A0B17;
+  --surface: #3A0F1F;
+  --elevated: #4A1828;
+  --border: rgba(255, 255, 255, 0.08);
+  --input-border: rgba(255, 255, 255, 0.15);
+  --input-focus: #C4547E;
 
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --text-inverse: #0f172a;
+  --text-primary: #FFF8EF;
+  --text-secondary: #E0C8D0;
+  --text-muted: #C9A8B2;
+  --text-inverse: #1F1B1C;
 }
 
 * {

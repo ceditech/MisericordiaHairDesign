@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -32,7 +32,7 @@ function CancelPageInner() {
 
                 <div className="flex flex-col gap-4">
                     <Link href="/checkout">
-                        <Button className="w-full py-6 rounded-2xl shadow-lg shadow-[#a319c5]/20">
+                        <Button className="w-full py-6 rounded-2xl shadow-lg shadow-[#9F2D5C]/20">
                             <span className="material-icons text-base mr-2">refresh</span>
                             Return to Checkout
                         </Button>
@@ -47,7 +47,7 @@ function CancelPageInner() {
 
                 <div className="mt-12 pt-8 border-t border-slate-200 dark:border-white/5">
                     <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
-                        Having trouble with payment? <Link href="/contact" className="text-[#a319c5] font-bold hover:underline">Contact us</Link> and we can help you finalize your booking.
+                        Having trouble with payment? <Link href="/contact" className="text-[#9F2D5C] font-bold hover:underline">Contact us</Link> and we can help you finalize your booking.
                     </p>
                 </div>
             </div>
@@ -59,7 +59,7 @@ export default function CancelPage() {
     return (
         <Suspense fallback={
             <div className="min-h-screen flex items-center justify-center">
-                <span className="material-icons animate-spin text-[#a319c5] text-4xl">autorenew</span>
+                <span className="material-icons animate-spin text-[#9F2D5C] text-4xl">autorenew</span>
             </div>
         }>
             <CancelPageInner />

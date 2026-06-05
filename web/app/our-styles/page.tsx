@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
@@ -61,7 +61,7 @@ function StyleModal({ style, onClose }: { style: BraidStyle; onClose: () => void
                     />
                     {style.popular && (
                         <div className="absolute top-4 left-4">
-                            <span className="bg-[#a319c5] text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
+                            <span className="bg-[#9F2D5C] text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
                                 Most Popular
                             </span>
                         </div>
@@ -83,20 +83,20 @@ function StyleModal({ style, onClose }: { style: BraidStyle; onClose: () => void
                         <h4 className="font-bold text-slate-900 dark:text-white mb-4">Available Add-ons & Options</h4>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-[#a319c5] mb-2">Sizes</p>
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-[#9F2D5C] mb-2">Sizes</p>
                                 <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
                                     {SIZE_PRESETS.map(s => <li key={s.id}>{s.label} ({s.priceGuidance})</li>)}
                                 </ul>
                             </div>
                             <div>
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-[#a319c5] mb-2">Lengths</p>
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-[#9F2D5C] mb-2">Lengths</p>
                                 <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
                                     {LENGTH_PRESETS.map(l => <li key={l.id}>{l.label} ({l.inches})</li>)}
                                 </ul>
                             </div>
                         </div>
                         <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
-                            <p className="text-[10px] font-bold uppercase tracking-widest text-[#a319c5] mb-2">Optional Services</p>
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-[#9F2D5C] mb-2">Optional Services</p>
                             <p className="text-sm text-slate-600 dark:text-slate-400">
                                 {ADDON_WASHING.name} (+${ADDON_WASHING.price}) available at checkout.
                             </p>
@@ -104,13 +104,13 @@ function StyleModal({ style, onClose }: { style: BraidStyle; onClose: () => void
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 mb-8">
-                        <div className="bg-[#a319c5]/5 dark:bg-[#a319c5]/10 rounded-2xl p-5 text-center">
-                            <span className="material-icons text-[#a319c5] text-2xl mb-1 block">payments</span>
+                        <div className="bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10 rounded-2xl p-5 text-center">
+                            <span className="material-icons text-[#9F2D5C] text-2xl mb-1 block">payments</span>
                             <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Starting Price</p>
-                            <p className="text-xl font-extrabold text-[#a319c5]">{style.price}</p>
+                            <p className="text-xl font-extrabold text-[#9F2D5C]">{style.price}</p>
                         </div>
-                        <div className="bg-[#a319c5]/5 dark:bg-[#a319c5]/10 rounded-2xl p-5 text-center">
-                            <span className="material-icons text-[#a319c5] text-2xl mb-1 block">schedule</span>
+                        <div className="bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10 rounded-2xl p-5 text-center">
+                            <span className="material-icons text-[#9F2D5C] text-2xl mb-1 block">schedule</span>
                             <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Duration</p>
                             <p className="text-xl font-extrabold text-slate-900 dark:text-white">{style.duration}</p>
                         </div>
@@ -118,7 +118,7 @@ function StyleModal({ style, onClose }: { style: BraidStyle; onClose: () => void
 
                     <button
                         onClick={handleBookNow}
-                        className="w-full py-5 rounded-2xl bg-[#a319c5] hover:bg-[#8b15a8] text-white font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-xl shadow-[#a319c5]/30 active:scale-95"
+                        className="w-full py-5 rounded-2xl bg-[#9F2D5C] hover:bg-[#B8326A] text-white font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-xl shadow-[#9F2D5C]/30 active:scale-95"
                     >
                         <span className="material-icons">calendar_today</span>
                         Book This Style
@@ -173,16 +173,16 @@ export default function OurStylesPage() {
         <main className="min-h-screen bg-white dark:bg-[#0c0610]">
             {/* Hero */}
             <section className="relative py-20 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#a319c5]/8 via-transparent to-transparent" />
-                <div className="absolute top-0 right-0 w-96 h-96 bg-[#a319c5]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#9F2D5C]/8 via-transparent to-transparent" />
+                <div className="absolute top-0 right-0 w-96 h-96 bg-[#9F2D5C]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="max-w-2xl">
-                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#a319c5]/10 text-[#a319c5] text-xs font-bold uppercase tracking-widest mb-6">
-                            <span className="flex h-2 w-2 rounded-full bg-[#a319c5] animate-pulse" />
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#9F2D5C]/10 text-[#9F2D5C] text-xs font-bold uppercase tracking-widest mb-6">
+                            <span className="flex h-2 w-2 rounded-full bg-[#9F2D5C] animate-pulse" />
                             Explore Our Work
                         </div>
                         <h1 className="text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white leading-tight mb-5">
-                            Our Braiding <span className="text-[#a319c5]">Styles</span>
+                            Our Braiding <span className="text-[#9F2D5C]">Styles</span>
                         </h1>
                         <p className="text-lg text-slate-500 dark:text-slate-400 leading-relaxed">
                             Expertly crafted braids for every occasion. Tap any style to explore details and book your transformation.
@@ -204,7 +204,7 @@ export default function OurStylesPage() {
                         {styles.map((style, index) => (
                             <div
                                 key={style.id}
-                                className="break-inside-avoid group relative overflow-hidden rounded-3xl cursor-pointer shadow-md hover:shadow-2xl hover:shadow-[#a319c5]/15 transition-all duration-500"
+                                className="break-inside-avoid group relative overflow-hidden rounded-3xl cursor-pointer shadow-md hover:shadow-2xl hover:shadow-[#9F2D5C]/15 transition-all duration-500"
                                 onClick={() => setSelectedStyle(style)}
                             >
                                 {/* Image - alternating aspect ratios for visual interest */}
@@ -218,7 +218,7 @@ export default function OurStylesPage() {
                                 {/* Popular badge */}
                                 {style.popular && (
                                     <div className="absolute top-4 left-4">
-                                        <span className="bg-[#a319c5] text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
+                                        <span className="bg-[#9F2D5C] text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
                                             Most Popular
                                         </span>
                                     </div>
@@ -237,7 +237,7 @@ export default function OurStylesPage() {
                                             <span className="material-icons text-sm">schedule</span>
                                             {style.duration}
                                         </span>
-                                        <span className="ml-auto bg-white text-[#a319c5] text-xs font-bold px-4 py-1.5 rounded-full flex items-center gap-1">
+                                        <span className="ml-auto bg-white text-[#9F2D5C] text-xs font-bold px-4 py-1.5 rounded-full flex items-center gap-1">
                                             View Details
                                             <span className="material-icons text-xs">arrow_forward</span>
                                         </span>
@@ -254,13 +254,13 @@ export default function OurStylesPage() {
                 {/* Horizontal Customer Section */}
                 <div className="relative pt-10">
                     <div className="text-center mb-16">
-                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#a319c5]/10 text-[#a319c5] text-[10px] font-bold uppercase tracking-widest mb-4">
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#9F2D5C]/10 text-[#9F2D5C] text-[10px] font-bold uppercase tracking-widest mb-4">
                             <span className="material-icons text-sm">stars</span>
                             Customer Transformations
                         </div>
                         <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-6">
                             How We Make Our Customers <br />
-                            <span className="text-[#a319c5]">Look and Feel</span>
+                            <span className="text-[#9F2D5C]">Look and Feel</span>
                         </h2>
                         <p className="max-w-xl mx-auto text-slate-500 dark:text-slate-400">
                             Witness the magic of our expert braiding services. From subtle enhancements to bold transformations.
@@ -300,7 +300,7 @@ export default function OurStylesPage() {
                         <div className="absolute top-1/2 -left-8 -translate-y-1/2 z-20 hidden xl:block">
                             <button
                                 onClick={() => scroll("left")}
-                                className="w-16 h-16 rounded-full bg-white dark:bg-slate-900 shadow-2xl flex items-center justify-center text-[#a319c5] border border-slate-100 dark:border-white/10 hover:scale-110 active:scale-95 transition-all group"
+                                className="w-16 h-16 rounded-full bg-white dark:bg-slate-900 shadow-2xl flex items-center justify-center text-[#9F2D5C] border border-slate-100 dark:border-white/10 hover:scale-110 active:scale-95 transition-all group"
                                 aria-label="Previous images"
                             >
                                 <span className="material-icons group-hover:-translate-x-1 transition-transform">arrow_back</span>
@@ -309,7 +309,7 @@ export default function OurStylesPage() {
                         <div className="absolute top-1/2 -right-8 -translate-y-1/2 z-20 hidden xl:block">
                             <button
                                 onClick={() => scroll("right")}
-                                className="w-16 h-16 rounded-full bg-white dark:bg-slate-900 shadow-2xl flex items-center justify-center text-[#a319c5] border border-slate-100 dark:border-white/10 hover:scale-110 active:scale-95 transition-all group"
+                                className="w-16 h-16 rounded-full bg-white dark:bg-slate-900 shadow-2xl flex items-center justify-center text-[#9F2D5C] border border-slate-100 dark:border-white/10 hover:scale-110 active:scale-95 transition-all group"
                                 aria-label="Next images"
                             >
                                 <span className="material-icons group-hover:translate-x-1 transition-transform">arrow_forward</span>
@@ -318,7 +318,7 @@ export default function OurStylesPage() {
 
                         {/* Modern Progress Bar (Subtle) */}
                         <div className="max-w-xs mx-auto h-1 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden mt-4">
-                            <div className="h-full bg-[#a319c5] w-1/3 rounded-full opacity-50" />
+                            <div className="h-full bg-[#9F2D5C] w-1/3 rounded-full opacity-50" />
                         </div>
                     </div>
                 </div>
@@ -328,7 +328,7 @@ export default function OurStylesPage() {
                     <p className="text-slate-500 dark:text-slate-400 mb-6 text-lg">Ready to start your transformation?</p>
                     <Link
                         href="/book"
-                        className="inline-flex items-center gap-3 bg-[#a319c5] hover:bg-[#8b15a8] text-white px-12 py-5 rounded-full font-bold text-lg transition-all duration-300 shadow-xl shadow-[#a319c5]/30 hover:scale-105 active:scale-95"
+                        className="inline-flex items-center gap-3 bg-[#9F2D5C] hover:bg-[#B8326A] text-white px-12 py-5 rounded-full font-bold text-lg transition-all duration-300 shadow-xl shadow-[#9F2D5C]/30 hover:scale-105 active:scale-95"
                     >
                         <span className="material-icons">calendar_today</span>
                         Book Your Appointment

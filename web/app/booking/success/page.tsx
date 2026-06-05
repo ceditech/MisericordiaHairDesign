@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
@@ -81,7 +81,7 @@ function SuccessPageInner() {
     if (loading && !booking) {
         return (
             <main className="min-h-[80vh] flex flex-col items-center justify-center px-6 py-20">
-                <div className="w-16 h-16 border-4 border-[#a319c5] border-t-transparent rounded-full animate-spin mb-6"></div>
+                <div className="w-16 h-16 border-4 border-[#9F2D5C] border-t-transparent rounded-full animate-spin mb-6"></div>
                 <h1 className="text-xl font-medium text-slate-600 dark:text-slate-400">Confirming your booking...</h1>
             </main>
         );
@@ -294,7 +294,7 @@ export default function SuccessPage() {
     return (
         <Suspense fallback={
             <div className="min-h-screen flex items-center justify-center">
-                <span className="material-icons animate-spin text-[#a319c5] text-4xl">autorenew</span>
+                <span className="material-icons animate-spin text-[#9F2D5C] text-4xl">autorenew</span>
             </div>
         }>
             <SuccessPageInner />
