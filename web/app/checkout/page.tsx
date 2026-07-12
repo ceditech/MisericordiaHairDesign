@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter } from "next/navigation";
@@ -684,13 +684,13 @@ function CheckoutPageInner() {
                             {draft.washingAddon && (
                                 <div className="flex justify-between text-sm text-text-secondary">
                                     <span>Washing Service</span>
-                                    <span className="font-semibold">+{formatCents((addons.find(a => a.id === "wash")?.price || 15) * 100)}</span>
+                                    <span className="font-semibold">+{formatCents((addons.find(a => a.id === "wash")?.price || 25) * 100)}</span>
                                 </div>
                             )}
                             {draft.takeDownAddon && (
                                 <div className="flex justify-between text-sm text-text-secondary">
                                     <span>Take Down Service</span>
-                                    <span className="font-semibold">+{formatCents((addons.find(a => a.id === "take-down")?.price || 30) * 100)}</span>
+                                    <span className="font-semibold">+{formatCents((addons.find(a => a.id === "take-down")?.price || 45) * 100)}</span>
                                 </div>
                             )}
                             <div className="flex justify-between text-sm text-text-secondary">

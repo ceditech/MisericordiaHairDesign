@@ -69,12 +69,12 @@ export function calculateBookingPrice(input: PricingInput): PricingResult {
     let addonDepositCents = 0;
     
     if (input.washingAddon) {
-        const addon = input.addons?.find(a => a.id === "wash") || { price: 15, deposit: 15 };
+        const addon = input.addons?.find(a => a.id === "wash") || { price: 25, deposit: 25 };
         addonCents += addon.price * 100;
         addonDepositCents += addon.deposit * 100;
     }
     if (input.takeDownAddon) {
-        const addon = input.addons?.find(a => a.id === "take-down") || { price: 30, deposit: 30 };
+        const addon = input.addons?.find(a => a.id === "take-down") || { price: 45, deposit: 45 };
         addonCents += addon.price * 100;
         addonDepositCents += addon.deposit * 100;
     }

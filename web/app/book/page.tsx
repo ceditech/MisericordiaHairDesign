@@ -411,7 +411,7 @@ function BookingPageInner() {
     const taxCents = pricing.taxCents;
     const totalCents = pricing.totalCents;
 
-    // Deposit = Fixed $50 + Addons (Washing $15, Take Down $30)
+    // Deposit = Fixed $50 + Addons (Washing $25, Take Down $45)
     const totalDepositCents = pricing.depositCents;
 
     const displayTotal = pricing.baseCents > 0 ? formatCents(totalCents) : selectedStyle?.price || "";
@@ -510,7 +510,7 @@ function BookingPageInner() {
                         className="w-6 h-6 rounded-md border-slate-300 text-[#9F2D5C] focus:ring-[#9F2D5C] bg-slate-100 dark:bg-slate-800"
                     />
                     <div>
-                        <p className="font-bold text-sm text-slate-900 dark:text-white">Add Washing Service (+${addons.find(a => a.id === 'wash')?.price || 15})</p>
+                        <p className="font-bold text-sm text-slate-900 dark:text-white">Add Washing Service (+${addons.find(a => a.id === 'wash')?.price || 25})</p>
                         <p className="text-xs text-slate-500">Start your appointment with a clean, prepped foundation.</p>
                     </div>
                 </label>
@@ -522,7 +522,7 @@ function BookingPageInner() {
                         className="w-6 h-6 rounded-md border-slate-300 text-[#9F2D5C] focus:ring-[#9F2D5C] bg-slate-100 dark:bg-slate-800"
                     />
                     <div>
-                        <p className="font-bold text-sm text-slate-900 dark:text-white">Add Take Down Service (+${addons.find(a => a.id === 'take-down')?.price || 30})</p>
+                        <p className="font-bold text-sm text-slate-900 dark:text-white">Add Take Down Service (+${addons.find(a => a.id === 'take-down')?.price || 45})</p>
                         <p className="text-xs text-slate-500">Professional removal of your previous style.</p>
                     </div>
                 </label>
@@ -1051,13 +1051,13 @@ function BookingPageInner() {
                                 {bookingData.washingAddon && (
                                     <div className="flex justify-between items-center text-sm text-slate-500 dark:text-slate-400">
                                         <span>Add-on:</span>
-                                        <span>Washing (+${addons.find(a => a.id === 'wash')?.price || 15})</span>
+                                        <span>Washing (+${addons.find(a => a.id === 'wash')?.price || 25})</span>
                                     </div>
                                 )}
                                 {bookingData.takeDownAddon && (
                                     <div className="flex justify-between items-center text-sm text-slate-500 dark:text-slate-400">
                                         <span>Add-on:</span>
-                                        <span>Take Down (+${addons.find(a => a.id === 'take-down')?.price || 30})</span>
+                                        <span>Take Down (+${addons.find(a => a.id === 'take-down')?.price || 45})</span>
                                     </div>
                                 )}
                                 <div className="flex justify-between items-center text-sm text-slate-500 dark:text-slate-400">

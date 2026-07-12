@@ -1,6 +1,7 @@
 import { adminDb } from "../firebase/admin";
 import { STORE_PRODUCTS } from "../../data/products";
 import { BRAID_STYLES } from "../../../lib/styles";
+import { DEFAULT_ADDONS } from "../../constants/braidPresets";
 import { MIGRATED_BLOG_POSTS } from "../../../data/seeding/blogPosts";
 import { subMonths, startOfMonth, endOfMonth, eachMonthOfInterval, format, addDays, isWeekend } from "date-fns";
 
@@ -35,6 +36,18 @@ export async function seedDashboardData() {
         }, { merge: true });
     }
     await stylesBatch.commit();
+
+    // 1b. Seed Braid Addons
+    console.log("Seeding braid addons...");
+    const addonsBatch = adminDb.batch();
+    for (const addon of DEFAULT_ADDONS) {
+        const addonRef = adminDb.collection("braidAddons").doc(addon.id);
+        addonsBatch.set(addonRef, {
+            ...addon,
+            updatedAt: new Date()
+        }, { merge: true });
+    }
+    await addonsBatch.commit();
 
     // 2. Get styles for bookings
     const stylesSnap = await adminDb.collection("styles").get();

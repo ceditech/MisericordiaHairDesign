@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { collection, doc, writeBatch, serverTimestamp } from "firebase/firestore";
@@ -6,7 +6,7 @@ import { getDb } from "@/src/lib/firebase/client";
 import { STORE_PRODUCTS } from "@/src/data/products";
 import { BRAID_STYLES } from "@/lib/styles";
 import { REVIEWS } from "@/src/data/reviews";
-import { SIZE_PRESETS, LENGTH_PRESETS } from "@/src/constants/braidPresets";
+import { SIZE_PRESETS, LENGTH_PRESETS, DEFAULT_ADDONS } from "@/src/constants/braidPresets";
 import { Button, Card, Badge } from "@/components/ui";
 import { Database, ArrowRight, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
@@ -17,11 +17,13 @@ export default function MigratePage() {
         products: 'idle' | 'loading' | 'success' | 'error';
         styles: 'idle' | 'loading' | 'success' | 'error';
         presets: 'idle' | 'loading' | 'success' | 'error';
+        addons: 'idle' | 'loading' | 'success' | 'error';
         reviews: 'idle' | 'loading' | 'success' | 'error';
     }>({
         products: 'idle',
         styles: 'idle',
         presets: 'idle',
+        addons: 'idle',
         reviews: 'idle'
     });
 
@@ -122,10 +124,32 @@ export default function MigratePage() {
         }
     };
 
+    const migrateAddons = async () => {
+        setStatus(prev => ({ ...prev, addons: 'loading' }));
+        addLog("Starting Braid Addons migration...");
+        try {
+            const batch = writeBatch(db);
+            DEFAULT_ADDONS.forEach((addon) => {
+                const docRef = doc(collection(db, "braidAddons"), addon.id);
+                batch.set(docRef, {
+                    ...addon,
+                    updatedAt: serverTimestamp(),
+                });
+            });
+            await batch.commit();
+            addLog(`Successfully migrated ${DEFAULT_ADDONS.length} braid addons.`);
+            setStatus(prev => ({ ...prev, addons: 'success' }));
+        } catch (err: any) {
+            addLog(`Error migrating braid addons: ${err.message}`);
+            setStatus(prev => ({ ...prev, addons: 'error' }));
+        }
+    };
+
     const migrateAll = async () => {
         await migrateProducts();
         await migrateStyles();
         await migratePresets();
+        await migrateAddons();
         await migrateReviews();
     };
 
@@ -145,7 +169,7 @@ export default function MigratePage() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
                 <MigrationCard 
                     title="Products" 
                     count={STORE_PRODUCTS.length} 
@@ -163,6 +187,12 @@ export default function MigratePage() {
                     count={SIZE_PRESETS.length + LENGTH_PRESETS.length} 
                     status={status.presets} 
                     onMigrate={migratePresets}
+                />
+                <MigrationCard 
+                    title="Addons" 
+                    count={DEFAULT_ADDONS.length} 
+                    status={status.addons} 
+                    onMigrate={migrateAddons}
                 />
                 <MigrationCard 
                     title="Reviews" 

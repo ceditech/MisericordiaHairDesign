@@ -21,7 +21,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         id: "knotless-braids",
         name: "Knotless Braids",
         duration: "4-6 hours",
-        price: "$200 and up",
+        price: "$220 and up",
         image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Knotless-Braids.png",
         description: "Natural-looking, tension-free braids starting at the root.",
         popular: true,
@@ -31,7 +31,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         id: "single-braids",
         name: "Single Braids",
         duration: "6-8 hours",
-        price: "$180 and up",
+        price: "$195 and up",
         image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Single-Braids.png",
         description: "Classic single braids for a versatile and long-lasting look.",
         prepChecklist: DEFAULT_PREP
@@ -40,7 +40,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         id: "bohemian-braids",
         name: "Bohemian Braids",
         duration: "5-6 hours",
-        price: "$220 and up",
+        price: "$260 and up",
         image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Boho.png",
         description: "Soft, curly box braids for an effortless, boho aesthetic.",
         prepChecklist: [...DEFAULT_PREP, "Confirm desired curl pattern (Human or Synthetic hair provided)."]
@@ -49,7 +49,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         id: "box-braids",
         name: "Box Braids",
         duration: "5-7 hours",
-        price: "$180 and up",
+        price: "$195 and up",
         image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Box-braids-style.png",
         description: "Timeless protective style with clean, square sections.",
         prepChecklist: DEFAULT_PREP
@@ -58,7 +58,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         id: "micro-braids",
         name: "Micro Braids",
         duration: "8-12 hours",
-        price: "$180 and up",
+        price: "$320 and up",
         image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Micro-Braids.png",
         description: "Exquisite, tiny braids for maximum flow and styling options.",
         prepChecklist: [...DEFAULT_PREP, "Please bring snacks/entertainment for this long-duration style."]
@@ -67,7 +67,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         id: "cornrows",
         name: "Cornrows",
         duration: "2-4 hours",
-        price: "$120 and up",
+        price: "$95 and up",
         image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Cornrows-Braids.png",
         description: "Traditional scalp-braid designs, perfect for any occasion.",
         prepChecklist: DEFAULT_PREP
@@ -76,7 +76,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         id: "kinky-twist",
         name: "Kinky Twist",
         duration: "4-6 hours",
-        price: "$160 and up",
+        price: "$205 and up",
         image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Kinky-Twist.png",
         description: "Textured, natural-looking twists with a kinky finish.",
         prepChecklist: DEFAULT_PREP
@@ -85,7 +85,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         id: "crochet",
         name: "Crochet",
         duration: "2-3 hours",
-        price: "$100 and up",
+        price: "$125 and up",
         image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Crochet-Braids.png",
         description: "Quick and versatile install using a crochet hook method.",
         prepChecklist: DEFAULT_PREP
@@ -94,7 +94,7 @@ export const BRAID_STYLES: BraidStyle[] = [
         id: "kids-braids",
         name: "Kids Braids",
         duration: "2-4 hours",
-        price: "$100 and up",
+        price: "$85 and up",
         image: "https://storage.googleapis.com/misericordiahairdesign.firebasestorage.app/styles/Kids-Braids.png",
         description: "Gentle and beautiful braiding styles tailored for children.",
         prepChecklist: DEFAULT_PREP
