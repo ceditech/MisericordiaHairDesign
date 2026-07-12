@@ -12,7 +12,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Dede's Braids | Professional African American Braiding Services",
+  title: "Misericordia Hair Designs | Professional African American Braiding Services",
   description:
     "Expert African American braiding services in New York. Specializing in knotless braids, box braids, and protective styles. Book your appointment today!",
 };

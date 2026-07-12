@@ -11,7 +11,7 @@ export default function PaymentPage() {
                     Booking Confirmed!
                 </h1>
                 <p className="text-slate-500 dark:text-slate-400">
-                    Your appointment at Dede&apos;s Braids is all set. We can&apos;t wait to see you!
+                    Your appointment at MHDESIGNS&apos;s Braids is all set. We can&apos;t wait to see you!
                 </p>
             </div>
 
@@ -50,7 +50,7 @@ export default function PaymentPage() {
                         <span className="material-icons">location_on</span>
                     </div>
                     <div>
-                        <p className="font-bold">Dede&apos;s Braids Salon</p>
+                        <p className="font-bold">MHDESIGNS&apos;s Braids Salon</p>
                         <p className="text-slate-600 dark:text-slate-400">
                             123 Braid Ave, Suite 100
                             <br />

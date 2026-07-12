@@ -17,7 +17,7 @@ export default function PrivacyPage() {
                             Introduction
                         </h2>
                         <p className="text-slate-600 dark:text-slate-400">
-                            Dede’s Braids (“we,” “us,” or “our”) operates a hair braiding salon in Manor, Texas and provides online information, appointment booking, and related services through our website (the “Site”). This Privacy Policy explains what information we collect, how we use it, and the choices you have.
+                            Misericordia Hair Designs (“we,” “us,” or “our”) operates a hair braiding salon in Manor, Texas and provides online information, appointment booking, and related services through our website (the “Site”). This Privacy Policy explains what information we collect, how we use it, and the choices you have.
                         </p>
                         <p className="text-slate-600 dark:text-slate-400 mt-4">
                             By using our Site or booking an appointment, you agree to the practices described in this Privacy Policy.

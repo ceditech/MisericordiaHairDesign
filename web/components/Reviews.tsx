@@ -132,7 +132,7 @@ export default function Reviews() {
                                 </div>
                             </div>
                             <div className="flex flex-col items-start">
-                                <span className="text-[10px] font-bold uppercase tracking-widest opacity-80">Dede's Braids</span>
+                                <span className="text-[10px] font-bold uppercase tracking-widest opacity-80">Misericordia Hair Designs</span>
                                 <span className="text-[10px] font-medium opacity-60">77 Reviews</span>
                             </div>
                         </div>

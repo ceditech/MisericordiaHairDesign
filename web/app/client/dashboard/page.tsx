@@ -171,7 +171,7 @@ export default function ClientDashboardPage() {
                             Location Details
                         </h3>
                         <p className="text-slate-500 text-sm leading-relaxed mb-4">
-                            Dede&apos;s Braids Studio<br />
+                            MHDESIGNS&apos;s Braids Studio<br />
                             123 Beauty Avenue<br />
                             Braid City, NY 10001
                         </p>

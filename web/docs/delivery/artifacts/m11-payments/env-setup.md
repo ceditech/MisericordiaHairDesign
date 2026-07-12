@@ -1,6 +1,6 @@
 # Environment Configuration Guide (M11 Payments)
 
-This document outlines the required environment variables for the Dede's Braids Next.js application, specifically for Firebase Admin and Stripe/PayPal payment integrations.
+This document outlines the required environment variables for the Misericordia Hair Designs Next.js application, specifically for Firebase Admin and Stripe/PayPal payment integrations.
 
 ## Core Security Rules
 1. **Never commit `.env.local`** to version control.

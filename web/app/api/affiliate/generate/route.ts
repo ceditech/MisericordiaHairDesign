@@ -56,14 +56,14 @@ export async function POST(req: NextRequest) {
             const { EmailManager } = await import("@/src/lib/email/EmailManager");
             await EmailManager.sendEmail({
                 to: email,
-                subject: "Your Dede's Braids Affiliate Code",
+                subject: "Your Misericordia Hair Designs Affiliate Code",
                 bodyHtml: `
                     <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 40px; border: 1px solid #f0f0f0; border-radius: 20px; background: #ffffff;">
                         <div style="text-align: center; margin-bottom: 30px;">
                              <h1 style="color: #9F2D5C; font-size: 32px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; margin: 0;">Welcome to the Program!</h1>
                         </div>
                         <p style="font-size: 16px; color: #444; line-height: 1.6;">Hi <strong>${name}</strong>,</p>
-                        <p style="font-size: 16px; color: #444; line-height: 1.6;">We're thrilled to have you join Dede's Braids as an affiliate. Your unique referral code is now active and ready for use:</p>
+                        <p style="font-size: 16px; color: #444; line-height: 1.6;">We're thrilled to have you join Misericordia Hair Designs as an affiliate. Your unique referral code is now active and ready for use:</p>
                         
                         <div style="background: #fdf6ff; border: 2px dashed #9F2D5C; padding: 30px; text-align: center; border-radius: 15px; margin: 30px 0;">
                             <span style="font-size: 36px; font-weight: 900; color: #9F2D5C; letter-spacing: 4px;">${code}</span>
@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
         await adminDb.collection("mail").add({
             to: email,
             message: {
-                subject: "Your Dede's Braids Affiliate Code",
+                subject: "Your Misericordia Hair Designs Affiliate Code",
                 html: `<h1>Code: ${code}</h1>`
             }
         });

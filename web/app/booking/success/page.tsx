@@ -110,8 +110,8 @@ function SuccessPageInner() {
     const handleDownloadCalendar = () => {
         const icsContent = buildIcs({
             title: `Braiding Appointment: ${booking.styleName}`,
-            description: `Appointment for ${booking.clientName} at Dede's Braids.`,
-            location: "Dede's Braids, Manor, TX",
+            description: `Appointment for ${booking.clientName} at Misericordia Hair Designs.`,
+            location: "Misericordia Hair Designs, Manor, TX",
             startISO: `${booking.date} ${booking.time}`,
             durationMins: style?.duration.includes("8-12") ? 600 : 300 // estimate
         });

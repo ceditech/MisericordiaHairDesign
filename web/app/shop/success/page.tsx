@@ -81,8 +81,8 @@ function ShopSuccessInner() {
 
     const handleShare = async () => {
         const shareData = {
-            title: "Dede's Braids - Order Confirmation",
-            text: `Check out my order from Dede's Braids! Order #${session?.id.slice(-6).toUpperCase()}`,
+            title: "Misericordia Hair Designs - Order Confirmation",
+            text: `Check out my order from Misericordia Hair Designs! Order #${session?.id.slice(-6).toUpperCase()}`,
             url: window.location.href,
         };
 
@@ -187,7 +187,7 @@ function ShopSuccessInner() {
                                     <h3 className="font-black italic uppercase tracking-widest text-sm">Pickup Information</h3>
                                 </div>
                                 <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-                                    Your essentials will be ready for pickup at <span className="text-slate-900 dark:text-white font-bold">Dede&apos;s Braids (Manor, TX)</span> in roughly <span className="text-slate-900 dark:text-white font-bold">2-4 hours</span>. Please bring your order confirmation or ID.
+                                    Your essentials will be ready for pickup at <span className="text-slate-900 dark:text-white font-bold">MHDESIGNS&apos;s Braids (Manor, TX)</span> in roughly <span className="text-slate-900 dark:text-white font-bold">2-4 hours</span>. Please bring your order confirmation or ID.
                                 </p>
                             </>
                         )}

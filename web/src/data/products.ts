@@ -23,7 +23,7 @@ export const STORE_PRODUCTS: Product[] = [
     // --- Gels & Edge Control ---
     {
         id: "dedes-edge-control",
-        name: "Dede's Maximum Hold Edge Control",
+        name: "MHDESIGNS Maximum Hold Edge Control",
         category: "Gels & Edge Control",
         priceCents: 1500,
         currency: "USD",
@@ -99,7 +99,7 @@ export const STORE_PRODUCTS: Product[] = [
     // --- Hair Care ---
     {
         id: "growth-oil-scalp",
-        name: "Dede's Scalp & Growth Luxury Oil",
+        name: "MHDESIGNS Scalp & Growth Luxury Oil",
         category: "Hair Care",
         priceCents: 2200,
         currency: "USD",

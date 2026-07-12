@@ -63,7 +63,7 @@ export default function ProductsPage() {
                     Shop Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#9F2D5C] to-emerald-500">Stylist Essentials</span>
                 </h1>
                 <p className="text-lg text-slate-500 dark:text-slate-400">
-                    Premium braiding hair, wigs, professional gels, and beauty essentials—available for everyone. Get the Dede&apos;s Braids look at home.
+                    Premium braiding hair, wigs, professional gels, and beauty essentials—available for everyone. Get the MHDESIGNS&apos;s Braids look at home.
                 </p>
             </div>
 

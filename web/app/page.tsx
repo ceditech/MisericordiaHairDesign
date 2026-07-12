@@ -75,10 +75,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-3xl lg:text-4xl font-extrabold text-text-primary mb-4">
-              Why Choose Dede&apos;s?
+              Why Choose MHDESIGNS&apos;s?
             </h2>
             <p className="text-text-secondary max-w-2xl mx-auto">
-              At Dede&apos;s Braids, our mission is to empower individuals through beautiful and personalized
+              At MHDESIGNS&apos;s Braids, our mission is to empower individuals through beautiful and personalized
               hairstyles. We believe that every client deserves to feel confident and stylish with their unique look.
             </p>
           </div>

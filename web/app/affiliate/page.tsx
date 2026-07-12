@@ -60,7 +60,7 @@ export default function AffiliatePage() {
     const faqItems = [
         {
             title: "Who can join the affiliate program?",
-            content: "Anyone can join! Whether you're a regular client at Dede's Braids or simply a professional looking to earn commissions by referring people to our salon."
+            content: "Anyone can join! Whether you're a regular client at Misericordia Hair Designs or simply a professional looking to earn commissions by referring people to our salon."
         },
         {
             title: "What is the difference between “Client/Future Client” and “General Affiliate”?",
@@ -116,7 +116,7 @@ export default function AffiliatePage() {
                 <h1 className="text-5xl sm:text-7xl font-black text-slate-900 dark:text-white mb-8 italic uppercase tracking-tighter leading-[0.9]">
                     Earn Rewards With <br />
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#9F2D5C] via-[#9F2D5C] to-emerald-500">
-                        Dede&apos;s Braids Referrals
+                        MHDESIGNS&apos;s Braids Referrals
                     </span>
                 </h1>
                 <p className="text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto mb-12 font-medium">

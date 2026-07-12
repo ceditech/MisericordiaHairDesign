@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
         const order = await createOrder({
             amountUSD,
             currency,
-            description: description || "Dede's Braids — Booking Payment",
+            description: description || "Misericordia Hair Designs — Booking Payment",
         });
 
         // Return only the order ID to the frontend

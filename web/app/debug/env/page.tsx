@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Environment Diagnostics | Dede's Braids",
+  title: "Environment Diagnostics | Misericordia Hair Designs",
   robots: "noindex, nofollow",
 };
 

@@ -161,7 +161,7 @@ export default function ContactPage() {
                             Let&apos;s Talk About Your Next Style
                         </h1>
                         <p className="text-lg text-text-secondary">
-                            Have questions about a style or need a custom quote? Fill out the form, and Dede will personally get back to you within 24 hours.
+                            Have questions about a style or need a custom quote? Fill out the form, and MHDESIGNS will personally get back to you within 24 hours.
                         </p>
                     </div>
 
