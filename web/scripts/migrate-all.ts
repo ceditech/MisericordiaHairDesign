@@ -8,7 +8,7 @@ import { adminDb } from "../src/lib/firebase/admin";
 import { STORE_PRODUCTS } from "../src/data/products";
 import { BRAID_STYLES } from "../lib/styles";
 import { REVIEWS } from "../src/data/reviews";
-import { SIZE_PRESETS, LENGTH_PRESETS } from "../src/constants/braidPresets";
+import { SIZE_PRESETS, LENGTH_PRESETS, DEFAULT_ADDONS } from "../src/constants/braidPresets";
 import { FieldValue } from "firebase-admin/firestore";
 
 async function main() {
@@ -61,6 +61,17 @@ async function main() {
         count++;
     }
     console.log(`Prepared ${SIZE_PRESETS.length + LENGTH_PRESETS.length} presets.`);
+
+    // 3b. Migrate Braid Addons
+    for (const addon of DEFAULT_ADDONS) {
+        const ref = adminDb.collection("braidAddons").doc(addon.id);
+        batch.set(ref, {
+            ...addon,
+            updatedAt: FieldValue.serverTimestamp()
+        });
+        count++;
+    }
+    console.log(`Prepared ${DEFAULT_ADDONS.length} braid addons.`);
 
     // 4. Migrate Reviews
     for (const review of REVIEWS) {

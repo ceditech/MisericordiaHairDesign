@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
@@ -19,14 +19,14 @@ export function AccordionItem({ title, children, isOpen, onToggle }: AccordionIt
                 className="w-full py-6 flex items-center justify-between text-left group"
                 suppressHydrationWarning
             >
-                <span className="font-bold text-slate-900 dark:text-white group-hover:text-[#a319c5] transition-colors">
+                <span className="font-bold text-slate-900 dark:text-white group-hover:text-[#9F2D5C] transition-colors">
                     {title}
                 </span>
                 <ChevronDown
                     size={20}
                     className={cn(
                         "text-slate-400 transition-transform duration-300",
-                        isOpen && "rotate-180 text-[#a319c5]"
+                        isOpen && "rotate-180 text-[#9F2D5C]"
                     )}
                 />
             </button>

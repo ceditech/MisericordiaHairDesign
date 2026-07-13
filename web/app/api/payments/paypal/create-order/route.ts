@@ -109,7 +109,7 @@ export async function POST(req: NextRequest) {
       console.log(`[PayPal] Server-calculated price: ${amountCents}c (Choice: ${choice})`);
 
       const amountUSD = (amountCents / 100).toFixed(2);
-      const description = `Dede's Braids — ${draft.styleName ?? "Braiding Service"} (${choice === "deposit" ? "Deposit" : "Full Payment"})`;
+      const description = `Misericordia Hair Designs — ${draft.styleName ?? "Braiding Service"} (${choice === "deposit" ? "Deposit" : "Full Payment"})`;
 
       const order = await paypalServer.createOrder(amountCents, "USD", description);
 
@@ -154,7 +154,7 @@ export async function POST(req: NextRequest) {
       }
 
       const amountUSD = (totalCents / 100).toFixed(2);
-      const order = await paypalServer.createOrder(totalCents, "USD", "Dede's Braids Shop Order");
+      const order = await paypalServer.createOrder(totalCents, "USD", "Misericordia Hair Designs Shop Order");
 
       const approvalLink = (order.links as Array<{ rel: string; href: string }>)
         ?.find((l) => l.rel === "approve")?.href;

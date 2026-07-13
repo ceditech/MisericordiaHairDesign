@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 /**
  * StripeCheckout — Redirect to Stripe Hosted Checkout Page
@@ -102,7 +102,7 @@ export default function StripeCheckout({
         id="stripe-pay-button"
         onClick={handlePay}
         disabled={isRedirecting}
-        className="w-full py-6 rounded-full font-bold text-white text-lg shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 group active:scale-95 bg-[#a319c5] hover:bg-[#8b15a8] shadow-[#a319c5]/30 disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full py-6 rounded-full font-bold text-white text-lg shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 group active:scale-95 bg-[#9F2D5C] hover:bg-[#B8326A] shadow-[#9F2D5C]/30 disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {isRedirecting ? (
           <>

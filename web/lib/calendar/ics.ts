@@ -27,7 +27,7 @@ export function buildIcs({ title, description, location, startISO, durationMins 
     return [
         'BEGIN:VCALENDAR',
         'VERSION:2.0',
-        'PRODID:-//Dedes Braids//Booking System//EN',
+        'PRODID:-//Misericordia Hair Designs//Booking System//EN',
         'CALSCALE:GREGORIAN',
         'METHOD:PUBLISH',
         'BEGIN:VEVENT',

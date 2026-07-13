@@ -1,4 +1,4 @@
-# Prompt for DedeBraidApp Multi-Step Booking Flow
+# Prompt for MHDESIGNS Multi-Step Booking Flow
 
 Generate 4 distinct UI components (or one comprehensive page with 4 states) for the following booking steps, maintaining the "Elegant, Radiant, and High-End" aesthetic.
 

@@ -1,4 +1,4 @@
-.mapContainer {
+﻿.mapContainer {
     height: 100%;
     width: 100%;
     border-radius: 2rem;
@@ -30,7 +30,7 @@
 :global(.leaflet-control-zoom-in),
 :global(.leaflet-control-zoom-out) {
     background: #fff !important;
-    color: #a319c5 !important;
+    color: #9F2D5C !important;
     border: none !important;
     font-size: 18px !important;
     width: 36px !important;
@@ -41,7 +41,7 @@
 
 :global(.leaflet-control-zoom-in:hover),
 :global(.leaflet-control-zoom-out:hover) {
-    background: #a319c5 !important;
+    background: #9F2D5C !important;
     color: #fff !important;
 }
 
@@ -54,14 +54,14 @@
 }
 
 :global(.leaflet-control-attribution a) {
-    color: #a319c5 !important;
+    color: #9F2D5C !important;
 }
 
 /* Branded popup */
 :global(.leaflet-popup-content-wrapper) {
     border-radius: 1rem !important;
-    box-shadow: 0 4px 20px rgba(163, 25, 197, 0.15) !important;
-    border: 1px solid rgba(163, 25, 197, 0.12);
+    box-shadow: 0 4px 20px rgba(159, 45, 92, 0.15) !important;
+    border: 1px solid rgba(159, 45, 92, 0.12);
     padding: 0 !important;
     overflow: hidden;
 }
@@ -73,7 +73,7 @@
 }
 
 :global(.leaflet-popup-tip) {
-    box-shadow: 0 4px 20px rgba(163, 25, 197, 0.15) !important;
+    box-shadow: 0 4px 20px rgba(159, 45, 92, 0.15) !important;
 }
 
 :global(.leaflet-popup-close-button) {
@@ -89,7 +89,7 @@
     flex-direction: column;
     gap: 4px;
     padding: 16px;
-    border-top: 3px solid #a319c5;
+    border-top: 3px solid #9F2D5C;
 }
 
 .popup strong {
@@ -106,7 +106,7 @@
 .popup a {
     font-size: 13px;
     font-weight: 600;
-    color: #a319c5;
+    color: #9F2D5C;
     text-decoration: none;
     margin-top: 6px;
     transition: color 0.15s;
@@ -131,7 +131,7 @@
 
 :global(.dark .leaflet-control-zoom-in:hover),
 :global(.dark .leaflet-control-zoom-out:hover) {
-    background: #a319c5 !important;
+    background: #9F2D5C !important;
     color: #fff !important;
 }
 
@@ -146,7 +146,7 @@
 
 :global(.dark .leaflet-popup-content-wrapper) {
     background: #1e293b !important;
-    border-color: rgba(163, 25, 197, 0.25);
+    border-color: rgba(159, 45, 92, 0.25);
 }
 
 :global(.dark .leaflet-popup-tip) {

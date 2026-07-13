@@ -25,7 +25,7 @@
   "auth": {
     "providers": {
       "googleSignIn": {
-        "oAuthBrandDisplayName": "Dede's Braids",
+        "oAuthBrandDisplayName": "Misericordia Hair Designs",
         "supportEmail": "sales@edxstore.com"
       }
     }

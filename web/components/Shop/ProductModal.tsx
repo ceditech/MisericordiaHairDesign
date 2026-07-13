@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { Product } from "@/src/data/products";
@@ -81,7 +81,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                     <button
                                         key={idx}
                                         onClick={() => setMainImage(img)}
-                                        className={`relative w-24 aspect-square rounded-xl overflow-hidden border-2 transition-all ${mainImage === img ? 'border-[#a319c5]' : 'border-transparent opacity-60 hover:opacity-100'
+                                        className={`relative w-24 aspect-square rounded-xl overflow-hidden border-2 transition-all ${mainImage === img ? 'border-[#9F2D5C]' : 'border-transparent opacity-60 hover:opacity-100'
                                             }`}
                                     >
                                         <img src={img} alt="" className="w-full h-full object-cover" />
@@ -93,7 +93,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
 
                     {/* Content Area */}
                     <div className="p-8 lg:p-12 lg:pl-0">
-                        <Badge className="mb-4 bg-[#a319c5]/10 text-[#a319c5] border-none px-4 py-1.5 uppercase tracking-widest text-xs font-bold">
+                        <Badge className="mb-4 bg-[#9F2D5C]/10 text-[#9F2D5C] border-none px-4 py-1.5 uppercase tracking-widest text-xs font-bold">
                             {product.category}
                         </Badge>
 
@@ -102,7 +102,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                         </h2>
 
                         <div className="flex items-center gap-4 mb-8">
-                            <span className="text-4xl font-black text-[#a319c5] italic">
+                            <span className="text-4xl font-black text-[#9F2D5C] italic">
                                 {formatPrice(product.priceCents)}
                             </span>
                             {product.rating && (
@@ -129,7 +129,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                             key={option}
                                             onClick={() => setSelectedOptions(prev => ({ ...prev, [variant.name]: option }))}
                                             className={`px-5 py-3 rounded-xl border-2 transition-all font-semibold ${selectedOptions[variant.name] === option
-                                                ? 'border-[#a319c5] bg-[#a319c5]/5 text-[#a319c5]'
+                                                ? 'border-[#9F2D5C] bg-[#9F2D5C]/5 text-[#9F2D5C]'
                                                 : 'border-slate-100 dark:border-slate-800 text-slate-500 hover:border-slate-300'
                                                 }`}
                                         >
@@ -182,7 +182,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                             <Button
                                 onClick={handleBuyNow}
                                 size="lg"
-                                className="w-full py-8 rounded-2xl gap-3 text-lg font-bold bg-[#a319c5] hover:bg-[#8b15a8]"
+                                className="w-full py-8 rounded-2xl gap-3 text-lg font-bold bg-[#9F2D5C] hover:bg-[#B8326A]"
                             >
                                 <Zap size={22} fill="currentColor" />
                                 Buy Now
@@ -194,7 +194,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                 <ShieldCheck size={16} />
                                 Secure Checkout
                             </div>
-                            <div className="flex items-center gap-1.5 uppercase tracking-widest text-[#a319c5]">
+                            <div className="flex items-center gap-1.5 uppercase tracking-widest text-[#9F2D5C]">
                                 {product.stockStatus === 'in_stock' ? 'In Stock' : product.stockStatus.replace('_', ' ')}
                             </div>
                         </div>

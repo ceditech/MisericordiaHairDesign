@@ -6,7 +6,7 @@ import { getDb } from "@/src/lib/firebase/client";
 import { STORE_PRODUCTS } from "@/src/data/products";
 import { BRAID_STYLES } from "@/lib/styles";
 import { REVIEWS } from "@/src/data/reviews";
-import { SIZE_PRESETS, LENGTH_PRESETS } from "@/src/constants/braidPresets";
+import { SIZE_PRESETS, LENGTH_PRESETS, DEFAULT_ADDONS } from "@/src/constants/braidPresets";
 import { Button, Card, Badge } from "@/components/ui";
 import { Database, ArrowRight, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
@@ -17,11 +17,13 @@ export default function MigratePage() {
         products: 'idle' | 'loading' | 'success' | 'error';
         styles: 'idle' | 'loading' | 'success' | 'error';
         presets: 'idle' | 'loading' | 'success' | 'error';
+        addons: 'idle' | 'loading' | 'success' | 'error';
         reviews: 'idle' | 'loading' | 'success' | 'error';
     }>({
         products: 'idle',
         styles: 'idle',
         presets: 'idle',
+        addons: 'idle',
         reviews: 'idle'
     });
 
@@ -122,17 +124,39 @@ export default function MigratePage() {
         }
     };
 
+    const migrateAddons = async () => {
+        setStatus(prev => ({ ...prev, addons: 'loading' }));
+        addLog("Starting Braid Addons migration...");
+        try {
+            const batch = writeBatch(db);
+            DEFAULT_ADDONS.forEach((addon) => {
+                const docRef = doc(collection(db, "braidAddons"), addon.id);
+                batch.set(docRef, {
+                    ...addon,
+                    updatedAt: serverTimestamp(),
+                });
+            });
+            await batch.commit();
+            addLog(`Successfully migrated ${DEFAULT_ADDONS.length} braid addons.`);
+            setStatus(prev => ({ ...prev, addons: 'success' }));
+        } catch (err: any) {
+            addLog(`Error migrating braid addons: ${err.message}`);
+            setStatus(prev => ({ ...prev, addons: 'error' }));
+        }
+    };
+
     const migrateAll = async () => {
         await migrateProducts();
         await migrateStyles();
         await migratePresets();
+        await migrateAddons();
         await migrateReviews();
     };
 
     return (
         <main className="min-h-screen pt-32 pb-20 px-6 max-w-4xl mx-auto">
             <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-[#a319c5]/10 flex items-center justify-center text-[#a319c5]">
+                <div className="w-12 h-12 rounded-2xl bg-[#9F2D5C]/10 flex items-center justify-center text-[#9F2D5C]">
                     <Database size={24} />
                 </div>
                 <div>
@@ -145,7 +169,7 @@ export default function MigratePage() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
                 <MigrationCard 
                     title="Products" 
                     count={STORE_PRODUCTS.length} 
@@ -165,6 +189,12 @@ export default function MigratePage() {
                     onMigrate={migratePresets}
                 />
                 <MigrationCard 
+                    title="Addons" 
+                    count={DEFAULT_ADDONS.length} 
+                    status={status.addons} 
+                    onMigrate={migrateAddons}
+                />
+                <MigrationCard 
                     title="Reviews" 
                     count={REVIEWS.length} 
                     status={status.reviews} 
@@ -175,7 +205,7 @@ export default function MigratePage() {
             <div className="mb-12">
                  <Button 
                     onClick={migrateAll}
-                    className="w-full h-16 rounded-3xl bg-[#a319c5] hover:bg-[#8b15a8] text-white font-black text-lg gap-3 shadow-xl shadow-[#a319c5]/20"
+                    className="w-full h-16 rounded-3xl bg-[#9F2D5C] hover:bg-[#B8326A] text-white font-black text-lg gap-3 shadow-xl shadow-[#9F2D5C]/20"
                 >
                     Run Full Migration
                     <ArrowRight size={20} />
@@ -211,7 +241,7 @@ function MigrationCard({ title, count, status, onMigrate }: any) {
             
             <div className="mb-8">
                 {status === 'idle' && <Database size={40} className="text-slate-200" />}
-                {status === 'loading' && <Loader2 size={40} className="text-[#a319c5] animate-spin" />}
+                {status === 'loading' && <Loader2 size={40} className="text-[#9F2D5C] animate-spin" />}
                 {status === 'success' && <CheckCircle2 size={40} className="text-emerald-500" />}
                 {status === 'error' && <AlertCircle size={40} className="text-rose-500" />}
             </div>

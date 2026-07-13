@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { subscribeToAffiliates, createAffiliateProfile } from "@/src/lib/affiliate/affiliateService";
@@ -75,7 +75,7 @@ export default function AffiliatesTab() {
                 </div>
                 <Button 
                     onClick={() => setIsAdding(true)}
-                    className="rounded-xl font-bold bg-[#a319c5] text-white hover:bg-[#8e16ac] shadow-lg shadow-[#a319c5]/20 gap-2 px-6"
+                    className="rounded-xl font-bold bg-[#9F2D5C] text-white hover:bg-[#8e16ac] shadow-lg shadow-[#9F2D5C]/20 gap-2 px-6"
                 >
                     <UserPlus size={18} />
                     Add Partner
@@ -88,7 +88,7 @@ export default function AffiliatesTab() {
                     <Card key={affiliate.id} className="p-8 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 rounded-[2.5rem] hover:shadow-xl transition-all group">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <div className="flex items-center gap-6">
-                                <div className="w-14 h-14 rounded-2xl bg-[#a319c5]/10 text-[#a319c5] flex items-center justify-center shrink-0">
+                                <div className="w-14 h-14 rounded-2xl bg-[#9F2D5C]/10 text-[#9F2D5C] flex items-center justify-center shrink-0">
                                     <Users size={28} />
                                 </div>
                                 <div className="space-y-1">
@@ -96,8 +96,8 @@ export default function AffiliatesTab() {
                                         {affiliate.name}
                                     </h4>
                                     <div className="flex flex-wrap gap-4 text-sm text-slate-500 font-bold uppercase tracking-widest text-[10px]">
-                                        <span className="flex items-center gap-2"><Mail size={14} className="text-[#a319c5]" /> {affiliate.email}</span>
-                                        <span className="flex items-center gap-2"><Calendar size={14} className="text-[#a319c5]" /> Joined {format(new Date(affiliate.createdAt), "MMM yyyy")}</span>
+                                        <span className="flex items-center gap-2"><Mail size={14} className="text-[#9F2D5C]" /> {affiliate.email}</span>
+                                        <span className="flex items-center gap-2"><Calendar size={14} className="text-[#9F2D5C]" /> Joined {format(new Date(affiliate.createdAt), "MMM yyyy")}</span>
                                         <Badge className="bg-slate-100 dark:bg-slate-800 text-slate-500 border-none px-2 py-0 h-5">
                                             {affiliate.type}
                                         </Badge>
@@ -105,10 +105,10 @@ export default function AffiliatesTab() {
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-3xl border border-[#a319c5]/10">
+                            <div className="flex items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-3xl border border-[#9F2D5C]/10">
                                 <div className="text-right mr-4">
                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Referral Code</p>
-                                    <p className="text-lg font-black text-[#a319c5] italic tracking-tight">{affiliate.code}</p>
+                                    <p className="text-lg font-black text-[#9F2D5C] italic tracking-tight">{affiliate.code}</p>
                                 </div>
                                 <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
                                     <ShieldCheck size={20} />
@@ -180,7 +180,7 @@ export default function AffiliatesTab() {
                                 Cancel
                             </Button>
                             <Button 
-                                className="flex-1 bg-[#a319c5] hover:bg-[#8e16ac] text-white rounded-2xl py-6 font-bold shadow-lg shadow-[#a319c5]/20 gap-2"
+                                className="flex-1 bg-[#9F2D5C] hover:bg-[#8e16ac] text-white rounded-2xl py-6 font-bold shadow-lg shadow-[#9F2D5C]/20 gap-2"
                                 onClick={handleAdd}
                             >
                                 <Plus size={18} />

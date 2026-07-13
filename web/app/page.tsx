@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Reviews from "@/components/Reviews";
 import StylesCarousel from "@/components/StylesCarousel";
+import HeroCarousel from "@/components/HeroCarousel";
 
 export default function HomePage() {
   return (
@@ -63,17 +64,7 @@ export default function HomePage() {
             </div>
             <div className="relative">
               <div className="absolute inset-0 bg-brand-primary/20 rounded-full blur-3xl -z-10 scale-75"></div>
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-surface">
-                <img
-                  className="w-full aspect-[4/5] object-cover"
-                  alt="Close up of high quality knotless braids"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtJcynaXsFttco_LddTlL38eHNQNHBV1WODfv54_sxy2s6pT4tA6g8KfhkkYVyP9GwFYUGYW89SthiDSbJ-9VqAU_NNxP2lFbJ2N0pc8gxdfNFYtFzb_gWp0xE_ksJJXNCrTPlIUs2xqWi2dUHU9yNQJ-rCwIlxe4CzSYlXmWoA5N07oQutT2hWF3nMQKMoPhUTLJlVC8i_3ILiKdp9srh3qlefPI7wKXwB1QwWQti4-Rwtx4UysWra6V5-tio8W7n2iFR9-Ghag"
-                />
-                <div className="absolute bottom-6 right-6 bg-surface p-4 rounded-2xl shadow-xl border-l-4 border-brand-primary">
-                  <p className="text-xs font-bold text-brand-primary uppercase tracking-tighter">Featured Style</p>
-                  <p className="text-lg font-extrabold text-text-primary">Long Knotless</p>
-                </div>
-              </div>
+              <HeroCarousel />
             </div>
           </div>
         </div>
@@ -84,10 +75,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-3xl lg:text-4xl font-extrabold text-text-primary mb-4">
-              Why Choose Dede&apos;s?
+              Why Choose MHDESIGNS&apos;s?
             </h2>
             <p className="text-text-secondary max-w-2xl mx-auto">
-              At Dede&apos;s Braids, our mission is to empower individuals through beautiful and personalized
+              At MHDESIGNS&apos;s Braids, our mission is to empower individuals through beautiful and personalized
               hairstyles. We believe that every client deserves to feel confident and stylish with their unique look.
             </p>
           </div>

@@ -17,7 +17,7 @@ export default function TermsPage() {
                             Agreement to Terms
                         </h2>
                         <p className="text-slate-600 dark:text-slate-400">
-                            These Terms of Service (“Terms”) govern your access to and use of the Dede’s Braids website (the “Site”) and your booking of services with Dede’s Braids (“we,” “us,” our”). By using the Site or booking an appointment, you agree to these Terms. If you do not agree, do not use the Site.
+                            These Terms of Service (“Terms”) govern your access to and use of the Misericordia Hair Designs website (the “Site”) and your booking of services with Misericordia Hair Designs (“we,” “us,” our”). By using the Site or booking an appointment, you agree to these Terms. If you do not agree, do not use the Site.
                         </p>
                     </section>
 
@@ -26,7 +26,7 @@ export default function TermsPage() {
                             Use License
                         </h2>
                         <p className="text-slate-600 dark:text-slate-400 mb-4">
-                            Unless otherwise stated, the Site and its content (text, images, design elements, logos) are owned by or licensed to Dede’s Braids and are protected by intellectual property laws.
+                            Unless otherwise stated, the Site and its content (text, images, design elements, logos) are owned by or licensed to Misericordia Hair Designs and are protected by intellectual property laws.
                         </p>
                         <p className="text-slate-600 dark:text-slate-400 mb-6 font-semibold">
                             You may:
@@ -53,7 +53,7 @@ export default function TermsPage() {
                             (Fully professionally licensed to operate in Texas)
                         </p>
                         <p className="text-slate-600 dark:text-slate-400 mb-6">
-                            Dede’s Braids provides hair braiding services and related styling services. We operate as a professionally licensed business in Texas.
+                            Misericordia Hair Designs provides hair braiding services and related styling services. We operate as a professionally licensed business in Texas.
                         </p>
 
                         <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-4">Appointments & Booking</h3>
@@ -127,7 +127,7 @@ export default function TermsPage() {
                             Limitation of Liability
                         </h2>
                         <p className="text-slate-600 dark:text-slate-400">
-                            To the fullest extent permitted by law, Dede’s Braids is not liable for indirect, incidental, special, or consequential damages arising from use of the Site or services. Our total liability for any claim related to the Site or services will not exceed the amount you paid to us for the relevant service.
+                            To the fullest extent permitted by law, Misericordia Hair Designs is not liable for indirect, incidental, special, or consequential damages arising from use of the Site or services. Our total liability for any claim related to the Site or services will not exceed the amount you paid to us for the relevant service.
                         </p>
                     </section>
 

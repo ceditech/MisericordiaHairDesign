@@ -16,7 +16,7 @@ export default function OwnerPage() {
     if (!mounted) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white">
-                <Loader2 size={48} className="animate-spin text-[#6b38d4]" />
+                <Loader2 size={48} className="animate-spin text-[#9F2D5C]" />
             </div>
         );
     }

@@ -1,6 +1,6 @@
 # Firebase Foundation Architecture (Milestone 8)
 
-This document outlines the initial Firebase configuration for the Dede's Braids Next.js application.
+This document outlines the initial Firebase configuration for the Misericordia Hair Designs Next.js application.
 
 ## 1. Client-Side Initialization
 - **Location**: `/src/lib/firebase/client.ts`

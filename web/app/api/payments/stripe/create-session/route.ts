@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
             price_data: {
               currency: "usd",
               product_data: {
-                name: `Dede's Braids — ${draft.styleName ?? "Braiding Service"}`,
+                name: `Misericordia Hair Designs — ${draft.styleName ?? "Braiding Service"}`,
                 description: choice === "deposit"
                   ? "Appointment deposit (applied to total at appointment)"
                   : "Full service payment",

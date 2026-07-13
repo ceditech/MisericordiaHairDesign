@@ -36,7 +36,7 @@ async function verify() {
   try {
     const stripe = new Stripe(secretKey, {
         typescript: true,
-        appInfo: { name: "Dede's Braids (Verification)", version: "1.0.0" },
+        appInfo: { name: "Misericordia Hair Designs (Verification)", version: "1.0.0" },
         maxNetworkRetries: 3,
         timeout: 30000, 
     });

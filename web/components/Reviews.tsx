@@ -8,6 +8,7 @@ function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
+import Image from "next/image";
 import { subscribeToReviews } from "@/src/lib/firebase/ownerService";
 import { Review, REVIEWS } from "@/src/data/reviews";
 import { Skeleton } from "@/components/ui";
@@ -92,11 +93,17 @@ export default function Reviews() {
     return (
         <section className="py-24 text-white overflow-hidden relative min-h-[800px] flex items-center">
             {/* Background Image with Overlay */}
-            <div
-                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: 'url("/images/dedesbraids-salon-bg.jpeg")' }}
-            >
-                <div className="absolute inset-0 bg-black/50 backdrop-blur-[3px]" />
+            <div className="absolute inset-0 z-0">
+                <Image
+                    src="/images/mhdesign-bg.jpeg"
+                    alt="Misericordia Hair Design Salon Background"
+                    fill
+                    className="object-cover"
+                    sizes="100vw"
+                    quality={75}
+                    priority={false}
+                />
+                <div className="absolute inset-0 bg-black/50 backdrop-blur-[3px] z-10" />
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
@@ -125,7 +132,7 @@ export default function Reviews() {
                                 </div>
                             </div>
                             <div className="flex flex-col items-start">
-                                <span className="text-[10px] font-bold uppercase tracking-widest opacity-80">Dede's Braids</span>
+                                <span className="text-[10px] font-bold uppercase tracking-widest opacity-80">Misericordia Hair Designs</span>
                                 <span className="text-[10px] font-medium opacity-60">77 Reviews</span>
                             </div>
                         </div>

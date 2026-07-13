@@ -6,7 +6,7 @@ import "leaflet/dist/leaflet.css";
 import styles from "./Map.module.css";
 
 // Brand-colored custom marker icon
-const BRAND_COLOR = "#a319c5";
+const BRAND_COLOR = "#9F2D5C";
 
 const brandMarkerSvg = encodeURIComponent(`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="30" height="45">
@@ -49,7 +49,7 @@ export default function BraidsMap({ address, coordinates }: MapProps) {
                 <Marker position={coordinates} icon={brandIcon}>
                     <Popup>
                         <div className={styles.popup}>
-                            <strong>Dede&apos;s Braids</strong>
+                            <strong>MHDESIGNS</strong>
                             <span>{address}</span>
                             <a
                                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}

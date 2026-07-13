@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -135,7 +135,7 @@ export default function LoginPage() {
         <main className="min-h-screen pt-32 pb-20 px-6 flex items-center justify-center bg-slate-50 dark:bg-slate-950">
             <div className="w-full max-w-md">
                 <div className="text-center mb-10">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-[#a319c5]/10 text-[#a319c5] mb-6 shadow-inner">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-[#9F2D5C]/10 text-[#9F2D5C] mb-6 shadow-inner">
                         <Scissors size={32} />
                     </div>
                     <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-3 italic uppercase tracking-tighter">
@@ -148,7 +148,7 @@ export default function LoginPage() {
 
                 <Card className="p-8 sm:p-10 rounded-[3rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl relative overflow-hidden">
                     {/* Subtle accent blur */}
-                    <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#a319c5]/5 blur-3xl rounded-full" />
+                    <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#9F2D5C]/5 blur-3xl rounded-full" />
 
                     <div className="space-y-6 relative z-10">
                         {error && (
@@ -164,13 +164,13 @@ export default function LoginPage() {
                                     Email Address
                                 </label>
                                 <div className="relative group">
-                                    <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#a319c5] transition-colors">
+                                    <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#9F2D5C] transition-colors">
                                         <Mail size={20} />
                                     </div>
                                     <Input
                                         type="email"
                                         placeholder="name@example.com"
-                                        className="pl-14 h-16 rounded-2xl border-slate-100 dark:border-slate-800 focus:ring-4 focus:ring-[#a319c5]/10 focus:border-[#a319c5] transition-all bg-slate-50/50 dark:bg-slate-950/50"
+                                        className="pl-14 h-16 rounded-2xl border-slate-100 dark:border-slate-800 focus:ring-4 focus:ring-[#9F2D5C]/10 focus:border-[#9F2D5C] transition-all bg-slate-50/50 dark:bg-slate-950/50"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         required
@@ -185,13 +185,13 @@ export default function LoginPage() {
                                     </label>
                                 </div>
                                 <div className="relative group">
-                                    <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#a319c5] transition-colors">
+                                    <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#9F2D5C] transition-colors">
                                         <Lock size={20} />
                                     </div>
                                     <Input
                                         type="password"
                                         placeholder="••••••••"
-                                        className="pl-14 h-16 rounded-2xl border-slate-100 dark:border-slate-800 focus:ring-4 focus:ring-[#a319c5]/10 focus:border-[#a319c5] transition-all bg-slate-50/50 dark:bg-slate-950/50"
+                                        className="pl-14 h-16 rounded-2xl border-slate-100 dark:border-slate-800 focus:ring-4 focus:ring-[#9F2D5C]/10 focus:border-[#9F2D5C] transition-all bg-slate-50/50 dark:bg-slate-950/50"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
@@ -205,13 +205,13 @@ export default function LoginPage() {
                                         Confirm Password
                                     </label>
                                     <div className="relative group">
-                                        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#a319c5] transition-colors">
+                                        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#9F2D5C] transition-colors">
                                             <Lock size={20} />
                                         </div>
                                         <Input
                                             type="password"
                                             placeholder="••••••••"
-                                            className="pl-14 h-16 rounded-2xl border-slate-100 dark:border-slate-800 focus:ring-4 focus:ring-[#a319c5]/10 focus:border-[#a319c5] transition-all bg-slate-50/50 dark:bg-slate-950/50"
+                                            className="pl-14 h-16 rounded-2xl border-slate-100 dark:border-slate-800 focus:ring-4 focus:ring-[#9F2D5C]/10 focus:border-[#9F2D5C] transition-all bg-slate-50/50 dark:bg-slate-950/50"
                                             value={confirmPassword}
                                             onChange={(e) => setConfirmPassword(e.target.value)}
                                             required={isSignUp}
@@ -223,7 +223,7 @@ export default function LoginPage() {
                             <Button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full h-16 rounded-2xl bg-[#a319c5] hover:bg-[#8b15a8] text-white font-black text-lg shadow-xl shadow-[#a319c5]/30 active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100"
+                                className="w-full h-16 rounded-2xl bg-[#9F2D5C] hover:bg-[#B8326A] text-white font-black text-lg shadow-xl shadow-[#9F2D5C]/30 active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100"
                             >
                                 {loading ? (
                                     <div className="flex items-center gap-2">
@@ -265,7 +265,7 @@ export default function LoginPage() {
                     {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
                     <button
                         onClick={() => setIsSignUp(!isSignUp)}
-                        className="text-[#a319c5] font-black hover:underline underline-offset-4"
+                        className="text-[#9F2D5C] font-black hover:underline underline-offset-4"
                     >
                         {isSignUp ? "Sign In" : "Sign Up"}
                     </button>
@@ -275,7 +275,7 @@ export default function LoginPage() {
                     <p className="text-sm text-slate-400 font-bold uppercase tracking-widest mb-4">Just need to book?</p>
                     <Link
                         href="/book"
-                        className="inline-flex items-center gap-2 bg-white dark:bg-slate-900 text-[#a319c5] px-8 py-4 rounded-2xl font-black border-2 border-slate-100 dark:border-slate-800 hover:border-[#a319c5] transition-all shadow-sm active:scale-95"
+                        className="inline-flex items-center gap-2 bg-white dark:bg-slate-900 text-[#9F2D5C] px-8 py-4 rounded-2xl font-black border-2 border-slate-100 dark:border-slate-800 hover:border-[#9F2D5C] transition-all shadow-sm active:scale-95"
                     >
                         <Scissors size={20} />
                         Book an Appointment

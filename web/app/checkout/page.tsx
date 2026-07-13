@@ -30,8 +30,8 @@ import StripeCheckout from "@/components/StripeCheckout";
 function NoBookingState() {
     return (
         <main className="min-h-[70vh] flex flex-col items-center justify-center text-center px-6 py-20">
-            <div className="w-20 h-20 rounded-3xl bg-[#a319c5]/10 flex items-center justify-center mb-8 shadow-xl shadow-[#a319c5]/10">
-                <span className="material-icons text-[#a319c5] text-3xl">calendar_today</span>
+            <div className="w-20 h-20 rounded-3xl bg-[#9F2D5C]/10 flex items-center justify-center mb-8 shadow-xl shadow-[#9F2D5C]/10">
+                <span className="material-icons text-[#9F2D5C] text-3xl">calendar_today</span>
             </div>
             <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">No Booking Found</h1>
             <p className="text-slate-500 dark:text-slate-400 max-w-md mb-10 leading-relaxed">
@@ -40,7 +40,7 @@ function NoBookingState() {
             </p>
             <Link
                 href="/book"
-                className="bg-[#a319c5] hover:bg-[#8b15a8] text-white font-bold px-10 py-5 rounded-full shadow-2xl shadow-[#a319c5]/30 transition-all hover:scale-[1.03] active:scale-95 flex items-center gap-3"
+                className="bg-[#9F2D5C] hover:bg-[#B8326A] text-white font-bold px-10 py-5 rounded-full shadow-2xl shadow-[#9F2D5C]/30 transition-all hover:scale-[1.03] active:scale-95 flex items-center gap-3"
             >
                 <span className="material-icons text-base">arrow_back</span>
                 Start a Booking
@@ -66,19 +66,19 @@ function MethodCard({ provider, selected, onSelect, icon, label, description }: 
             id={`payment-method-${provider}`}
             onClick={onSelect}
             className={`w-full text-left flex items-center gap-5 p-6 rounded-2xl border-2 transition-all ${selected
-                ? "border-[#a319c5] bg-[#a319c5]/5 dark:bg-[#a319c5]/10"
-                : "border-slate-100 dark:border-slate-700 hover:border-[#a319c5]/40 bg-white dark:bg-slate-800"
+                ? "border-[#9F2D5C] bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10"
+                : "border-slate-100 dark:border-slate-700 hover:border-[#9F2D5C]/40 bg-white dark:bg-slate-800"
                 }`}
             aria-pressed={selected}
         >
-            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all ${selected ? "bg-[#a319c5] text-white shadow-lg shadow-[#a319c5]/30" : "bg-slate-100 dark:bg-slate-700 text-slate-500"}`}>
+            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all ${selected ? "bg-[#9F2D5C] text-white shadow-lg shadow-[#9F2D5C]/30" : "bg-slate-100 dark:bg-slate-700 text-slate-500"}`}>
                 <span className="material-icons text-xl">{icon}</span>
             </div>
             <div className="flex-1">
-                <p className={`font-bold text-base transition-colors ${selected ? "text-[#a319c5]" : "text-slate-900 dark:text-white"}`}>{label}</p>
+                <p className={`font-bold text-base transition-colors ${selected ? "text-[#9F2D5C]" : "text-slate-900 dark:text-white"}`}>{label}</p>
                 <p className="text-xs text-slate-400 mt-0.5">{description}</p>
             </div>
-            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${selected ? "border-[#a319c5] bg-[#a319c5]" : "border-slate-300 dark:border-slate-600"}`}>
+            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${selected ? "border-[#9F2D5C] bg-[#9F2D5C]" : "border-slate-300 dark:border-slate-600"}`}>
                 {selected && <span className="material-icons text-white text-[12px]">check</span>}
             </div>
         </button>
@@ -176,7 +176,7 @@ function CheckoutPageInner() {
         return (
             <main className="max-w-7xl mx-auto px-6 py-16 flex items-center justify-center min-h-[50vh]">
                 <div className="flex flex-col items-center gap-4">
-                    <span className="material-icons animate-spin text-[#a319c5] text-4xl">autorenew</span>
+                    <span className="material-icons animate-spin text-[#9F2D5C] text-4xl">autorenew</span>
                     <p className="text-slate-500 font-medium">Loading style details...</p>
                 </div>
             </main>
@@ -451,7 +451,7 @@ function CheckoutPageInner() {
             {/* Back link */}
             <Link
                 href="/book"
-                className="inline-flex items-center gap-2 text-slate-400 hover:text-[#a319c5] transition-colors font-bold uppercase tracking-widest text-xs mb-12"
+                className="inline-flex items-center gap-2 text-slate-400 hover:text-[#9F2D5C] transition-colors font-bold uppercase tracking-widest text-xs mb-12"
             >
                 <span className="material-icons text-sm">arrow_back</span>
                 Back to Booking
@@ -477,18 +477,18 @@ function CheckoutPageInner() {
                                 id="choice-deposit"
                                 onClick={() => setPaymentChoice("deposit")}
                                 className={`relative p-7 rounded-[1.5rem] border-2 text-left transition-all ${paymentChoice === "deposit"
-                                    ? "border-[#a319c5] bg-[#a319c5]/5 dark:bg-[#a319c5]/10"
-                                    : "border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-[#a319c5]/40"
+                                    ? "border-[#9F2D5C] bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10"
+                                    : "border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-[#9F2D5C]/40"
                                     }`}
                                 aria-pressed={paymentChoice === "deposit"}
                             >
                                 {paymentChoice === "deposit" && (
-                                    <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#a319c5] flex items-center justify-center">
+                                    <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#9F2D5C] flex items-center justify-center">
                                         <span className="material-icons text-white text-[14px]">check</span>
                                     </div>
                                 )}
                                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Deposit</p>
-                                <p className="text-3xl font-black text-[#a319c5] mb-1">{formatCents(pricing.depositCents)}</p>
+                                <p className="text-3xl font-black text-[#9F2D5C] mb-1">{formatCents(pricing.depositCents)}</p>
                                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                                     Secure your spot now. Non-refundable, applied to your total.
                                 </p>
@@ -499,18 +499,18 @@ function CheckoutPageInner() {
                                 id="choice-full"
                                 onClick={() => setPaymentChoice("full")}
                                 className={`relative p-7 rounded-[1.5rem] border-2 text-left transition-all ${paymentChoice === "full"
-                                    ? "border-[#a319c5] bg-[#a319c5]/5 dark:bg-[#a319c5]/10"
-                                    : "border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-[#a319c5]/40"
+                                    ? "border-[#9F2D5C] bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10"
+                                    : "border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-[#9F2D5C]/40"
                                     }`}
                                 aria-pressed={paymentChoice === "full"}
                             >
                                 {paymentChoice === "full" && (
-                                    <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#a319c5] flex items-center justify-center">
+                                    <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#9F2D5C] flex items-center justify-center">
                                         <span className="material-icons text-white text-[14px]">check</span>
                                     </div>
                                 )}
                                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Pay in Full</p>
-                                <p className="text-3xl font-black text-[#a319c5] mb-1">{amountLabel}</p>
+                                <p className="text-3xl font-black text-[#9F2D5C] mb-1">{amountLabel}</p>
                                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                                     Pay the full service cost today. No balance due at appointment.
                                 </p>
@@ -616,12 +616,12 @@ function CheckoutPageInner() {
                                         placeholder="Promo Code"
                                         value={promoCode}
                                         onChange={(e) => setPromoCode(e.target.value)}
-                                        className="flex-1 bg-white/5 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#a319c5] transition-colors"
+                                        className="flex-1 bg-white/5 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#9F2D5C] transition-colors"
                                     />
                                     <button
                                         onClick={handleApplyPromo}
                                         disabled={!promoCode.trim()}
-                                        className="bg-[#a319c5]/20 hover:bg-[#a319c5]/30 text-[#a319c5] px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-50"
+                                        className="bg-[#9F2D5C]/20 hover:bg-[#9F2D5C]/30 text-[#9F2D5C] px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-50"
                                     >
                                         Apply
                                     </button>
@@ -684,13 +684,13 @@ function CheckoutPageInner() {
                             {draft.washingAddon && (
                                 <div className="flex justify-between text-sm text-text-secondary">
                                     <span>Washing Service</span>
-                                    <span className="font-semibold">+{formatCents((addons.find(a => a.id === "wash")?.price || 15) * 100)}</span>
+                                    <span className="font-semibold">+{formatCents((addons.find(a => a.id === "wash")?.price || 25) * 100)}</span>
                                 </div>
                             )}
                             {draft.takeDownAddon && (
                                 <div className="flex justify-between text-sm text-text-secondary">
                                     <span>Take Down Service</span>
-                                    <span className="font-semibold">+{formatCents((addons.find(a => a.id === "take-down")?.price || 30) * 100)}</span>
+                                    <span className="font-semibold">+{formatCents((addons.find(a => a.id === "take-down")?.price || 45) * 100)}</span>
                                 </div>
                             )}
                             <div className="flex justify-between text-sm text-text-secondary">
@@ -767,7 +767,7 @@ function CheckoutPageInner() {
 
                             <Link
                                 href="/book"
-                                className="w-full py-4 rounded-full font-bold text-slate-400 hover:text-[#a319c5] transition-colors text-center text-sm flex items-center justify-center gap-2"
+                                className="w-full py-4 rounded-full font-bold text-slate-400 hover:text-[#9F2D5C] transition-colors text-center text-sm flex items-center justify-center gap-2"
                             >
                                 <span className="material-icons text-sm">arrow_back</span>
                                 Edit my booking
@@ -789,7 +789,7 @@ export default function CheckoutPage() {
     return (
         <Suspense fallback={
             <div className="min-h-screen flex items-center justify-center">
-                <span className="material-icons animate-spin text-[#a319c5] text-4xl">autorenew</span>
+                <span className="material-icons animate-spin text-[#9F2D5C] text-4xl">autorenew</span>
             </div>
         }>
             <CheckoutPageInner />

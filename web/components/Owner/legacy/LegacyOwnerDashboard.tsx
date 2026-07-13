@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { Badge, Card, Button } from "@/components/ui";
@@ -41,7 +41,7 @@ export default function LegacyOwnerDashboard() {
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
                 <div>
-                    <Badge className="mb-4 bg-[#a319c5]/10 text-[#a319c5] border-none uppercase tracking-widest text-xs font-black">
+                    <Badge className="mb-4 bg-[#9F2D5C]/10 text-[#9F2D5C] border-none uppercase tracking-widest text-xs font-black">
                         Management Portal
                     </Badge>
                     <h1 className="text-5xl font-black text-slate-900 dark:text-white italic uppercase tracking-tighter">
@@ -64,7 +64,7 @@ export default function LegacyOwnerDashboard() {
                         className={`
                             flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold transition-all
                             ${activeTab === tab.id 
-                                ? "bg-[#a319c5] text-white shadow-lg shadow-[#a319c5]/20" 
+                                ? "bg-[#9F2D5C] text-white shadow-lg shadow-[#9F2D5C]/20" 
                                 : "text-slate-500 hover:text-slate-900 dark:hover:text-white"}
                         `}
                     >
@@ -113,12 +113,12 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: TabType) => void }) {
                     <Card 
                         key={panel.title}
                         onClick={() => onNavigate(panel.tab as TabType)}
-                        className="p-8 rounded-[2.5rem] bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-[#a319c5] hover:shadow-2xl transition-all cursor-pointer group relative overflow-hidden"
+                        className="p-8 rounded-[2.5rem] bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-[#9F2D5C] hover:shadow-2xl transition-all cursor-pointer group relative overflow-hidden"
                     >
                         <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-700">
                             <panel.icon size={120} />
                         </div>
-                        <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-[#a319c5] mb-6 group-hover:bg-[#a319c5] group-hover:text-white transition-colors">
+                        <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-[#9F2D5C] mb-6 group-hover:bg-[#9F2D5C] group-hover:text-white transition-colors">
                             <panel.icon size={24} />
                         </div>
                         <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2 italic uppercase tracking-tighter">
@@ -135,7 +135,7 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: TabType) => void }) {
                <Card className="p-10 rounded-[3rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl overflow-hidden relative">
                     <div className="flex items-center justify-between mb-8">
                         <h2 className="text-3xl font-black italic uppercase tracking-tighter">Quick Stats</h2>
-                        <TrendingUp className="text-[#a319c5]" />
+                        <TrendingUp className="text-[#9F2D5C]" />
                     </div>
                     <div className="space-y-6">
                         {[
@@ -157,14 +157,14 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: TabType) => void }) {
                 <Card className="p-10 rounded-[3rem] border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl relative overflow-hidden">
                     <div className="flex items-center justify-between mb-8">
                         <h2 className="text-3xl font-black italic uppercase tracking-tighter">Business Health</h2>
-                        <LayoutDashboard className="text-[#a319c5]" />
+                        <LayoutDashboard className="text-[#9F2D5C]" />
                     </div>
                     <div className="flex flex-col h-full justify-center pb-12">
                          <div className="space-y-4">
                             <p className="text-sm text-slate-500 leading-relaxed font-bold uppercase tracking-widest text-[10px]">
-                                Your business is performing <span className="text-[#a319c5]">above average</span> this month. Shop sales have increased by 15% since migrating to the new dashboard.
+                                Your business is performing <span className="text-[#9F2D5C]">above average</span> this month. Shop sales have increased by 15% since migrating to the new dashboard.
                             </p>
-                            <Button className="rounded-2xl bg-[#a319c5] text-white font-bold px-8 h-12 gap-2 shadow-lg shadow-[#a319c5]/20">
+                            <Button className="rounded-2xl bg-[#9F2D5C] text-white font-bold px-8 h-12 gap-2 shadow-lg shadow-[#9F2D5C]/20">
                                 View Full Reports
                                 <ChevronRight size={18} />
                             </Button>

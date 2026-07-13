@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -59,13 +59,13 @@ export default function SeedOwnerPage() {
                         <h2 className="text-xl font-bold mb-2">Not Logged In</h2>
                         <p className="text-slate-500 mb-6">Please log in first to seed your role.</p>
                         <Link href="/login">
-                            <Button className="bg-[#a319c5]">Go to Login</Button>
+                            <Button className="bg-[#9F2D5C]">Go to Login</Button>
                         </Link>
                     </div>
                 ) : (
                     <div className="space-y-8">
                         <div className="flex items-center gap-4 p-6 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800">
-                            <div className="w-12 h-12 rounded-xl bg-[#a319c5]/10 text-[#a319c5] flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-xl bg-[#9F2D5C]/10 text-[#9F2D5C] flex items-center justify-center">
                                 <UserCheck size={24} />
                             </div>
                             <div>
@@ -83,7 +83,7 @@ export default function SeedOwnerPage() {
                         <Button
                             onClick={handleSeed}
                             disabled={loading || role === "owner"}
-                            className="w-full h-16 rounded-2xl bg-[#a319c5] hover:bg-[#8b15a8] text-white font-black text-lg gap-2 shadow-xl shadow-[#a319c5]/30 active:scale-[0.98] transition-all disabled:opacity-50"
+                            className="w-full h-16 rounded-2xl bg-[#9F2D5C] hover:bg-[#B8326A] text-white font-black text-lg gap-2 shadow-xl shadow-[#9F2D5C]/30 active:scale-[0.98] transition-all disabled:opacity-50"
                         >
                             {loading ? (
                                 <Loader2 size={24} className="animate-spin" />

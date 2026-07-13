@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import Link from "next/link";
@@ -23,7 +23,7 @@ export default function CartPage() {
                 </p>
                 <Link
                     href="/products"
-                    className="bg-[#a319c5] hover:bg-[#8b15a8] text-white px-12 py-8 rounded-2xl text-lg font-bold inline-flex items-center justify-center transition-all shadow-xl active:scale-95"
+                    className="bg-[#9F2D5C] hover:bg-[#B8326A] text-white px-12 py-8 rounded-2xl text-lg font-bold inline-flex items-center justify-center transition-all shadow-xl active:scale-95"
                 >
                     Browse Products
                 </Link>
@@ -38,7 +38,7 @@ export default function CartPage() {
                 <div className="flex-1">
                     <div className="flex items-center justify-between mb-8">
                         <h1 className="text-4xl font-black text-slate-900 dark:text-white">Shopping Cart</h1>
-                        <Badge className="bg-[#a319c5]/10 text-[#a319c5] border-none text-sm font-bold px-4 py-1">
+                        <Badge className="bg-[#9F2D5C]/10 text-[#9F2D5C] border-none text-sm font-bold px-4 py-1">
                             {cartCount} Items
                         </Badge>
                     </div>
@@ -56,7 +56,7 @@ export default function CartPage() {
                                     </div>
                                     <div className="flex-1 flex flex-col sm:flex-row justify-between gap-4">
                                         <div className="flex-1">
-                                            <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2 leading-tight group-hover:text-[#a319c5] transition-colors line-clamp-1">
+                                            <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2 leading-tight group-hover:text-[#9F2D5C] transition-colors line-clamp-1">
                                                 {item.name}
                                             </h3>
                                             {item.selectedOptions && Object.entries(item.selectedOptions).map(([key, val]) => (
@@ -65,7 +65,7 @@ export default function CartPage() {
                                                 </p>
                                             ))}
                                             <div className="flex items-center gap-4 mt-4 sm:hidden">
-                                                <span className="text-xl font-black text-[#a319c5] italic">
+                                                <span className="text-xl font-black text-[#9F2D5C] italic">
                                                     {formatPrice(item.priceCents)}
                                                 </span>
                                             </div>
@@ -110,8 +110,8 @@ export default function CartPage() {
                         ))}
                     </div>
 
-                    <Link href="/products" className="inline-flex items-center gap-2 text-slate-400 font-bold mt-12 hover:text-[#a319c5] transition-colors group">
-                        <div className="w-8 h-8 rounded-full border border-slate-200 dark:border-slate-800 flex items-center justify-center group-hover:border-[#a319c5] transition-colors">
+                    <Link href="/products" className="inline-flex items-center gap-2 text-slate-400 font-bold mt-12 hover:text-[#9F2D5C] transition-colors group">
+                        <div className="w-8 h-8 rounded-full border border-slate-200 dark:border-slate-800 flex items-center justify-center group-hover:border-[#9F2D5C] transition-colors">
                             <ArrowLeft size={16} />
                         </div>
                         Continue Shopping
@@ -141,7 +141,7 @@ export default function CartPage() {
                                 <div className="pt-6 border-t border-slate-200 dark:border-slate-800">
                                     <div className="flex justify-between items-end">
                                         <div className="flex flex-col">
-                                            <span className="text-xs font-black uppercase tracking-widest text-[#a319c5] mb-1">Estimated Total</span>
+                                            <span className="text-xs font-black uppercase tracking-widest text-[#9F2D5C] mb-1">Estimated Total</span>
                                             <span className="text-4xl font-black text-slate-900 dark:text-white italic">
                                                 {formatPrice(cartTotal * 1.0825)}
                                             </span>
@@ -152,7 +152,7 @@ export default function CartPage() {
 
                             <Link
                                 href="/shop/checkout"
-                                className="w-full bg-[#a319c5] hover:bg-[#8b15a8] text-white py-8 rounded-2xl text-lg font-black flex items-center justify-center transition-all shadow-xl shadow-[#a319c5]/30 active:scale-[0.98]"
+                                className="w-full bg-[#9F2D5C] hover:bg-[#B8326A] text-white py-8 rounded-2xl text-lg font-black flex items-center justify-center transition-all shadow-xl shadow-[#9F2D5C]/30 active:scale-[0.98]"
                             >
                                 Go to Checkout
                             </Link>

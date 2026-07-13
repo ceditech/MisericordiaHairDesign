@@ -1,8 +1,8 @@
-# Design System: DedeBraidApp
+# Design System: MHDESIGNS
 **Project ID:** 387000833000817160
 
 ## 1. Visual Theme & Atmosphere
-The DedeBraidApp design system embodies an **Elegant, Radiant, and High-End** aesthetic. It is designed to evoke confidence and professionalism, focusing on the artistry of braiding while maintaining a clean, modern digital experience. The interface feels "Airy" and "Premium," utilizing generous whitespace and a sophisticated purple-leaning palette to create a sense of luxury and trustworthiness.
+The MHDESIGNS design system embodies an **Elegant, Radiant, and High-End** aesthetic. It is designed to evoke confidence and professionalism, focusing on the artistry of braiding while maintaining a clean, modern digital experience. The interface feels "Airy" and "Premium," utilizing generous whitespace and a sophisticated purple-leaning palette to create a sense of luxury and trustworthiness.
 
 ## 2. Color Palette & Roles
 The system uses a curated selection of purples and pinks to establish a regal and feminine brand identity.

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useState, useMemo } from "react";
@@ -189,7 +189,7 @@ export default function BlogPage() {
                             <Button
                                 variant="secondary"
                                 onClick={() => setVisibleCount(prev => prev + 3)}
-                                className="px-12 py-6 rounded-2xl border-2 border-[#a319c5]/20 hover:border-[#a319c5]"
+                                className="px-12 py-6 rounded-2xl border-2 border-[#9F2D5C]/20 hover:border-[#9F2D5C]"
                             >
                                 Load More Posts
                             </Button>
@@ -199,7 +199,7 @@ export default function BlogPage() {
             )}
 
             {/* Newsletter Section */}
-            <div className="mt-24 bg-[#a319c5] rounded-3xl p-8 md:p-16 text-white overflow-hidden relative">
+            <div className="mt-24 bg-[#9F2D5C] rounded-3xl p-8 md:p-16 text-white overflow-hidden relative">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
                 <div className="relative z-10 max-w-2xl mx-auto text-center">
                     <h2 className="text-3xl md:text-4xl font-bold mb-4">Stay in the Loop</h2>
@@ -218,7 +218,7 @@ export default function BlogPage() {
                         <Button
                             type="submit"
                             disabled={isSubmittingNewsletter}
-                            className="bg-white text-[#a319c5] hover:bg-purple-50 rounded-2xl py-6 px-8 h-auto font-bold shadow-lg"
+                            className="bg-white text-[#9F2D5C] hover:bg-purple-50 rounded-2xl py-6 px-8 h-auto font-bold shadow-lg"
                         >
                             {isSubmittingNewsletter ? "Joining..." : "Join the Diary"}
                         </Button>

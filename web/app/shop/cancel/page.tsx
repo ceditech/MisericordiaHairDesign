@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { Button, Card, Badge } from "@/components/ui";
@@ -27,7 +27,7 @@ export default function ShopCancelPage() {
             <div className="grid sm:grid-cols-2 gap-4 max-w-lg mx-auto mb-16">
                 <Link
                     href="/shop/checkout"
-                    className="w-full bg-[#a319c5] hover:bg-[#8b15a8] text-white py-8 rounded-2xl flex items-center justify-center gap-3 font-black transition-all active:scale-[0.98]"
+                    className="w-full bg-[#9F2D5C] hover:bg-[#B8326A] text-white py-8 rounded-2xl flex items-center justify-center gap-3 font-black transition-all active:scale-[0.98]"
                 >
                     Try Again
                 </Link>
@@ -47,12 +47,12 @@ export default function ShopCancelPage() {
                 <div>
                     <h3 className="font-bold text-slate-900 dark:text-white mb-2">Need Help?</h3>
                     <p className="text-sm text-slate-500 leading-relaxed">
-                        If you experienced technical issues or have questions about a product, please reach out to us at <a href={`mailto:${CONTACT_EMAIL}`} className="text-[#a319c5] font-bold">{CONTACT_EMAIL}</a> and we&apos;ll be happy to assist you.
+                        If you experienced technical issues or have questions about a product, please reach out to us at <a href={`mailto:${CONTACT_EMAIL}`} className="text-[#9F2D5C] font-bold">{CONTACT_EMAIL}</a> and we&apos;ll be happy to assist you.
                     </p>
                 </div>
             </Card>
 
-            <Link href="/products" className="inline-flex items-center gap-2 text-slate-400 font-bold mt-12 hover:text-[#a319c5] transition-colors group">
+            <Link href="/products" className="inline-flex items-center gap-2 text-slate-400 font-bold mt-12 hover:text-[#9F2D5C] transition-colors group">
                 <ArrowLeft size={16} />
                 Back to Shop
             </Link>

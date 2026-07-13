@@ -1,4 +1,4 @@
-# Site Vision: Dede's Hair Braiding
+# Site Vision: Misericordia Hair Designs
 A professional, high-end booking platform for hair braiding services, emphasizing quality, confidence, and expert care.
 
 ## 1. Project ID

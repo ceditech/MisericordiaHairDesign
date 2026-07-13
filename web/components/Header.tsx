@@ -66,7 +66,7 @@ export default function Header() {
     };
 
     const Logo = () => (
-        <Link href="/" className="text-2xl font-extrabold tracking-tighter text-brand-secondary">
+        <Link href="/" className="text-2xl font-extrabold tracking-tighter text-brand-primary">
             MHDESIGNS
         </Link>
     );
@@ -145,7 +145,7 @@ export default function Header() {
                             <Link href="/cart" className="relative p-2 text-text-secondary hover:text-brand-primary transition-colors">
                                 <span className="material-icons text-2xl">shopping_cart</span>
                                 {cartCount > 0 && (
-                                    <span className="absolute -top-1 -right-1 bg-[#a319c5] text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg border-2 border-surface">
+                                    <span className="absolute -top-1 -right-1 bg-brand-secondary text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg border-2 border-surface">
                                         {cartCount}
                                     </span>
                                 )}
@@ -166,7 +166,7 @@ export default function Header() {
                         <Link href="/cart" className="relative p-2 text-text-secondary hover:text-brand-primary transition-colors">
                             <span className="material-icons text-2xl">shopping_cart</span>
                             {cartCount > 0 && (
-                                <span className="absolute -top-1 -right-1 bg-[#a319c5] text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full shadow-lg border-2 border-surface">
+                                <span className="absolute -top-1 -right-1 bg-brand-secondary text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full shadow-lg border-2 border-surface">
                                     {cartCount}
                                 </span>
                             )}
