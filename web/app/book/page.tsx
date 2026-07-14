@@ -37,8 +37,13 @@ function parseMaxDurationHours(duration: string | undefined): number {
     return val;
 }
 
-/** Generate 30-minute time slots from 9:00 AM up to (closingHour - maxDuration) */
-function generateSlots(maxDurationHours: number, selectedDateStr: string, existingBookings: BookingRecord[] = [], allStyles: BraidStyle[] = []): string[] {
+export interface TimeSlot {
+    time: string;
+    available: boolean;
+}
+
+/** Generate 30-minute time slots from 9:00 AM up to closingHour */
+function generateSlots(maxDurationHours: number, selectedDateStr: string, existingBookings: BookingRecord[] = [], allStyles: BraidStyle[] = []): TimeSlot[] {
     const OPEN_HOUR = 9;   // 9:00 AM
     const CLOSE_HOUR = 21; // 9:00 PM
 
@@ -46,7 +51,7 @@ function generateSlots(maxDurationHours: number, selectedDateStr: string, existi
     const endMinutes = CLOSE_HOUR * 60;
     const lastPossibleStartMinutes = endMinutes - (maxDurationHours * 60);
 
-    const slots: string[] = [];
+    const slots: TimeSlot[] = [];
     const now = new Date();
     const isToday = (() => {
         if (!selectedDateStr) return false;
@@ -78,17 +83,18 @@ function generateSlots(maxDurationHours: number, selectedDateStr: string, existi
         return { start, end: start + (durationHours * 60) };
     }).filter(Boolean) as Array<{start: number, end: number}>;
 
-    console.log("[generateSlots] Debug:", {
-        styleDuration: maxDurationHours,
-        lastPossibleStart: `${Math.floor(lastPossibleStartMinutes / 60)}:${(lastPossibleStartMinutes % 60).toString().padStart(2, '0')}`,
-        existingBookingsCount: existingBookings.length
-    });
+    for (let current = startMinutes; current <= endMinutes - 30; current += 30) {
+        let available = true;
 
-    for (let current = startMinutes; current <= lastPossibleStartMinutes; current += 30) {
         // Filter past times for today
         if (isToday) {
             const nowMinutes = now.getHours() * 60 + now.getMinutes();
-            if (current <= nowMinutes) continue;
+            if (current <= nowMinutes) available = false;
+        }
+
+        // Check if starting here would exceed closing time based on duration
+        if (current > lastPossibleStartMinutes) {
+            available = false;
         }
 
         const slotEnd = current + (maxDurationHours * 60);
@@ -96,14 +102,17 @@ function generateSlots(maxDurationHours: number, selectedDateStr: string, existi
             return Math.max(current, range.start) < Math.min(slotEnd, range.end);
         });
 
-        if (hasOverlap) continue;
+        if (hasOverlap) available = false;
 
         const h = Math.floor(current / 60);
         const m = current % 60;
         const suffix = h < 12 ? "AM" : "PM";
         const displayHour = h === 0 ? 12 : h > 12 ? h - 12 : h;
         const displayMin = m === 0 ? "00" : "30";
-        slots.push(`${displayHour}:${displayMin} ${suffix}`);
+        slots.push({
+            time: `${displayHour}:${displayMin} ${suffix}`,
+            available
+        });
     }
 
     return slots;
@@ -717,16 +726,25 @@ function BookingPageInner() {
                                             </div>
                                         ) : (
                                             <div className="space-y-3 overflow-y-auto max-h-80 pr-1">
-                                                {availableSlots.map((t) => (
+                                                {availableSlots.map((slot) => (
                                                     <button
-                                                        key={t}
-                                                        onClick={() => setBookingData((prev) => ({ ...prev, time: t }))}
-                                                        className={`w-full py-3 rounded-xl font-bold border-2 transition-all text-sm ${bookingData.time === t
-                                                            ? "border-brand-primary bg-brand-primary/5 text-brand-primary"
-                                                            : "border-border bg-surface hover:border-brand-primary/40 text-text-primary"
+                                                        key={slot.time}
+                                                        disabled={!slot.available}
+                                                        onClick={() => setBookingData((prev) => ({ ...prev, time: slot.time }))}
+                                                        className={`w-full py-3 rounded-xl font-bold border-2 transition-all text-sm flex items-center justify-center ${
+                                                            !slot.available
+                                                                ? "border-border bg-surface text-text-muted opacity-50 cursor-not-allowed"
+                                                                : bookingData.time === slot.time
+                                                                    ? "border-brand-primary bg-brand-primary/5 text-brand-primary"
+                                                                    : "border-border bg-surface hover:border-brand-primary/40 text-text-primary"
                                                             }`}
                                                     >
-                                                        {t}
+                                                        {slot.time}
+                                                        {!slot.available && (
+                                                            <span className="text-xs font-normal ml-2 opacity-70">
+                                                                (Unavailable)
+                                                            </span>
+                                                        )}
                                                     </button>
                                                 ))}
                                             </div>
