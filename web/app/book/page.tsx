@@ -6,11 +6,11 @@ import Link from "next/link";
 import { BRAID_STYLES, BraidStyle } from "@/lib/styles";
 import { useAuth } from "@/src/providers/AuthProvider";
 import { saveDraft, loadDraft, clearDraft, BookingDraft } from "@/lib/bookingDraft";
-import { DEPOSIT_POLICY, CANCELLATION_POLICY, DEPOSIT_AMOUNT } from "@/src/content/legal";
+import { DEPOSIT_POLICY, CANCELLATION_POLICY, DEPOSIT_AMOUNT, CONTACT_PHONE } from "@/src/content/legal";
 import { getBookingsByDate, BookingRecord } from "@/src/lib/firebase/userBookings";
 import { subscribeToStyles, subscribeToPresets, subscribeToAddons } from "@/src/lib/firebase/ownerService";
 import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
-import { Skeleton } from "@/components/ui";
+import { Skeleton, Modal } from "@/components/ui";
 import { calculateBookingPrice, formatCents } from "@/lib/pricing";
 import { formatUSPhone, isValidUSPhone } from "@/lib/utils";
 
@@ -203,6 +203,8 @@ function BookingPageInner() {
     const [isLoadingBookings, setIsLoadingBookings] = useState(false);
     const [photoError, setPhotoError] = useState<string | null>(null);
 
+    const [showNoSlotsModal, setShowNoSlotsModal] = useState(false);
+
     const [draftRestored, setDraftRestored] = useState(false);
     const hasRedirected = useRef(false);
     // Guard: only start persisting AFTER draft hydration has run
@@ -287,6 +289,21 @@ function BookingPageInner() {
         }
     }, [bookingData.date]);
 
+    // Check for no available slots after bookings are loaded
+    useEffect(() => {
+        if (!isLoadingBookings && bookingData.date) {
+             const maxDur = selectedStyle ? parseMaxDurationHours(selectedStyle.duration) : 4;
+             const slots = generateSlots(maxDur, bookingData.date, existingBookings, styles);
+             const hasAvail = slots.some(s => s.available);
+             if (!hasAvail && slots.length > 0) {
+                 setShowNoSlotsModal(true);
+             } else {
+                 setShowNoSlotsModal(false);
+             }
+        } else {
+             setShowNoSlotsModal(false);
+        }
+    }, [isLoadingBookings, bookingData.date, existingBookings, selectedStyle, styles]);
 
 
     // ── Persist draft on every relevant state change ──────────────────────────
@@ -399,6 +416,7 @@ function BookingPageInner() {
     // ── Slot generation ────────────────────────────────────────────────────────
     const maxDuration = selectedStyle ? parseMaxDurationHours(selectedStyle.duration) : 4;
     const availableSlots = generateSlots(maxDuration, bookingData.date, existingBookings, styles);
+    const hasAvailableSlots = availableSlots.some(s => s.available);
 
 
     // ── Computed Totals ────────────────────────────────────────────────────────
@@ -718,11 +736,19 @@ function BookingPageInner() {
                                                 <span className="material-icons text-4xl mb-3 opacity-30">calendar_today</span>
                                                 <p className="text-sm">Select a date to see available slots</p>
                                             </div>
-                                        ) : availableSlots.length === 0 ? (
-
-                                            <div className="flex flex-col items-center justify-center h-48 text-center text-text-muted">
-                                                <span className="material-icons text-4xl mb-3 opacity-30">schedule</span>
-                                                <p className="text-sm">No slots available for today.<br />Please select another date.</p>
+                                        ) : !hasAvailableSlots ? (
+                                            <div className="flex flex-col items-center justify-center p-6 text-center bg-[#9F2D5C]/5 border border-[#9F2D5C]/20 rounded-2xl animate-in zoom-in-95 duration-300">
+                                                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm mb-4">
+                                                    <span className="material-icons text-[#9F2D5C] text-2xl">event_busy</span>
+                                                </div>
+                                                <h4 className="text-slate-900 dark:text-white font-bold text-base mb-2">No Slots Available</h4>
+                                                <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+                                                    We are fully booked or it is past business hours. Please select the next day or a following date.
+                                                </p>
+                                                <div className="inline-flex items-center justify-center bg-white dark:bg-slate-800 px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm gap-2">
+                                                    <span className="material-icons text-[14px] text-slate-400">phone</span>
+                                                    <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">Urgent? Call {CONTACT_PHONE}</span>
+                                                </div>
                                             </div>
                                         ) : (
                                             <div className="space-y-3 overflow-y-auto max-h-80 pr-1">
@@ -1140,6 +1166,33 @@ function BookingPageInner() {
                     </div>
                 </div>
             </div>
+
+            {/* No Slots Modal */}
+            <Modal
+                isOpen={showNoSlotsModal}
+                onClose={() => setShowNoSlotsModal(false)}
+                title="No Slots Available"
+            >
+                <div className="flex flex-col items-center justify-center text-center pb-4">
+                    <div className="w-16 h-16 bg-[#9F2D5C]/10 rounded-full flex items-center justify-center mb-6">
+                        <span className="material-icons text-[#9F2D5C] text-3xl">event_busy</span>
+                    </div>
+                    <p className="text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
+                        We're sorry, but there are no available slots for <strong className="text-slate-900 dark:text-white">{bookingData.date}</strong>. 
+                        This may be because we are fully booked, or the remaining time before our <strong>9:00 PM</strong> closing time is not enough to complete your selected style (<span className="text-[#9F2D5C] font-semibold">{selectedStyle?.duration}</span>).
+                    </p>
+                    <button
+                        onClick={() => setShowNoSlotsModal(false)}
+                        className="w-full bg-[#9F2D5C] text-white py-4 rounded-xl font-bold hover:bg-[#8A264F] transition-colors shadow-md hover:shadow-lg"
+                    >
+                        Select Another Day
+                    </button>
+                    <div className="mt-6 flex items-center justify-center gap-2 text-slate-500">
+                        <span className="material-icons text-sm">phone</span>
+                        <span className="text-xs">Need help? Call <a href={`tel:${CONTACT_PHONE.replace(/\D/g, '')}`} className="text-[#9F2D5C] hover:underline">{CONTACT_PHONE}</a></span>
+                    </div>
+                </div>
+            </Modal>
         </main>
     );
 }
