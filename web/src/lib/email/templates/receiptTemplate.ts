@@ -2,13 +2,14 @@ export function generateElegantReceiptEmail(
     draft: any,
     bookingId: string,
     role: "client" | "owner",
-    amountPaidFormatted: string
+    amountPaidFormatted: string,
+    isReactivation?: boolean
 ): string {
     const isOwner = role === "owner";
-    const title = isOwner ? "New Booking Received! 🎉" : "Your Booking is Confirmed!";
+    const title = isOwner ? "New Booking Received! 🎉" : (isReactivation ? "Booking Reactivated!" : "Your Booking is Confirmed!");
     const preheader = isOwner
         ? `New appointment for ${draft.clientName} on ${draft.date}.`
-        : `Thank you for booking with Misericordia Hair Design. Here are your appointment details.`;
+        : (isReactivation ? `Your appointment has been successfully reactivated.` : `Thank you for booking with Misericordia Hair Design. Here are your appointment details.`);
 
     const accentColor = "#a319c5";
     const bgColor = "#f8f6f7";
