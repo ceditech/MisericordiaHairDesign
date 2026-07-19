@@ -21,10 +21,10 @@ export default function Footer() {
                             {/* Facebook */}
                             <Tooltip content="Follow on Facebook" position="top">
                                 <a
-                                    href="https://www.facebook.com/profile.php?id=61585347691705&sk=map"
+                                    href="https://www.facebook.com/profile.php?id=61585347691705"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#9F2D5C] hover:text-white transition-all duration-300"
+                                    className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#9F2D5C] hover:bg-[#9F2D5C] hover:text-white transition-all duration-300"
                                     aria-label="Facebook"
                                 >
                                     <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -38,7 +38,7 @@ export default function Footer() {
                                     href="https://www.instagram.com/dedesbraids/"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#9F2D5C] hover:text-white transition-all duration-300"
+                                    className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#9F2D5C] hover:bg-[#9F2D5C] hover:text-white transition-all duration-300"
                                     aria-label="Instagram"
                                 >
                                     <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -49,10 +49,10 @@ export default function Footer() {
                             {/* TikTok */}
                             <Tooltip content="Follow on TikTok" position="top">
                                 <a
-                                    href="https://www.tiktok.com/@dedesbraids"
+                                    href="https://www.tiktok.com/@misericordiahairdesign"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#9F2D5C] hover:text-white transition-all duration-300"
+                                    className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#9F2D5C] hover:bg-[#9F2D5C] hover:text-white transition-all duration-300"
                                     aria-label="TikTok"
                                 >
                                     <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -66,7 +66,7 @@ export default function Footer() {
                                     href="https://www.yelp.com/biz/qsQ8HcD94A0PBK6GY3KoIw"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#9F2D5C] hover:text-white transition-all duration-300"
+                                    className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#9F2D5C] hover:bg-[#9F2D5C] hover:text-white transition-all duration-300"
                                     aria-label="Yelp"
                                 >
                                     <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
