@@ -1187,9 +1187,15 @@ function BookingPageInner() {
                     >
                         Select Another Day
                     </button>
-                    <div className="mt-6 flex items-center justify-center gap-2 text-slate-500">
-                        <span className="material-icons text-sm">phone</span>
-                        <span className="text-xs">Need help? Call <a href={`tel:${CONTACT_PHONE.replace(/\D/g, '')}`} className="text-[#9F2D5C] hover:underline">{CONTACT_PHONE}</a></span>
+                    <div className="mt-6 p-4 rounded-xl bg-[#9F2D5C]/5 border border-[#9F2D5C]/20 flex items-start gap-3 text-left">
+                        <div className="relative flex h-3 w-3 mt-1 shrink-0">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#9F2D5C] opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-[#9F2D5C]"></span>
+                        </div>
+                        <div className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                            <strong className="text-[#9F2D5C] block mb-0.5">Need Help or need urgent services?</strong>
+                            Please call <a href={`tel:${CONTACT_PHONE.replace(/\D/g, '')}`} className="font-bold text-[#9F2D5C] hover:underline">{CONTACT_PHONE}</a>, or email <a href="mailto:mariefleurekpe@gmail.com" className="font-bold text-[#9F2D5C] hover:underline">mariefleurekpe@gmail.com</a>
+                        </div>
                     </div>
                 </div>
             </Modal>
