@@ -8,6 +8,7 @@ import {
     uploadFile
 } from "@/src/lib/firebase/ownerService";
 import { Scissors, Plus, Trash2, Edit3, Save, X, Clock, DollarSign, Layers, Grid, Upload } from "lucide-react";
+import { Drawer } from "@/components/ui/Drawer";
 import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
 
 type StyleRecord = {
@@ -265,43 +266,22 @@ export default function StitchStyles() {
                                         </div>
                                     </div>
                                     <div className="p-6 space-y-4" onClick={e => e.stopPropagation()}>
-                                        {isEditing ? (
-                                            <div className="space-y-3">
-                                                <input className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-sm font-bold border-none focus:ring-2 focus:ring-[#6b38d4] text-slate-900 dark:text-white" value={editData.name || ""} onChange={e => setEditData(d => ({ ...d, name: e.target.value }))} placeholder="Style name" />
-                                                <textarea className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-sm border-none focus:ring-2 focus:ring-[#6b38d4] text-slate-900 dark:text-white resize-none" rows={2} value={editData.description || ""} onChange={e => setEditData(d => ({ ...d, description: e.target.value }))} placeholder="Description" />
-                                                <div className="grid grid-cols-2 gap-3">
-                                                    <input type="number" className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-sm font-bold border-none focus:ring-2 focus:ring-[#6b38d4] text-slate-900 dark:text-white" value={editData.price || (editData.priceCents || 0) / 100} onChange={e => setEditData(d => ({ ...d, price: parseFloat(e.target.value), priceCents: Math.round(parseFloat(e.target.value) * 100) }))} placeholder="Price ($)" />
-                                                    <input type="number" className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-sm font-bold border-none focus:ring-2 focus:ring-[#6b38d4] text-slate-900 dark:text-white" value={editData.duration || 120} onChange={e => setEditData(d => ({ ...d, duration: parseInt(e.target.value) }))} placeholder="Duration (min)" />
-                                                </div>
-                                                <div className="flex gap-2">
-                                                    <button onClick={saveEdit} disabled={saving} className="flex-1 flex items-center justify-center gap-1 py-2.5 rounded-xl bg-[#6b38d4] text-white text-xs font-bold disabled:opacity-50">
-                                                        <Save size={14} />Save
-                                                    </button>
-                                                    <button onClick={() => setEditingId(null)} className="flex-1 flex items-center justify-center gap-1 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs font-bold">
-                                                        <X size={14} />Cancel
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <>
-                                                <div>
-                                                    <h3 className="font-bold text-lg text-slate-900 dark:text-white">{style.name || "Unnamed Style"}</h3>
-                                                    {style.description && <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">{style.description}</p>}
-                                                </div>
-                                                <div className="flex gap-4 text-sm">
-                                                    <span className="flex items-center gap-1.5 text-[#6b38d4] dark:text-[#d0bcff] font-bold"><DollarSign size={14} />${price.toFixed(0)}</span>
-                                                    <span className="flex items-center gap-1.5 text-slate-500 font-medium"><Clock size={14} />{style.duration || 120} min</span>
-                                                </div>
-                                                <div className="flex gap-2">
-                                                    <button onClick={() => { setEditingId(style.id); setEditData({ ...style }); }} className="flex-1 flex items-center justify-center gap-1 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold hover:bg-[#e9ddff] hover:text-[#6b38d4] transition-colors">
-                                                        <Edit3 size={14} />Edit
-                                                    </button>
-                                                    <button onClick={() => handleDelete(style.id)} className="flex items-center justify-center gap-1 py-2.5 px-4 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-400 text-xs font-bold hover:bg-red-100 transition-colors">
-                                                        <Trash2 size={14} />
-                                                    </button>
-                                                </div>
-                                            </>
-                                        )}
+                                        <div>
+                                            <h3 className="font-bold text-lg text-slate-900 dark:text-white">{style.name || "Unnamed Style"}</h3>
+                                            {style.description && <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">{style.description}</p>}
+                                        </div>
+                                        <div className="flex gap-4 text-sm">
+                                            <span className="flex items-center gap-1.5 text-[#6b38d4] dark:text-[#d0bcff] font-bold"><DollarSign size={14} />${price.toFixed(0)}</span>
+                                            <span className="flex items-center gap-1.5 text-slate-500 font-medium"><Clock size={14} />{style.duration || 120} min</span>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <button onClick={() => { setEditingId(style.id); setEditData({ ...style }); }} className="flex-1 flex items-center justify-center gap-1 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold hover:bg-[#e9ddff] hover:text-[#6b38d4] transition-colors">
+                                                <Edit3 size={14} />Edit
+                                            </button>
+                                            <button onClick={() => handleDelete(style.id)} className="flex items-center justify-center gap-1 py-2.5 px-4 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-400 text-xs font-bold hover:bg-red-100 transition-colors">
+                                                <Trash2 size={14} />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             );
@@ -467,46 +447,104 @@ export default function StitchStyles() {
                 </div>
             )}
 
-            {/* Modals */}
-            {isAdding && (
-                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
-                    <div className="w-full max-w-lg bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] shadow-2xl space-y-6 border border-slate-100 dark:border-slate-800 animate-in zoom-in-95 duration-300">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-2xl font-extrabold font-headline text-slate-900 dark:text-white">Add Style</h3>
-                            <button onClick={() => setIsAdding(false)} className="text-slate-400 hover:text-slate-900 p-2 bg-slate-100 dark:bg-slate-800 rounded-full transition-colors"><X size={18} /></button>
+            {/* Drawer for Add/Edit Style */}
+            <Drawer 
+                isOpen={isAdding || editingId !== null} 
+                onClose={() => { setIsAdding(false); setEditingId(null); setImageFile(null); }}
+                title={isAdding ? "Add Style" : "Edit Style"}
+                className="w-full sm:max-w-md bg-surface p-0 flex flex-col"
+            >
+                <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-surface">
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-2xl font-extrabold font-headline text-slate-900 dark:text-white">
+                            {isAdding ? "Add Style" : "Edit Style"}
+                        </h3>
+                        <button onClick={() => { setIsAdding(false); setEditingId(null); setImageFile(null); }} className="text-slate-400 hover:text-slate-900 p-2 bg-slate-100 dark:bg-slate-800 rounded-full transition-colors"><X size={18} /></button>
+                    </div>
+
+                    {[
+                        { label: "Style Name *", key: "name", type: "text", placeholder: "e.g. Knotless Braids" },
+                        { label: "Description", key: "description", type: "text", placeholder: "Short description..." },
+                        { label: "Price ($)", key: "price", type: "number", placeholder: "150" },
+                        { label: "Duration (min)", key: "duration", type: "number", placeholder: "180" },
+                    ].map(f => (
+                        <div key={f.key} className="space-y-1.5">
+                            <label className="text-xs font-bold uppercase tracking-widest text-slate-400">{f.label}</label>
+                            {f.key === "description" ? (
+                                <textarea
+                                    placeholder={f.placeholder}
+                                    rows={3}
+                                    className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-[#6b38d4] text-slate-900 dark:text-white text-sm resize-none"
+                                    value={isAdding ? (newStyle as any)[f.key] : (editData as any)[f.key] || ""}
+                                    onChange={e => {
+                                        if (isAdding) setNewStyle(s => ({ ...s, [f.key]: e.target.value }));
+                                        else setEditData(d => ({ ...d, [f.key]: e.target.value }));
+                                    }}
+                                />
+                            ) : (
+                                <input 
+                                    type={f.type} 
+                                    placeholder={f.placeholder} 
+                                    className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-[#6b38d4] text-slate-900 dark:text-white text-sm font-bold" 
+                                    value={isAdding ? (newStyle as any)[f.key] : (editData as any)[f.key] ?? ""} 
+                                    onChange={e => {
+                                        const val = f.type === "number" ? (parseFloat(e.target.value) || 0) : e.target.value;
+                                        if (isAdding) {
+                                            setNewStyle(s => ({ ...s, [f.key]: val }));
+                                        } else {
+                                            if (f.key === "price") {
+                                                setEditData(d => ({ ...d, price: val as number, priceCents: Math.round((val as number) * 100) }));
+                                            } else {
+                                                setEditData(d => ({ ...d, [f.key]: val }));
+                                            }
+                                        }
+                                    }} 
+                                />
+                            )}
                         </div>
-                        {[
-                            { label: "Style Name *", key: "name", type: "text", placeholder: "e.g. Knotless Braids" },
-                            { label: "Description", key: "description", type: "text", placeholder: "Short description..." },
-                            { label: "Price ($)", key: "price", type: "number", placeholder: "150" },
-                            { label: "Duration (min)", key: "duration", type: "number", placeholder: "180" },
-                        ].map(f => (
-                            <div key={f.key} className="space-y-1.5">
-                                <label className="text-xs font-bold uppercase tracking-widest text-slate-400">{f.label}</label>
-                                <input type={f.type} placeholder={f.placeholder} className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-[#6b38d4] text-slate-900 dark:text-white text-sm font-bold" value={(newStyle as any)[f.key]} onChange={e => setNewStyle(s => ({ ...s, [f.key]: f.type === "number" ? parseFloat(e.target.value) || 0 : e.target.value }))} />
-                            </div>
-                        ))}
-                        <div className="space-y-1.5">
-                            <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Style Image</label>
-                            <div className="flex items-center justify-center w-full">
-                                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-350 dark:border-slate-700 rounded-2xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                        <Upload className="w-8 h-8 mb-2 text-slate-400" />
-                                        <p className="text-xs text-slate-500 font-bold">{imageFile ? imageFile.name : "Click to upload style image"}</p>
-                                    </div>
-                                    <input type="file" className="hidden" accept="image/*" onChange={e => setImageFile(e.target.files?.[0] || null)} />
-                                </label>
-                            </div>
-                        </div>
-                        <div className="flex gap-3 pt-2">
-                            <button onClick={() => setIsAdding(false)} className="flex-1 py-4 rounded-2xl font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200">Cancel</button>
-                            <button onClick={handleAdd} disabled={saving || !newStyle.name} className="flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl bg-[#6b38d4] text-white font-bold shadow-lg shadow-[#6b38d4]/20 disabled:opacity-50">
-                                <Plus size={18} />Add Style
-                            </button>
+                    ))}
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Style Image</label>
+                        <div className="flex items-center justify-center w-full">
+                            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-350 dark:border-slate-700 rounded-2xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <Upload className="w-8 h-8 mb-2 text-slate-400" />
+                                    <p className="text-xs text-slate-500 font-bold text-center px-4">
+                                        {imageFile ? imageFile.name : (!isAdding && editData.imageUrl) ? "Upload new image to replace" : "Click to upload style image"}
+                                    </p>
+                                </div>
+                                <input type="file" className="hidden" accept="image/*" onChange={e => setImageFile(e.target.files?.[0] || null)} />
+                            </label>
                         </div>
                     </div>
                 </div>
-            )}
+                <div className="p-6 border-t border-border bg-slate-50 dark:bg-slate-900 flex gap-3">
+                    <button onClick={() => { setIsAdding(false); setEditingId(null); setImageFile(null); }} className="flex-1 py-4 rounded-2xl font-bold text-slate-500 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">Cancel</button>
+                    <button 
+                        onClick={async () => {
+                            if (isAdding) {
+                                await handleAdd();
+                            } else {
+                                setSaving(true);
+                                try {
+                                    let imageUrl = editData.imageUrl;
+                                    if (imageFile) {
+                                        imageUrl = await uploadFile(imageFile, `styles/${editingId}_${Date.now()}`);
+                                    }
+                                    await upsertStyle({ ...editData, id: editingId!, imageUrl });
+                                    setEditingId(null);
+                                    setImageFile(null);
+                                } catch (err) { console.error(err); }
+                                finally { setSaving(false); }
+                            }
+                        }} 
+                        disabled={saving || (isAdding && !newStyle.name) || (!isAdding && !editData.name)} 
+                        className="flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl bg-[#6b38d4] text-white font-bold shadow-lg shadow-[#6b38d4]/20 disabled:opacity-50 hover:bg-[#8455ef] transition-colors"
+                    >
+                        {isAdding ? <><Plus size={18} />Add Style</> : <><Save size={18} />Save Changes</>}
+                    </button>
+                </div>
+            </Drawer>
 
             {/* Details Modal */}
             {viewingStyle && (
