@@ -3,12 +3,14 @@ import { adminDb } from "@/src/lib/firebase/admin";
 import { EmailManager } from "@/src/lib/email/EmailManager";
 import { generateElegantReceiptEmail } from "@/src/lib/email/templates/receiptTemplate";
 import { FieldValue } from "firebase-admin/firestore";
+import { withAuth } from "@/src/lib/auth/withAuth";
 
-export async function POST(req: NextRequest) {
+/** POST /api/admin/bookings/reactivate: staff only (owner, admin, assistant). */
+export const POST = withAuth(["owner", "admin", "assistant"], async (req: NextRequest, auth) => {
     try {
         const { bookingId } = await req.json();
 
-        if (!bookingId) {
+        if (!bookingId || typeof bookingId !== "string") {
             return NextResponse.json({ error: "Missing bookingId" }, { status: 400 });
         }
 
@@ -20,6 +22,8 @@ export async function POST(req: NextRequest) {
         }
 
         const bookingData = bookingSnap.data();
+
+        console.info(`[Reactivate] booking ${bookingId} by ${auth.uid}`);
 
         // Update booking status to confirmed
         await bookingRef.update({
@@ -44,6 +48,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: true });
     } catch (error: any) {
         console.error("Error reactivating booking:", error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return NextResponse.json({ error: "Failed to reactivate booking" }, { status: 500 });
     }
-}
+});

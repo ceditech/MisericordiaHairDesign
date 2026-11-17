@@ -44,6 +44,7 @@ import {
     useAffiliateMetrics
 } from "@/src/lib/firebase/ownerService";
 import { useAuth } from "@/src/hooks/useAuth";
+import { authFetch } from "@/src/lib/http/authFetch";
 
 // --- Types ---
 
@@ -199,7 +200,7 @@ export default function StitchOverview() {
     const runSeed = async () => {
         setSeeding(true);
         try {
-            const res = await fetch("/api/admin/seed");
+            const res = await authFetch("/api/admin/seed", { method: "POST" });
             const data = await res.json();
             if (data.success) {
                 alert("Success! Dashboard populated with historical data.");
