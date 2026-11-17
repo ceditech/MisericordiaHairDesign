@@ -4,12 +4,16 @@ import { FieldValue } from "firebase-admin/firestore";
 import { buildReminderEmail } from "@/lib/notifications/emailTemplates";
 import { format, addDays } from "date-fns";
 import { EmailManager } from "@/src/lib/email/EmailManager";
+import { requireCronSecretOrRole } from "@/src/lib/auth/requireCronSecretOrRole";
+import { HttpError } from "@/src/lib/http/HttpError";
 
 export const dynamic = "force-dynamic";
 
 /**
  * API Route to trigger automated reminders.
- * Can be called by a cron job (e.g. Vercel Cron, GitHub Actions).
+ * Callable by a scheduler (Authorization: Bearer <CRON_SECRET>) or by the super
+ * admin from the dashboard (Firebase ID token). Fails closed: if CRON_SECRET is
+ * not configured, only the super admin can trigger it.
  * 
  * Logic:
  * 1. Find all 'confirmed' bookings for tomorrow.
@@ -19,11 +23,8 @@ export const dynamic = "force-dynamic";
  */
 export async function POST(req: NextRequest) {
     try {
-        // Simple security check (optional, but recommended)
-        const authHeader = req.headers.get("authorization");
-        if (process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
+        const caller = await requireCronSecretOrRole(req, ["superAdmin"]);
+        console.info(`[Reminders API] Triggered by ${caller.kind === "cron" ? "scheduler" : `user ${caller.auth.uid}`}`);
 
         const tomorrow = addDays(new Date(), 1);
         const tomorrowStr = format(tomorrow, "yyyy-MM-dd");
@@ -95,11 +96,14 @@ export async function POST(req: NextRequest) {
             count: sentCount 
         });
 
-    } catch (error: any) {
+    } catch (error) {
+        if (error instanceof HttpError) {
+            return NextResponse.json({ success: false, error: error.message }, { status: error.status });
+        }
         console.error("[Reminders API] Error:", error);
         return NextResponse.json({ 
             success: false, 
-            error: error.message 
+            error: "Failed to process reminders" 
         }, { status: 500 });
     }
 }

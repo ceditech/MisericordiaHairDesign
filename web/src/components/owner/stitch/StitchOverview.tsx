@@ -217,7 +217,7 @@ export default function StitchOverview() {
     const runReminders = async () => {
         setSendingReminders(true);
         try {
-            const res = await fetch("/api/admin/reminders", { 
+            const res = await authFetch("/api/admin/reminders", { 
                 method: "POST",
                 headers: { "Content-Type": "application/json" }
             });
