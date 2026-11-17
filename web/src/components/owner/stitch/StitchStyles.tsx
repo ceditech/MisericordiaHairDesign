@@ -238,7 +238,11 @@ export default function StitchStyles() {
                         <div className="bg-[#e9ddff] dark:bg-slate-800 p-5 rounded-[1.5rem] border border-transparent">
                             <p className="text-xs font-bold uppercase tracking-widest text-[#6b38d4] dark:text-[#d0bcff] mb-1">Avg Price</p>
                             <p className="text-3xl font-black font-headline text-[#6b38d4] dark:text-[#d0bcff]">
-                                ${styles.length > 0 ? Math.round(styles.reduce((acc, s) => acc + (Number(s.priceCents) / 100 || Number(s.price) || 0), 0) / styles.length) : 0}
+                                ${styles.length > 0 ? Math.round(styles.reduce((acc, s) => {
+                                    const parsedPrice = s.price ? parseFloat(String(s.price).replace(/[^0-9.]/g, '')) : 0;
+                                    const p = (typeof s.priceCents === 'number' && s.priceCents > 0) ? s.priceCents / 100 : parsedPrice;
+                                    return acc + p;
+                                }, 0) / styles.length) : 0}
                             </p>
                         </div>
                     </div>
@@ -246,7 +250,8 @@ export default function StitchStyles() {
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                         {styles.map(style => {
                             const isEditing = editingId === style.id;
-                            const price = Number(style.priceCents) / 100 || Number(style.price) || 0;
+                            const parsedPrice = style.price ? parseFloat(String(style.price).replace(/[^0-9.]/g, '')) : 0;
+                            const price = (typeof style.priceCents === 'number' && style.priceCents > 0) ? style.priceCents / 100 : parsedPrice;
                             return (
                                 <div key={style.id} onClick={() => !isEditing && setViewingStyle(style)} className="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
                                     <div className="h-32 bg-gradient-to-br from-[#e9ddff] to-[#ffd9e4] dark:from-slate-800 dark:to-slate-700 flex items-center justify-center relative group-hover:scale-105 transition-transform duration-500 overflow-hidden">
@@ -275,7 +280,10 @@ export default function StitchStyles() {
                                             <span className="flex items-center gap-1.5 text-slate-500 font-medium"><Clock size={14} />{style.duration || 120} min</span>
                                         </div>
                                         <div className="flex gap-2">
-                                            <button onClick={() => { setEditingId(style.id); setEditData({ ...style }); }} className="flex-1 flex items-center justify-center gap-1 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold hover:bg-[#e9ddff] hover:text-[#6b38d4] transition-colors">
+                                            <button onClick={() => { 
+                                                    setEditingId(style.id); 
+                                                    setEditData({ ...style, price: price }); 
+                                                }} className="flex-1 flex items-center justify-center gap-1 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold hover:bg-[#e9ddff] hover:text-[#6b38d4] transition-colors">
                                                 <Edit3 size={14} />Edit
                                             </button>
                                             <button onClick={() => handleDelete(style.id)} className="flex items-center justify-center gap-1 py-2.5 px-4 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-400 text-xs font-bold hover:bg-red-100 transition-colors">
@@ -581,7 +589,11 @@ export default function StitchStyles() {
                                 <div className="bg-slate-50 dark:bg-slate-850 p-4 rounded-2xl">
                                     <span className="text-xs text-slate-400 font-bold uppercase tracking-wider block mb-1">Starting Price</span>
                                     <span className="text-2xl font-black text-[#6b38d4] dark:text-[#d0bcff] flex items-center gap-1">
-                                        <DollarSign size={20} />{(Number(viewingStyle.priceCents) / 100 || Number(viewingStyle.price) || 0).toFixed(2)}
+                                        <DollarSign size={20} />
+                                        {((typeof viewingStyle.priceCents === 'number' && viewingStyle.priceCents > 0) 
+                                            ? viewingStyle.priceCents / 100 
+                                            : (viewingStyle.price ? parseFloat(String(viewingStyle.price).replace(/[^0-9.]/g, '')) : 0)
+                                        ).toFixed(2)}
                                     </span>
                                 </div>
                                 <div className="bg-slate-50 dark:bg-slate-850 p-4 rounded-2xl">
@@ -593,7 +605,13 @@ export default function StitchStyles() {
                             </div>
                             
                             <div className="flex gap-3">
-                                <button onClick={() => { setEditingId(viewingStyle.id); setEditData({ ...viewingStyle }); setViewingStyle(null); }} className="flex-1 py-4 bg-[#6b38d4] hover:bg-[#8455ef] text-white font-bold rounded-2xl shadow-lg transition-colors flex items-center justify-center gap-2">
+                                <button onClick={() => { 
+                                    setEditingId(viewingStyle.id); 
+                                    const parsedPrice = viewingStyle.price ? parseFloat(String(viewingStyle.price).replace(/[^0-9.]/g, '')) : 0;
+                                    const p = (typeof viewingStyle.priceCents === 'number' && viewingStyle.priceCents > 0) ? viewingStyle.priceCents / 100 : parsedPrice;
+                                    setEditData({ ...viewingStyle, price: p }); 
+                                    setViewingStyle(null); 
+                                }} className="flex-1 py-4 bg-[#6b38d4] hover:bg-[#8455ef] text-white font-bold rounded-2xl shadow-lg transition-colors flex items-center justify-center gap-2">
                                     <Edit3 size={18} /> Edit Style details
                                 </button>
                                 <button onClick={() => setViewingStyle(null)} className="px-6 py-4 bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold rounded-2xl hover:bg-slate-200">
