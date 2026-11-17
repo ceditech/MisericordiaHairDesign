@@ -19,7 +19,7 @@ export async function seedDashboardData() {
         const styleRef = adminDb.collection("styles").doc(style.id);
         
         // Parse price string like "$200 and up" to numeric cents
-        const numericPrice = parseInt(style.price.replace(/[^0-9]/g, '')) || 0;
+        const numericPrice = parseInt(String(style.price).replace(/[^0-9]/g, '')) || 0;
         const priceCents = numericPrice * 100;
 
         // Parse duration like "4-6 hours" to minutes
