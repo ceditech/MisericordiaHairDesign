@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
@@ -107,7 +107,11 @@ function StyleModal({ style, onClose }: { style: BraidStyle; onClose: () => void
                         <div className="bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10 rounded-2xl p-5 text-center">
                             <span className="material-icons text-[#9F2D5C] text-2xl mb-1 block">payments</span>
                             <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Starting Price</p>
-                            <p className="text-xl font-extrabold text-[#9F2D5C]">{style.price}</p>
+                            <p className="text-xl font-extrabold text-[#9F2D5C]">
+                                {(typeof style.priceCents === 'number' && style.priceCents > 0) 
+                                    ? `$${(style.priceCents / 100).toFixed(0)} and up` 
+                                    : (typeof style.price === 'number' ? `$${style.price.toFixed(0)} and up` : style.price)}
+                            </p>
                         </div>
                         <div className="bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10 rounded-2xl p-5 text-center">
                             <span className="material-icons text-[#9F2D5C] text-2xl mb-1 block">schedule</span>
@@ -230,7 +234,9 @@ export default function OurStylesPage() {
                                         {style.name}
                                     </h3>
                                     <p className="text-[#e899ff] font-semibold text-sm mb-3 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                                        {style.price}
+                                        {(typeof style.priceCents === 'number' && style.priceCents > 0) 
+                                            ? `$${(style.priceCents / 100).toFixed(0)} and up` 
+                                            : (typeof style.price === 'number' ? `$${style.price.toFixed(0)} and up` : style.price)}
                                     </p>
                                     <div className="flex items-center gap-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-600">
                                         <span className="text-white/80 text-xs font-medium flex items-center gap-1">

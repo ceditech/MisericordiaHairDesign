@@ -80,6 +80,26 @@ export default function StitchAppointments() {
         finally { setUpdating(false); }
     };
 
+    const reactivateBooking = async (id: string) => {
+        setUpdating(true);
+        try {
+            const res = await fetch("/api/admin/bookings/reactivate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ bookingId: id })
+            });
+            if (res.ok) {
+                setSelected(prev => prev ? { ...prev, status: "confirmed" } : prev);
+            } else {
+                console.error("Failed to reactivate booking");
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setUpdating(false);
+        }
+    };
+
     const filtered = bookings.filter(b => {
         const name = (b.clientName || b.name || "").toLowerCase();
         const email = (b.clientEmail || b.email || "").toLowerCase();
@@ -298,32 +318,45 @@ export default function StitchAppointments() {
 
                             <div className="space-y-3">
                                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Actions</p>
-                                <div className="grid grid-cols-2 gap-3">
+                                {selected.status === 'cancelled' ? (
                                     <button
                                         disabled={updating}
-                                        onClick={() => updateStatus(selected.id, "confirmed")}
-                                        className="flex items-center justify-center gap-2 py-3 px-4 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-full text-xs font-extrabold hover:bg-emerald-200 transition-all disabled:opacity-50"
+                                        onClick={() => reactivateBooking(selected.id)}
+                                        className="w-full flex items-center justify-center gap-2 py-3 text-xs font-extrabold bg-[#6b38d4] text-white rounded-full hover:opacity-90 transition-all disabled:opacity-50 shadow-lg shadow-[#6b38d4]/20"
                                     >
                                         <CheckCircle size={14} />
-                                        Confirm
+                                        Enable (Reactivate Booking)
                                     </button>
-                                    <button
-                                        disabled={updating}
-                                        onClick={() => updateStatus(selected.id, "completed")}
-                                        className="flex items-center justify-center gap-2 py-3 px-4 bg-[#6b38d4] text-white rounded-full text-xs font-extrabold hover:-translate-y-0.5 transition-all shadow-lg shadow-[#6b38d4]/20 disabled:opacity-50"
-                                    >
-                                        <CheckCircle size={14} />
-                                        Complete
-                                    </button>
-                                </div>
-                                <button
-                                    disabled={updating}
-                                    onClick={() => updateStatus(selected.id, "cancelled")}
-                                    className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all disabled:opacity-50"
-                                >
-                                    <XCircle size={14} />
-                                    Cancel Appointment
-                                </button>
+                                ) : (
+                                    <>
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <button
+                                                disabled={updating || selected.status === "confirmed" || selected.status === "completed"}
+                                                onClick={() => updateStatus(selected.id, "confirmed")}
+                                                className="flex items-center justify-center gap-2 py-3 px-4 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-full text-xs font-extrabold hover:bg-emerald-200 transition-all disabled:opacity-50"
+                                            >
+                                                <CheckCircle size={14} />
+                                                Confirm
+                                            </button>
+                                            <button
+                                                disabled={updating || selected.status === "completed"}
+                                                onClick={() => updateStatus(selected.id, "completed")}
+                                                className="flex items-center justify-center gap-2 py-3 px-4 bg-[#6b38d4] text-white rounded-full text-xs font-extrabold hover:-translate-y-0.5 transition-all shadow-lg shadow-[#6b38d4]/20 disabled:opacity-50"
+                                            >
+                                                <CheckCircle size={14} />
+                                                Complete
+                                            </button>
+                                        </div>
+                                        <button
+                                            disabled={updating || selected.status === "completed"}
+                                            onClick={() => updateStatus(selected.id, "cancelled")}
+                                            className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-all disabled:opacity-50"
+                                        >
+                                            <XCircle size={14} />
+                                            Cancel Appointment
+                                        </button>
+                                    </>
+                                )}
                             </div>
                         </>
                     )}

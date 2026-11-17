@@ -2,7 +2,8 @@ export interface BraidStyle {
     id: string;
     name: string;
     duration: string;
-    price: string;
+    price: string | number;
+    priceCents?: number;
     image: string;
     description: string;
     popular?: boolean;
