@@ -13,10 +13,17 @@ service cloud.firestore {
          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['owner', 'admin', 'assistant']);
     }
 
-    // User profiles
+    // User profiles.
+    // - A user may read only their own profile (staff read all via the owner catch-all below).
+    // - A user may create their own profile only as a client (or without a role).
+    // - A user may update their own profile but may never add, change or remove `role`.
+    //   Roles are assigned by staff (catch-all) or the Admin SDK (server routes).
     match /users/{userId} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated() && request.auth.uid == userId;
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow create: if isAuthenticated() && request.auth.uid == userId
+        && (!('role' in request.resource.data) || request.resource.data.role == 'client');
+      allow update: if isAuthenticated() && request.auth.uid == userId
+        && request.resource.data.get('role', null) == resource.data.get('role', null);
     }
     
     // Catch-All for Owner Management
