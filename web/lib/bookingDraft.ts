@@ -54,6 +54,31 @@ export function isDraftValid(draft: BookingDraft | null): draft is BookingDraft 
     return !!(draft.styleId && draft.date && draft.time && draft.name && draft.email && draft.phone);
 }
 
+/** Draft fields that must never be written to Firestore (secrets and bulky client-only data). */
+const NON_PERSISTED_FIELDS = new Set(["password", "createAccount", "photoPreview", "inspirationPhoto"]);
+
+/**
+ * Returns a copy of the draft that is safe to store in Firestore: no password,
+ * account-creation flags or raw photo data URL, and no undefined values.
+ * Does not mutate the input (checkout still needs the password to create the account).
+ */
+export function sanitizeDraftForPersistence(draft: BookingDraft): Record<string, unknown> {
+    const safe: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(draft)) {
+        if (NON_PERSISTED_FIELDS.has(key) || value === undefined) continue;
+        safe[key] = value;
+    }
+    return safe;
+}
+
+/**
+ * Creates an unguessable draft id. The id acts as the capability for the
+ * confirmation lookup, so it must not be predictable.
+ */
+export function newDraftId(): string {
+    return `draft_${crypto.randomUUID()}`;
+}
+
 // ─── Confirmed booking (persisted to localStorage for success page) ──────────
 
 const CONFIRMED_KEY = "dedes_confirmed_booking";
