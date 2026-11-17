@@ -5,6 +5,8 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
     test: {
         environment: "node",
+        testTimeout: 30_000,
+        hookTimeout: 60_000,
         include: ["tests/rules/**/*.test.ts"],
         passWithNoTests: true,
         // Rules tests share one emulator instance: run files sequentially.
