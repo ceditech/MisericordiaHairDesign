@@ -6,10 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "firebase:emulators": "firebase emulators:start",
     "firebase:deploy:dev": "firebase deploy -P default",
-    "firebase:deploy:prod": "firebase deploy -P prod"
+    "firebase:deploy:prod": "firebase deploy -P prod",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:rules": "npx --yes firebase-tools emulators:exec --config ../firebase.json --only firestore,storage \"vitest run --config vitest.rules.config.ts\"",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@paypal/react-paypal-js": "^9.0.2",
@@ -34,6 +39,8 @@
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.2",
+    "@playwright/test": "^1.65.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -42,6 +49,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.7"
   }
 }
