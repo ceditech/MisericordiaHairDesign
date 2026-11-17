@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:rules": "npx --yes firebase-tools emulators:exec --config ../firebase.json --only firestore,storage \"vitest run --config vitest.rules.config.ts\"",
+    "test:rules": "npx --yes firebase-tools emulators:exec --config ../firebase.json --project demo-misericordia-rules --only firestore,storage \"vitest run --config vitest.rules.config.ts\"",
     "test:e2e": "playwright test"
   },
   "dependencies": {
