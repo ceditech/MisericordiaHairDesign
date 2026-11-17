@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { collection, query, onSnapshot, orderBy, doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { getDb } from "@/src/lib/firebase/client";
+import { authFetch } from "@/src/lib/http/authFetch";
 import { Calendar, Search, ChevronRight, X, CheckCircle, XCircle, Clock, Filter, TrendingUp, DollarSign, Ban, ReceiptText } from "lucide-react";
 
 type Booking = {
@@ -83,7 +84,7 @@ export default function StitchAppointments() {
     const reactivateBooking = async (id: string) => {
         setUpdating(true);
         try {
-            const res = await fetch("/api/admin/bookings/reactivate", {
+            const res = await authFetch("/api/admin/bookings/reactivate", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ bookingId: id })

@@ -2,15 +2,25 @@ import { NextRequest, NextResponse } from "next/server";
 import { adminAuth, adminDb } from "@/src/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
 import { EmailManager } from "@/src/lib/email/EmailManager";
+import { withAuth } from "@/src/lib/auth/withAuth";
 
 export const dynamic = "force-dynamic";
 
-export async function POST(req: NextRequest) {
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/**
+ * POST /api/admin/add-assistant: super admin only (matches the dashboard UI).
+ * Always assigns the "assistant" role and never overwrites an owner/admin.
+ */
+export const POST = withAuth(["superAdmin"], async (req: NextRequest, auth) => {
     try {
         const { email, name, phone } = await req.json();
 
         if (!email || !name || !phone) {
             return NextResponse.json({ success: false, error: "Email, name, and phone are required." }, { status: 400 });
+        }
+        if (typeof email !== "string" || typeof name !== "string" || typeof phone !== "string" || !EMAIL_PATTERN.test(email)) {
+            return NextResponse.json({ success: false, error: "A valid email, name, and phone are required." }, { status: 400 });
         }
 
         let uid = "";
@@ -45,6 +55,15 @@ export async function POST(req: NextRequest) {
 
         // 2. Update Firestore user document
         const userRef = adminDb.collection("users").doc(uid);
+        const existingSnap = await userRef.get();
+        const existingRole = existingSnap.exists ? existingSnap.data()?.role : null;
+        if (existingRole === "owner" || existingRole === "admin") {
+            return NextResponse.json(
+                { success: false, error: "This user already has a higher role and cannot be changed to assistant." },
+                { status: 409 },
+            );
+        }
+        console.info(`[Add Assistant] ${email} (${uid}) added by ${auth.uid}`);
         await userRef.set({
             email,
             name,
@@ -96,7 +115,7 @@ export async function POST(req: NextRequest) {
             emailSent = true;
         } catch (error: any) {
             console.error("[Add Assistant API] Email Error:", error);
-            emailError = error.message;
+            emailError = "Email could not be sent";
         }
 
         return NextResponse.json({ 
@@ -112,7 +131,7 @@ export async function POST(req: NextRequest) {
         console.error("[Add Assistant API] Error:", error);
         return NextResponse.json({ 
             success: false, 
-            error: error.message || "Failed to add assistant." 
+            error: "Failed to add assistant." 
         }, { status: 500 });
     }
-}
+});

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Users, Plus, Trash2, ShieldCheck, Mail, Search, AlertCircle } from "lucide-react";
 import { useAuth } from "@/src/providers/AuthProvider";
 import { subscribeToAssistants, updateUserRole, findUserByEmail } from "@/src/lib/firebase/ownerService";
+import { authFetch } from "@/src/lib/http/authFetch";
 
 export default function StitchAdminManagement() {
     const { isSuperAdmin } = useAuth();
@@ -41,7 +42,7 @@ export default function StitchAdminManagement() {
         setError(null);
         setSuccessMessage(null);
         try {
-            const res = await fetch("/api/admin/add-assistant", {
+            const res = await authFetch("/api/admin/add-assistant", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
