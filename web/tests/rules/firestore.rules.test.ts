@@ -13,7 +13,7 @@ import { actors, createRulesEnv, seedDocs, seedStaff } from "./helpers";
 let env: RulesTestEnvironment;
 
 beforeAll(async () => {
-    env = await createRulesEnv("demo-misericordia-rules-firestore");
+    env = await createRulesEnv("demo-misericordia-rules");
 });
 afterAll(async () => {
     await env.cleanup();

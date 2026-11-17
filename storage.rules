@@ -1,31 +1,64 @@
 rules_version = '2';
 
-// Craft rules based on data in your Firestore database
-// allow write: if firestore.get(
-//    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
 service firebase.storage {
   match /b/{bucket}/o {
-    
-    // Allow public uploads for booking inspiration photos (up to 5MB, images only)
-    match /bookingDrafts/{draftId}/{imageId} {
-      allow read: if true;
-      allow write: if request.resource.size < 5 * 1024 * 1024
-                   && request.resource.contentType.matches('image/.*');
+
+    // Staff = users/{uid}.role of owner, admin or assistant. Checked with a cross-service
+    // Firestore read; deploying these rules needs the Firebase Rules service agent to have
+    // Firestore access (the Firebase CLI offers to grant it on first deploy).
+    function isStaff() {
+      return request.auth != null
+        && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role in ['owner', 'admin', 'assistant'];
     }
 
-    // Allow public read for styles and hero folder images
+    // Staff uploads (dashboard images): up to 25MB.
+    function isStaffUpload() {
+      return isStaff() && request.resource.size < 25 * 1024 * 1024;
+    }
+
+    // Guest inspiration photos for a booking draft: new files only (no overwrite or delete), images under 5MB.
+    // The draft id is a random UUID created by the checkout, so the folder name acts as the capability.
+    match /bookingDrafts/{draftId}/{imageId} {
+      allow read: if true;
+      allow create: if draftId.matches('draft_.+')
+                    && request.resource.size < 5 * 1024 * 1024
+                    && request.resource.contentType.matches('image/.*');
+    }
+
+    // Public site images: anyone can read; only staff can write.
     match /styles/{imageId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow create, update: if isStaffUpload();
+      allow delete: if isStaff();
     }
     match /hero/{imageId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow create, update: if isStaffUpload();
+      allow delete: if isStaff();
+    }
+    match /blog/{imageId} {
+      allow read: if true;
+      allow create, update: if isStaffUpload();
+      allow delete: if isStaff();
+    }
+    match /products/{imageId} {
+      allow read: if true;
+      allow create, update: if isStaffUpload();
+      allow delete: if isStaff();
     }
 
-    // Default rule: only authenticated users can read/write other files
+    // Dashboard profile photos: staff only, and a user may only write files named after their own uid.
+    match /profiles/{imageId} {
+      allow read: if isStaff();
+      allow create, update: if isStaffUpload() && imageId.matches(request.auth.uid + '_.*');
+      allow delete: if isStaff() && imageId.matches(request.auth.uid + '_.*');
+    }
+
+    // Default rule: staff can read anything; there is no write access outside the folders above
+    // (rules from different matches are OR-ed, so a broader write rule here would also bypass
+    // the per-uid restriction on profiles/).
     match /{allPaths=**} {
-      allow read, write: if request.auth != null;
+      allow read: if isStaff();
     }
   }
 }
