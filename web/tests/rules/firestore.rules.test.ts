@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, beforeEach, describe, it } from "vitest";
 import { assertFails, assertSucceeds, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
-import { deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import { actors, createRulesEnv, seedDocs, seedStaff } from "./helpers";
 
 /**
@@ -50,12 +50,34 @@ describe("anonymous visitor", () => {
         await assertFails(setDoc(doc(db, "reviews/r1"), { rating: 5 }));
     });
 
-    it("CURRENT (insecure): can read AND overwrite any bookingDrafts document", async () => {
-        await seedDocs(env, { "bookingDrafts/d1": { name: "Someone", email: "someone@example.com" } });
+    it("bookingDrafts: can create and update a draft (guest checkout), as the checkout page does", async () => {
         const db = actors.anon(env).firestore();
-        await assertSucceeds(getDoc(doc(db, "bookingDrafts/d1")));
-        await assertSucceeds(setDoc(doc(db, "bookingDrafts/d1"), { name: "Overwritten" }));
-        await assertSucceeds(deleteDoc(doc(db, "bookingDrafts/d1")));
+        await assertSucceeds(setDoc(doc(db, "bookingDrafts/d1"), { clientName: "Jane", clientEmail: "jane@example.com" }));
+        await assertSucceeds(setDoc(doc(db, "bookingDrafts/d1"), { clientName: "Jane", provider: "stripe" }));
+    });
+
+    it("bookingDrafts: cannot read, list or delete drafts (PII is not world-readable)", async () => {
+        await seedDocs(env, { "bookingDrafts/d1": { clientName: "Someone", clientEmail: "someone@example.com" } });
+        const db = actors.anon(env).firestore();
+        await assertFails(getDoc(doc(db, "bookingDrafts/d1")));
+        await assertFails(getDocs(collection(db, "bookingDrafts")));
+        await assertFails(deleteDoc(doc(db, "bookingDrafts/d1")));
+    });
+
+    it("bookingDrafts: a draft containing a password is rejected on create and on update", async () => {
+        const db = actors.anon(env).firestore();
+        await assertFails(setDoc(doc(db, "bookingDrafts/d2"), { clientName: "Jane", password: "secret" }));
+        await seedDocs(env, { "bookingDrafts/d3": { clientName: "Jane" } });
+        await assertFails(setDoc(doc(db, "bookingDrafts/d3"), { clientName: "Jane", password: "secret" }));
+        await assertFails(updateDoc(doc(db, "bookingDrafts/d3"), { password: "secret" }));
+    });
+
+    it("bookingDrafts: signed-in non-staff users get the same limits as anonymous visitors", async () => {
+        await seedDocs(env, { "bookingDrafts/d1": { clientName: "Someone" } });
+        const db = actors.client(env).firestore();
+        await assertSucceeds(setDoc(doc(db, "bookingDrafts/d9"), { clientName: "Me" }));
+        await assertFails(getDoc(doc(db, "bookingDrafts/d1")));
+        await assertFails(getDocs(collection(db, "bookingDrafts")));
     });
 });
 
@@ -162,6 +184,14 @@ describe("staff (owner, admin, assistant)", () => {
         await assertSucceeds(getDoc(doc(db, "users/u1")));
         await assertSucceeds(updateDoc(doc(db, "users/u1"), { role: "assistant" }));
         await assertSucceeds(updateDoc(doc(db, "users/u1"), { role: null }));
+    });
+
+    it("staff can read, list and delete booking drafts (dashboard conversion stats)", async () => {
+        await seedDocs(env, { "bookingDrafts/d1": { clientName: "Someone" } });
+        const db = actors.ownerByEmail(env).firestore();
+        await assertSucceeds(getDoc(doc(db, "bookingDrafts/d1")));
+        await assertSucceeds(getDocs(collection(db, "bookingDrafts")));
+        await assertSucceeds(deleteDoc(doc(db, "bookingDrafts/d1")));
     });
 
     it("subcollections are denied by default, even for owners", async () => {

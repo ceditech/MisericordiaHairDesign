@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useToast } from "@/components/ui";
-import { loadDraft, clearDraft, isDraftValid, BookingDraft, saveConfirmedBooking } from "@/lib/bookingDraft";
+import { loadDraft, clearDraft, isDraftValid, BookingDraft, saveConfirmedBooking, sanitizeDraftForPersistence, newDraftId } from "@/lib/bookingDraft";
 import { BRAID_STYLES, BraidStyle } from "@/lib/styles";
 import { calculateBookingPrice, formatCents } from "@/lib/pricing";
 
@@ -143,7 +143,7 @@ function CheckoutPageInner() {
         if (d) {
             let id = sessionStorage.getItem("checkoutDraftId");
             if (!id) {
-                id = `draft_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+                id = newDraftId();
                 sessionStorage.setItem("checkoutDraftId", id);
             }
             setDraftId(id);
@@ -328,16 +328,8 @@ function CheckoutPageInner() {
                 photoUrl = draft.photoPreview;
             }
 
-            const safeDraft = { ...draft };
-            delete (safeDraft as any).photoPreview;
-            delete (safeDraft as any).inspirationPhoto;
-
-            // Clean undefined values
-            Object.keys(safeDraft).forEach(key => {
-                if ((safeDraft as any)[key] === undefined) {
-                    delete (safeDraft as any)[key];
-                }
-            });
+            // Never persist the account password (or other client-only fields) to Firestore.
+            const safeDraft = sanitizeDraftForPersistence(draft);
 
             await setDoc(doc(db, "bookingDrafts", id), {
                 ...safeDraft,

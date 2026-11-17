@@ -39,7 +39,13 @@ service cloud.firestore {
     match /braidAddons/{addonId} { allow read: if true; }
     match /codes/{codeId} { allow read: if true; }
     match /reviews/{reviewId} { allow read: if true; allow create: if isAuthenticated(); }
-    match /bookingDrafts/{draftId} { allow read, write: if true; }
+    // Guest checkout writes the draft before payment (the server reads it with the Admin SDK).
+    // Clients may create/update a draft but never read, list or delete one (it holds PII),
+    // and a draft may never contain a password. Staff read/delete via the owner catch-all.
+    match /bookingDrafts/{draftId} {
+      allow create: if !('password' in request.resource.data);
+      allow update: if !('password' in request.resource.data);
+    }
     
     // Nested Default (for safety on subcollections)
     match /{document=**} {
