@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, feature/**]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: web
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+
+      # BLOCKING gate: unit/route-handler tests.
+      - name: Unit tests
+        run: npm test
+
+      # BLOCKING gate: typecheck is green (0 errors).
+      - name: Typecheck
+        run: npm run typecheck
+
+      # BASELINE steps. Lint is red (265 errors / 148 warnings) and is fixed
+      # in Phase 6. Build passes locally but stays non-blocking until a first
+      # CI run confirms the placeholder env below is sufficient. Then remove
+      # `continue-on-error` (see AUDIT-NOV-16-2026.md, sections 2.1 and 2.8).
+      - name: Lint (baseline, non-blocking)
+        continue-on-error: true
+        run: npm run lint
+      - name: Build (baseline, non-blocking)
+        continue-on-error: true
+        run: npm run build
+        env:
+          # Placeholders so the build does not depend on real project values.
+          NEXT_PUBLIC_FIREBASE_API_KEY: ci-placeholder
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ci-placeholder.firebaseapp.com
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ci-placeholder
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ci-placeholder.appspot.com
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: "0"
+          NEXT_PUBLIC_FIREBASE_APP_ID: ci-placeholder
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_ci_placeholder
+
+  rules:
+    # Firestore/Storage rules tests against the emulator. Has no tests until
+    # Phase 3 (passes with none); it exists now so the job is wired and required.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci
+      - run: npm run test:rules

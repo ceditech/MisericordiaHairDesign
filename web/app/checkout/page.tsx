@@ -377,7 +377,7 @@ function CheckoutPageInner() {
                 washingAddon: !!draft.washingAddon,
                 takeDownAddon: !!draft.takeDownAddon,
                 duration: style.duration,
-                price: style.price,
+                price: String(style.price),
                 date: draft.date,
                 time: draft.time,
                 clientName: draft.name,

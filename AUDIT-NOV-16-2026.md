@@ -1,4 +1,4 @@
-# AUDIT-NOV-14-2026 — Misericordia Hair Design
+# AUDIT-NOV-16-2026 — Misericordia Hair Design
 
 **Scope:** whole repository (`web/` Next.js app, Firebase rules/config, `static-template/` archive, docs).
 **Method:** static review of source, configuration and rules. **The build, linter, type checker and tests were NOT run.** "Working" means "implemented and internally consistent", not "verified". Items marked **(verify)** must be confirmed before acting.
