@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Mail, AlertCircle, CheckCircle2, Lock, Trash2, Plus, Sparkles, RefreshCw } from "lucide-react";
 import { useAuth } from "@/src/providers/AuthProvider";
+import { authFetch } from "@/src/lib/http/authFetch";
 
 interface EmailSender {
     email: string;
@@ -27,7 +28,7 @@ export default function StitchEmailSettings() {
         try {
             setLoading(true);
             setError(null);
-            const res = await fetch("/api/admin/email/senders");
+            const res = await authFetch("/api/admin/email/senders");
             const data = await res.json();
             if (data.success) {
                 // Ensure primary is always sorted first, followed by others
@@ -47,9 +48,16 @@ export default function StitchEmailSettings() {
         }
     };
 
+    // The senders API is super-admin only; skip the call (and a 403 banner) for everyone else.
     useEffect(() => {
-        fetchSenders();
+        if (isSuperAdmin) {
+            fetchSenders();
+        } else {
+            setLoading(false);
+        }
+    }, [isSuperAdmin]);
 
+    useEffect(() => {
         // Check query parameters for success/error redirection from OAuth
         const params = new URLSearchParams(window.location.search);
         if (params.get("email_success") === "true") {
@@ -62,9 +70,20 @@ export default function StitchEmailSettings() {
         }
     }, []);
 
-    const handleConnect = (email: string) => {
-        // Redirect to the auth API route with target email parameter
-        window.location.href = `/api/admin/email/auth?email=${encodeURIComponent(email)}`;
+    const handleConnect = async (email: string) => {
+        // The auth route is protected, so ask it (with the ID token) for the Google URL, then go there.
+        try {
+            setError(null);
+            const res = await authFetch(`/api/admin/email/auth?email=${encodeURIComponent(email)}`);
+            const data = await res.json();
+            if (data.success && data.url) {
+                window.location.href = data.url;
+            } else {
+                setError(data.error || "Failed to start Google authorization.");
+            }
+        } catch {
+            setError("Failed to start Google authorization.");
+        }
     };
 
     const handleDelete = async (email: string) => {
@@ -76,7 +95,7 @@ export default function StitchEmailSettings() {
             setActionLoading(email);
             setError(null);
             setSuccess(null);
-            const res = await fetch(`/api/admin/email/senders?email=${encodeURIComponent(email)}`, {
+            const res = await authFetch(`/api/admin/email/senders?email=${encodeURIComponent(email)}`, {
                 method: "DELETE"
             });
             const data = await res.json();

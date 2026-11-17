@@ -1,23 +1,25 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { google } from "googleapis";
 import { SenderRepository } from "@/src/lib/email/SenderRepository";
+import { OAUTH_NONCE_COOKIE, verifyOAuthState } from "@/src/lib/auth/oauthState";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request: Request) {
+/** Errors whose message is written for the user and safe to show on the settings page. */
+class OAuthFlowError extends Error {}
+
+const GENERIC_FAILURE = "Email authorization failed. Please try again.";
+
+/**
+ * GET /api/admin/email/callback
+ * Google redirects the browser here, so no Authorization header is possible.
+ * Trust comes from the signed state issued by /api/admin/email/auth (bound to a
+ * super admin and a nonce cookie). Without a valid state nothing is saved.
+ */
+export async function GET(request: NextRequest) {
     const url = new URL(request.url);
     const code = url.searchParams.get("code");
     const error = url.searchParams.get("error");
-    const state = url.searchParams.get("state") || "sales@edxstore.com";
-    const targetEmail = state.toLowerCase().trim();
-
-    if (error) {
-        return NextResponse.redirect(new URL("/owner/settings?email_error=" + encodeURIComponent(error), request.url));
-    }
-
-    if (!code) {
-        return NextResponse.json({ error: "No authorization code provided." }, { status: 400 });
-    }
 
     const clientId = process.env.GOOGLE_CLIENT_ID;
     const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
@@ -25,6 +27,28 @@ export async function GET(request: Request) {
 
     if (!clientId || !clientSecret) {
         return NextResponse.json({ error: "Google OAuth is not configured." }, { status: 500 });
+    }
+
+    const redirectWith = (query: string) => {
+        const res = NextResponse.redirect(new URL(`/owner/settings?${query}`, request.url));
+        res.cookies.set(OAUTH_NONCE_COOKIE, "", { path: "/api/admin/email/callback", maxAge: 0 });
+        return res;
+    };
+
+    const verified = verifyOAuthState(url.searchParams.get("state"), clientSecret);
+    const nonceCookie = request.cookies.get(OAUTH_NONCE_COOKIE)?.value;
+    if (!verified || !nonceCookie || nonceCookie !== verified.nonce) {
+        console.warn("[Email OAuth] Rejected callback with missing/invalid state or nonce");
+        return redirectWith("email_error=" + encodeURIComponent("Invalid or expired authorization request. Please start again."));
+    }
+    const targetEmail = verified.email.toLowerCase().trim();
+
+    if (error) {
+        return redirectWith("email_error=" + encodeURIComponent("Google authorization was not completed."));
+    }
+
+    if (!code) {
+        return NextResponse.json({ error: "No authorization code provided." }, { status: 400 });
     }
 
     const oauth2Client = new google.auth.OAuth2(
@@ -46,12 +70,12 @@ export async function GET(request: Request) {
         const email = userInfo.data.email;
 
         if (!email) {
-            throw new Error("Could not retrieve email address from Google.");
+            throw new OAuthFlowError("Could not retrieve email address from Google.");
         }
 
         const authenticatedEmail = email.toLowerCase().trim();
         if (authenticatedEmail !== targetEmail) {
-            throw new Error(`Account mismatch. Expected: ${targetEmail}, but authorized: ${authenticatedEmail}. Please select the matching account.`);
+            throw new OAuthFlowError(`Account mismatch. Expected: ${targetEmail}, but authorized: ${authenticatedEmail}. Please select the matching account.`);
         }
 
         if (!tokens.refresh_token) {
@@ -63,7 +87,7 @@ export async function GET(request: Request) {
             if (existing && existing.refreshToken) {
                 tokens.refresh_token = existing.refreshToken;
             } else {
-                throw new Error("No refresh token returned by Google. Please disconnect and reconnect to prompt for full consent.");
+                throw new OAuthFlowError("No refresh token returned by Google. Please disconnect and reconnect to prompt for full consent.");
             }
         }
 
@@ -84,9 +108,10 @@ export async function GET(request: Request) {
             });
         }
 
-        return NextResponse.redirect(new URL("/owner/settings?email_success=true", request.url));
-    } catch (err: any) {
+        return redirectWith("email_success=true");
+    } catch (err) {
         console.error("Error exchanging OAuth code:", err);
-        return NextResponse.redirect(new URL("/owner/settings?email_error=" + encodeURIComponent(err.message), request.url));
+        const message = err instanceof OAuthFlowError ? err.message : GENERIC_FAILURE;
+        return redirectWith("email_error=" + encodeURIComponent(message));
     }
 }
