@@ -11,10 +11,14 @@ import { buildClientConfirmationEmail, buildProviderConfirmationEmail } from "@/
 import { Modal, useToast, Button, Badge } from "@/components/ui";
 import { getDb } from "@/src/lib/firebase/client";
 import { getDoc, doc } from "firebase/firestore";
+import { capturePayPalBooking } from "@/src/lib/bookings/capturePayPalBooking";
 
 function SuccessPageInner() {
     const searchParams = useSearchParams();
     const draftId = searchParams.get("draftId");
+    const provider = searchParams.get("provider");
+    const paypalToken = searchParams.get("token");
+    const [captureError, setCaptureError] = useState<string | null>(null);
     const { showToast } = useToast();
     const [booking, setBooking] = useState<ConfirmedBooking | null>(null);
     const [loading, setLoading] = useState(true);
@@ -33,6 +37,16 @@ function SuccessPageInner() {
             if (localData && isMounted) {
                 setBooking(localData);
                 clearDraft();
+            }
+
+            // 1b. PayPal: the payment is captured (and the booking created) only here
+            if (draftId && provider === "paypal" && paypalToken) {
+                const captured = await capturePayPalBooking({ draftId, paypalToken });
+                if (!captured.ok && isMounted) {
+                    setCaptureError(captured.message);
+                    setLoading(false);
+                    return;
+                }
             }
 
             // 2. Then try secure API if we have a draftId
@@ -76,7 +90,19 @@ function SuccessPageInner() {
 
         fetchBooking();
         return () => { isMounted = false; };
-    }, [draftId, showToast]);
+    }, [draftId, provider, paypalToken, showToast]);
+
+    if (captureError && !booking) {
+        return (
+            <main className="min-h-[80vh] flex flex-col items-center justify-center px-6 py-20">
+                <h1 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">Payment not completed</h1>
+                <p className="text-slate-500 text-center max-w-sm mb-8">{captureError}</p>
+                <Link href="/checkout">
+                    <Button>Back to Checkout</Button>
+                </Link>
+            </main>
+        );
+    }
 
     if (loading && !booking) {
         return (

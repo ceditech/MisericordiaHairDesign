@@ -13,7 +13,7 @@ const state = vi.hoisted(() => ({
     updates: [] as Array<{ id: string; data: Record<string, unknown> }>,
     stripeSessions: [] as Array<StripeArgs>,
     coupons: [] as Array<Record<string, unknown>>,
-    paypalOrders: [] as Array<{ amount: number; currency: string; description: string }>,
+    paypalOrders: [] as Array<{ amount: number; currency: string; description: string; urls?: { returnUrl: string; cancelUrl: string } }>,
 }));
 
 vi.mock("@/src/lib/firebase/admin", () => ({
@@ -47,8 +47,8 @@ vi.mock("@/src/lib/payments/stripeServer", () => ({
 }));
 vi.mock("@/src/lib/payments/paypalServer", () => ({
     paypalServer: {
-        createOrder: async (amount: number, currency: string, description: string) => {
-            state.paypalOrders.push({ amount, currency, description });
+        createOrder: async (amount: number, currency: string, description: string, urls?: { returnUrl: string; cancelUrl: string }) => {
+            state.paypalOrders.push({ amount, currency, description, urls });
             return { id: "PAYPAL-1", links: [{ rel: "approve", href: "https://paypal.example/approve" }] };
         },
     },
@@ -81,7 +81,7 @@ const paypalCall = (body: Record<string, unknown>) =>
     paypalPOST(
         new NextRequest("http://localhost/api/payments/paypal/create-order", {
             method: "POST",
-            body: JSON.stringify({ sessionType: "shop", returnUrl: "https://x/r", cancelUrl: "https://x/c", ...body }),
+            body: JSON.stringify({ sessionType: "shop", returnUrl: "http://localhost/r", cancelUrl: "http://localhost/c", ...body }),
         }),
     );
 
@@ -162,6 +162,13 @@ describe("PayPal create-order: shop orders", () => {
 
     it("also accepts the legacy orderId field", async () => {
         expect((await paypalCall({ orderId: "shop_1" })).status).toBe(200);
+    });
+
+    it("rejects return/cancel urls that point at another site (400) and creates no PayPal order", async () => {
+        const before = state.paypalOrders.length;
+        const res = await paypalCall({ shopOrderId: "shop_1", returnUrl: "https://evil.test/r" });
+        expect(res.status).toBe(400);
+        expect(state.paypalOrders.length).toBe(before);
     });
 
     it("rejects a missing order, a missing id, a paid order and an order without totals; no PayPal order is created", async () => {

@@ -19,7 +19,6 @@ import { getDb } from "@/src/lib/firebase";
 import { getStorageInstance } from "@/src/lib/firebase/client";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
-import PayPalCheckout from "@/components/PayPalCheckout";
 import StripeCheckout from "@/components/StripeCheckout";
 
 

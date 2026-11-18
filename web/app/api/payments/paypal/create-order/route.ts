@@ -4,6 +4,7 @@ import { adminDb } from "@/src/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
 import { calculateBookingPrice } from "@/lib/pricing";
 import { BRAID_STYLES } from "@/lib/styles";
+import { allowedOriginsFor, findApprovalLink, isAllowedReturnUrl } from "@/src/lib/payments/paypalOrderBody";
 
 export const runtime = "nodejs";
 
@@ -48,6 +49,13 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    // PayPal sends the buyer back to these URLs: they must belong to this site
+    const allowed = allowedOriginsFor(req);
+    if (!isAllowedReturnUrl(returnUrl, allowed) || !isAllowedReturnUrl(cancelUrl, allowed)) {
+      return NextResponse.json({ error: "Invalid returnUrl or cancelUrl" }, { status: 400 });
+    }
+    const urls = { returnUrl, cancelUrl };
 
     // ── BOOKING FLOW ──────────────────────────────────────────────────────────
     if (sessionType === "booking") {
@@ -115,10 +123,9 @@ export async function POST(req: NextRequest) {
       const amountUSD = (amountCents / 100).toFixed(2);
       const description = `Misericordia Hair Designs — ${draft.styleName ?? "Braiding Service"} (${choice === "deposit" ? "Deposit" : "Full Payment"})`;
 
-      const order = await paypalServer.createOrder(amountCents, "USD", description);
+      const order = await paypalServer.createOrder(amountCents, "USD", description, urls);
 
-      const approvalLink = (order.links as Array<{ rel: string; href: string }>)
-        ?.find((l) => l.rel === "approve")?.href;
+      const approvalLink = findApprovalLink(order.links);
 
       if (!approvalLink) {
         throw new Error("PayPal did not return an approval link");
@@ -162,10 +169,9 @@ export async function POST(req: NextRequest) {
       }
 
       const amountUSD = (totalCents / 100).toFixed(2);
-      const order = await paypalServer.createOrder(totalCents, "USD", "Misericordia Hair Designs Shop Order");
+      const order = await paypalServer.createOrder(totalCents, "USD", "Misericordia Hair Designs Shop Order", urls);
 
-      const approvalLink = (order.links as Array<{ rel: string; href: string }>)
-        ?.find((l) => l.rel === "approve")?.href;
+      const approvalLink = findApprovalLink(order.links);
 
       if (!approvalLink) {
         throw new Error("PayPal did not return an approval link");
