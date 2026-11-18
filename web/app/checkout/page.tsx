@@ -99,6 +99,7 @@ function CheckoutPageInner() {
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [promoCode, setPromoCode] = useState("");
     const [appliedCode, setAppliedCode] = useState<string | null>(null);
+    const [appliedDiscountPercent, setAppliedDiscountPercent] = useState(0);
     const hasRedirected = useRef(false);
     // draftId is the server-side identifier for this booking session (stable per draft load)
     const [draftId, setDraftId] = useState<string | null>(null);
@@ -194,9 +195,8 @@ function CheckoutPageInner() {
         sizePresets,
         lengthPresets,
         addons,
-        promoCode: appliedCode,
-        discountPercent: (window as any)._appliedCodeData?.discountPercent || 10
-    } as any);
+        promo: appliedCode ? { code: appliedCode, discountPercent: appliedDiscountPercent } : null,
+    });
 
     const amountDueNow = paymentChoice === "deposit" ? pricing.depositCents : pricing.totalCents;
 
@@ -212,20 +212,14 @@ function CheckoutPageInner() {
             const codeRef = doc(getDb(), "codes", code);
             const codeSnap = await getDoc(codeRef);
 
-            if (codeSnap.exists() && codeSnap.data().active) {
-                const data = codeSnap.data();
+            const data = codeSnap.exists() ? codeSnap.data() : null;
+            if (data && data.active === true) {
+                const pct = typeof data.discountPercent === "number" && data.discountPercent > 0 && data.discountPercent <= 100 ? data.discountPercent : 10;
                 setAppliedCode(code);
-                // Store metadata about the code if needed for pricing
-                (window as any)._appliedCodeData = data;
-                showToast?.(`${code} applied! ${data.discountPercent}% discount added.`, "success");
+                setAppliedDiscountPercent(pct);
+                showToast?.(`${code} applied! ${pct}% discount added.`, "success");
             } else {
-                // Fallback for legacy hardcoded codes if any, or just fail
-                if (code === "AFFILIATE10" || code.startsWith("DB-AFF-")) {
-                     setAppliedCode(code);
-                     showToast?.(`${code} applied! 10% discount added.`, "success");
-                } else {
-                    setErrorMsg("Invalid or expired promotional code.");
-                }
+                setErrorMsg("Invalid or expired promotional code.");
             }
         } catch (err) {
             console.error("Error validating promo code:", err);
@@ -625,7 +619,7 @@ function CheckoutPageInner() {
                                     Code Applied
                                 </div>
                                 <button
-                                    onClick={() => { setAppliedCode(null); setPromoCode(""); }}
+                                    onClick={() => { setAppliedCode(null); setAppliedDiscountPercent(0); setPromoCode(""); }}
                                     className="text-text-muted hover:text-text-primary text-[10px] font-black uppercase tracking-widest underline underline-offset-4"
                                 >
                                     Remove
