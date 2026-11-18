@@ -434,8 +434,7 @@ function BookingPageInner() {
     const sizePreset = sizePresets.find(s => s.id === bookingData.sizeId) || sizePresets[0];
     const lengthPreset = lengthPresets.find(l => l.id === bookingData.lengthId) || lengthPresets[0];
 
-    // Total Service = Base + Length + Size + Addons + 8.25% Tax
-    const taxCents = pricing.taxCents;
+    // Total Service = Base + Length + Size + Addons (services are not taxed)
     const totalCents = pricing.totalCents;
 
     // Deposit = Fixed $50 + Addons (Washing $25, Take Down $45)
@@ -1104,10 +1103,6 @@ function BookingPageInner() {
                                         <span>Take Down (+${addons.find(a => a.id === 'take-down')?.price || 45})</span>
                                     </div>
                                 )}
-                                <div className="flex justify-between items-center text-sm text-slate-500 dark:text-slate-400">
-                                    <span>Tax (8.25%):</span>
-                                    <span>{pricing.baseCents > 0 ? formatCents(taxCents) : "TBD"}</span>
-                                </div>
                                 <div className="flex justify-between items-center pt-2 border-t border-slate-200 dark:border-slate-800">
                                     <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Estimated Total</p>
                                     <p className="text-2xl font-bold text-[#9F2D5C]">{displayTotal}</p>
