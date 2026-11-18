@@ -84,6 +84,26 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // ── BOOKING: verify the draft BEFORE any money is captured ────────────────
+    let bookingDraft: FirebaseFirestore.DocumentData | null = null;
+    if (sessionType === "booking") {
+      if (!draftId) {
+        return NextResponse.json({ error: "Missing draftId" }, { status: 400 });
+      }
+      const draftSnap = await adminDb.collection("bookingDrafts").doc(draftId).get();
+      if (!draftSnap.exists) {
+        return NextResponse.json({ error: "Booking draft not found" }, { status: 404 });
+      }
+      bookingDraft = draftSnap.data()!;
+      if (bookingDraft.status === "confirmed" || bookingDraft.payment?.status === "paid") {
+        return NextResponse.json({ status: "already_processed", message: "Booking already confirmed" });
+      }
+      // The PayPal order must be the one created for this draft
+      if (bookingDraft.payment?.provider !== "paypal" || bookingDraft.payment?.sessionId !== paypalOrderId) {
+        return NextResponse.json({ error: "PayPal order does not match this booking" }, { status: 409 });
+      }
+    }
+
     // ── CAPTURE ───────────────────────────────────────────────────────────────
     const captureResult = await paypalServer.captureOrder(paypalOrderId);
 
@@ -95,32 +115,40 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // ── RECORD EVENT (idempotency) ────────────────────────────────────────────
-    await eventRef.set({
+    const eventData = {
       provider: "paypal",
       paypalOrderId,
       sessionType,
       draftId: draftId ?? null,
       orderId: orderId ?? null,
       processedAt: FieldValue.serverTimestamp(),
-    });
+    };
 
     // ── BOOKING FINALIZATION ──────────────────────────────────────────────────
-    if (sessionType === "booking") {
-      if (!draftId) {
-        return NextResponse.json({ error: "Missing draftId" }, { status: 400 });
-      }
-
-      const draftSnap = await adminDb.collection("bookingDrafts").doc(draftId).get();
-      if (!draftSnap.exists) {
-        return NextResponse.json({ error: "Booking draft not found" }, { status: 404 });
-      }
-
-      const draft = draftSnap.data()!;
+    if (sessionType === "booking" && draftId && bookingDraft) {
+      const draft = bookingDraft;
       const bookingId = `booking_${draftId}`;
 
-      // Create the canonical booking record (server-side only)
-      await adminDb.collection("bookings").doc(bookingId).set({
+      // The captured amount must equal the amount the server priced for this draft
+      const capturedValue = (captureResult as CaptureResult).purchase_units?.[0]?.payments?.captures?.[0]?.amount?.value;
+      const capturedCents = capturedValue !== undefined ? Math.round(parseFloat(capturedValue) * 100) : NaN;
+      const expectedCents: number | undefined = draft.payment?.amountCents;
+      if (!Number.isFinite(capturedCents) || capturedCents !== expectedCents) {
+        console.error("[PayPal] Booking capture amount mismatch", { draftId, capturedCents, expectedCents });
+        await eventRef.set(eventData);
+        await adminDb.collection("bookingDrafts").doc(draftId).update({
+          "payment.status": "amount_mismatch",
+          "payment.capturedCents": Number.isFinite(capturedCents) ? capturedCents : null,
+          status: "payment_review",
+          updatedAt: FieldValue.serverTimestamp(),
+        });
+        return NextResponse.json({ error: "Payment amount did not match the booking. We will review it." }, { status: 409 });
+      }
+
+      // Booking record, draft update and idempotency event are written together
+      const batch = adminDb.batch();
+      batch.set(eventRef, eventData);
+      batch.set(adminDb.collection("bookings").doc(bookingId), {
         bookingId,
         draftId,
         userId: draft.userId ?? null,
@@ -149,11 +177,13 @@ export async function POST(req: NextRequest) {
       });
 
       // Mark draft as confirmed
-      await adminDb.collection("bookingDrafts").doc(draftId).update({
+      batch.update(adminDb.collection("bookingDrafts").doc(draftId), {
         "payment.status": "paid",
+        "payment.capturedCents": capturedCents,
         status: "confirmed",
         updatedAt: FieldValue.serverTimestamp(),
       });
+      await batch.commit();
 
       // Release slot lock if one exists
       const lockId = draft.lockId;
@@ -211,6 +241,7 @@ export async function POST(req: NextRequest) {
 
     // ── SHOP FINALIZATION ─────────────────────────────────────────────────────
     if (sessionType === "shop" && orderId && shopOrder) {
+      await eventRef.set(eventData);
       const orderRef = adminDb.collection("shopOrders").doc(orderId);
 
       // The captured amount must equal the order total computed by the server

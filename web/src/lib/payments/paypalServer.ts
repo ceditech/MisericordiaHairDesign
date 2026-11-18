@@ -7,6 +7,8 @@
  * and managing access token lifecycle.
  */
 
+import { buildCreateOrderBody } from "./paypalOrderBody";
+
 interface PayPalToken {
     access_token: string;
     expires_at: number;
@@ -118,19 +120,15 @@ class PayPalService {
     /**
      * Create a new PayPal order
      */
-    public async createOrder(amount: number, currency: string = "USD", description: string = "Booking Deposit") {
+    public async createOrder(
+        amount: number,
+        currency: string = "USD",
+        description: string = "Booking Deposit",
+        urls?: { returnUrl: string; cancelUrl: string },
+    ) {
         return this.request("/v2/checkout/orders", {
             method: "POST",
-            body: JSON.stringify({
-                intent: "CAPTURE",
-                purchase_units: [{
-                    amount: {
-                        currency_code: currency,
-                        value: (amount / 100).toFixed(2),
-                    },
-                    description,
-                }],
-            }),
+            body: JSON.stringify(buildCreateOrderBody(amount, currency, description, urls)),
         });
     }
 
