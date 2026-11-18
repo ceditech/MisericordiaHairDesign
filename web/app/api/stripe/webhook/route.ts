@@ -6,6 +6,7 @@ import { FieldValue } from "firebase-admin/firestore";
 import { generateHtmlReceipt } from "@/lib/payments/receipt-generator";
 import { EmailManager } from "@/src/lib/email/EmailManager";
 import { addInventoryDecrements } from "@/src/lib/shop/finalizeShopOrder";
+import { emailStatusFields, sendShopOrderEmails } from "@/src/lib/shop/shopOrderEmails";
 import { generateElegantReceiptEmail } from "@/src/lib/email/templates/receiptTemplate";
 import Stripe from "stripe";
 
@@ -321,4 +322,10 @@ async function handleShopPayment(session: Stripe.Checkout.Session) {
   await batch.commit();
 
   console.log("[Stripe Webhook] ✅ Shop order paid and inventory updated:", orderId);
+
+  // Receipt + owner notification (best effort: never undoes or blocks the payment)
+  const emailResult = await sendShopOrderEmails(orderData, orderId);
+  await orderRef
+    .update(emailStatusFields(emailResult, FieldValue.serverTimestamp()))
+    .catch((e) => console.error("[Stripe Webhook] Could not record email status:", orderId, e));
 }

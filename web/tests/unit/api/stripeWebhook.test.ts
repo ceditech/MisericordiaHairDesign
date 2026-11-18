@@ -11,6 +11,7 @@ const state = vi.hoisted(() => ({
     writes: [] as Array<{ op: string; col: string; id: string; data: Record<string, unknown> }>,
     event: {} as Record<string, unknown>,
     failBookingSet: false,
+    failEmails: false,
     emails: [] as string[],
 }));
 
@@ -51,7 +52,7 @@ vi.mock("@/src/lib/firebase/admin", () => {
 vi.mock("firebase-admin/firestore", () => ({
     FieldValue: { serverTimestamp: () => "TS", increment: (n: number) => ({ increment: n }) },
 }));
-vi.mock("@/src/lib/email/EmailManager", () => ({ EmailManager: { sendEmail: async (m: { to: string }) => void state.emails.push(m.to) } }));
+vi.mock("@/src/lib/email/EmailManager", () => ({ EmailManager: { sendEmail: async (m: { to: string }) => { if (state.failEmails) throw new Error("smtp down"); state.emails.push(m.to); } } }));
 vi.mock("@/lib/payments/receipt-generator", () => ({ generateHtmlReceipt: () => "<p/>" }));
 vi.mock("@/src/lib/email/templates/receiptTemplate", () => ({ generateElegantReceiptEmail: () => "<p/>" }));
 vi.mock("@/src/lib/affiliate/affiliateTracker", () => ({ processAffiliateConversion: async () => {} }));
@@ -101,6 +102,7 @@ beforeEach(() => {
     state.writes = [];
     state.emails = [];
     state.failBookingSet = false;
+    state.failEmails = false;
     vi.spyOn(console, "log").mockImplementation(() => {});
     vi.spyOn(console, "warn").mockImplementation(() => {});
     vi.spyOn(console, "error").mockImplementation(() => {});
@@ -163,6 +165,27 @@ describe("Stripe webhook: shop orders", () => {
         expect(res.status).toBe(200);
         expect(wrote("shopOrders")[0].data).toMatchObject({ status: "paid", "payment.status": "paid", "payment.stripeSessionId": "cs_1" });
         expect(wrote("products").map((w) => [w.id, w.data.inventory])).toEqual([["edge", { increment: -2 }]]);
+    });
+
+    it("emails the customer and the owner once the order is paid, and records the email status", async () => {
+        state.orders.shop_1 = order({ customerName: "Ann Lee", customerEmail: "ann@example.com", fulfillmentType: "pickup", totals: { totalCents: 2500, subtotalCents: 2000, taxCents: 500, shippingCents: 0, discountCents: 0 } });
+        await sendEvent(shopSession());
+        expect(state.emails).toEqual(["ann@example.com", "sales@edxstore.com"]);
+        expect(wrote("shopOrders").some((w) => w.data["emails.customerSent"] === true && w.data["emails.ownerSent"] === true)).toBe(true);
+    });
+
+    it("still marks the order paid and returns 200 when the emails fail", async () => {
+        state.failEmails = true;
+        const res = await sendEvent(shopSession());
+        expect(res.status).toBe(200);
+        expect(wrote("shopOrders")[0].data).toMatchObject({ status: "paid" });
+    });
+
+    it("sends no emails for an order held for review or already paid", async () => {
+        await sendEvent(shopSession({ amount_total: 1 }));
+        state.orders.shop_1 = order({ status: "paid" });
+        await sendEvent(shopSession(), "evt_2");
+        expect(state.emails).toHaveLength(0);
     });
 
     it("holds the order for review and leaves inventory alone when the amount differs", async () => {

@@ -5,6 +5,8 @@ import { FieldValue } from "firebase-admin/firestore";
 import { generateHtmlReceipt } from "@/lib/payments/receipt-generator";
 import { EmailManager } from "@/src/lib/email/EmailManager";
 import { addInventoryDecrements } from "@/src/lib/shop/finalizeShopOrder";
+import type { ShopReceiptOrder } from "@/src/lib/email/templates/shopReceiptTemplate";
+import { emailStatusFields, sendShopOrderEmails } from "@/src/lib/shop/shopOrderEmails";
 import { generateElegantReceiptEmail } from "@/src/lib/email/templates/receiptTemplate";
 
 export const runtime = "nodejs";
@@ -273,6 +275,12 @@ export async function POST(req: NextRequest) {
       await batch.commit();
 
       console.log("[PayPal] Shop order paid:", orderId);
+
+      // Receipt + owner notification (best effort: never undoes or blocks the payment)
+      const emailResult = await sendShopOrderEmails(shopOrder as unknown as ShopReceiptOrder, orderId);
+      await orderRef
+        .update(emailStatusFields(emailResult, FieldValue.serverTimestamp()))
+        .catch((e) => console.error("[PayPal] Could not record email status:", orderId, e));
       return NextResponse.json({ status: "paid", orderId });
     }
 
