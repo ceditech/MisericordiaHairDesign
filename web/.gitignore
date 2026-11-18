@@ -49,3 +49,10 @@ next-env.d.ts
 
 # firebase emulator logs
 *-debug.log
+
+# local logs and tool output
+*.log
+build_err.txt
+seed_error.txt
+ts_errors.txt
+tsc*.txt
