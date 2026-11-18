@@ -90,8 +90,17 @@ describe("signed-in user without a staff role", () => {
         await assertFails(setDoc(doc(db, "products/p1"), { a: 2 }));
     });
 
-    it("can create a review", async () => {
-        await assertSucceeds(setDoc(doc(actors.client(env).firestore(), "reviews/r1"), { rating: 5 }));
+    it("cannot create, edit or delete reviews (reviews are managed by staff)", async () => {
+        await seedDocs(env, { "reviews/r0": { rating: 4, author: "Someone" } });
+        const db = actors.client(env).firestore();
+        await assertFails(setDoc(doc(db, "reviews/r1"), { rating: 5 }));
+        await assertFails(setDoc(doc(db, "reviews/r0"), { rating: 1 }));
+        await assertFails(deleteDoc(doc(db, "reviews/r0")));
+    });
+
+    it("can still read reviews", async () => {
+        await seedDocs(env, { "reviews/r0": { rating: 4 } });
+        await assertSucceeds(getDoc(doc(actors.client(env).firestore(), "reviews/r0")));
     });
 
     it("can create their own profile as a client, with or without an explicit role", async () => {
@@ -184,6 +193,13 @@ describe("staff (owner, admin, assistant)", () => {
         await assertSucceeds(getDoc(doc(db, "users/u1")));
         await assertSucceeds(updateDoc(doc(db, "users/u1"), { role: "assistant" }));
         await assertSucceeds(updateDoc(doc(db, "users/u1"), { role: null }));
+    });
+
+    it("staff can create, edit and delete reviews (dashboard review manager)", async () => {
+        const db = actors.ownerByEmail(env).firestore();
+        await assertSucceeds(setDoc(doc(db, "reviews/r1"), { rating: 5, author: "Jane" }));
+        await assertSucceeds(updateDoc(doc(db, "reviews/r1"), { rating: 4 }));
+        await assertSucceeds(deleteDoc(doc(db, "reviews/r1")));
     });
 
     it("staff can read, list and delete booking drafts (dashboard conversion stats)", async () => {

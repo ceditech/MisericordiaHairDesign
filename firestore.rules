@@ -38,7 +38,9 @@ service cloud.firestore {
     match /braidPresets/{presetId} { allow read: if true; }
     match /braidAddons/{addonId} { allow read: if true; }
     match /codes/{codeId} { allow read: if true; }
-    match /reviews/{reviewId} { allow read: if true; allow create: if isAuthenticated(); }
+    // Reviews are shown publicly and managed by staff only (no client review form exists yet).
+    // If customers get a review form later, add a create rule with schema and ownership checks.
+    match /reviews/{reviewId} { allow read: if true; }
     // Guest checkout writes the draft before payment (the server reads it with the Admin SDK).
     // Clients may create/update a draft but never read, list or delete one (it holds PII),
     // and a draft may never contain a password. Staff read/delete via the owner catch-all.
