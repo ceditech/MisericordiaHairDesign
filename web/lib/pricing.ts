@@ -57,7 +57,11 @@ export interface PricingInput {
     sizePresets?: SizePreset[];
     lengthPresets?: LengthPreset[];
     addons?: any[];
-    promoCode?: string | null;
+    /**
+     * A promo already validated against the `codes` collection (active, with its percent).
+     * Never derived from the code text: callers must look the code up first.
+     */
+    promo?: { code: string; discountPercent: number } | null;
 }
 
 export function calculateBookingPrice(input: PricingInput): PricingResult {
@@ -87,16 +91,9 @@ export function calculateBookingPrice(input: PricingInput): PricingResult {
     const subtotalCents = baseCents + sizeAdjustmentCents + lengthAdjustmentCents + addonCents;
     
     let discountCents = 0;
-    if (input.promoCode) {
-        const code = input.promoCode.trim().toUpperCase();
-        // Check if we have dynamic data from the component (via a global or passed in)
-        // Since this is a pure function, we prefer it to be passed in. 
-        // I'll add discountPercent to PricingInput.
-        const discountPercent = (input as any).discountPercent || 10; 
-        
-        if (code === "AFFILIATE10" || code.startsWith("DB-AFF-")) {
-            discountCents = Math.round(subtotalCents * (discountPercent / 100));
-        }
+    if (input.promo && input.promo.discountPercent > 0) {
+        const pct = Math.min(input.promo.discountPercent, 100);
+        discountCents = Math.round(subtotalCents * (pct / 100));
     }
 
     const discountedSubtotal = subtotalCents - discountCents;

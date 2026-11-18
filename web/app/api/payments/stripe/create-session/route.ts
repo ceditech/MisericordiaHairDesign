@@ -4,6 +4,7 @@ import { adminDb } from "@/src/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
 import { calculateBookingPrice } from "@/lib/pricing";
 import { BRAID_STYLES } from "@/lib/styles";
+import { loadActivePromo, PromoError } from "@/src/lib/promo/loadActivePromo";
 
 export const runtime = "nodejs";
 
@@ -79,6 +80,27 @@ export async function POST(req: NextRequest) {
       const lengthPresets = presets.filter((p: any) => p.type === "length");
       const addons = addonsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
 
+      // The discount comes only from an active code in the `codes` collection
+
+      let promo: Awaited<ReturnType<typeof loadActivePromo>> = null;
+
+      try {
+
+        promo = await loadActivePromo(draft.promoCode || draft.appliedCode || null);
+
+      } catch (e) {
+
+        if (e instanceof PromoError) {
+
+          return NextResponse.json({ error: "The promotional code on this booking is no longer valid. Please remove it and try again." }, { status: 400 });
+
+        }
+
+        throw e;
+
+      }
+
+
       // RE-CALCULATE PRICING ON SERVER (Security: Do not trust draft values)
       // Try to find in live styles first, fallback to static config
       const liveStyle = styles.find((s: any) => s.id === draft.styleId);
@@ -96,7 +118,7 @@ export async function POST(req: NextRequest) {
         sizePresets,
         lengthPresets,
         addons,
-        promoCode: draft.promoCode || draft.appliedCode || null
+        promo
       });
 
       let amountCents: number;

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { adminDb } from "@/src/lib/firebase/admin";
 import { requireUser } from "@/src/lib/auth/requireUser";
+import { loadActivePromo, PromoError } from "@/src/lib/promo/loadActivePromo";
 import { clientIp, createRateLimiter } from "@/src/lib/http/rateLimit";
 import {
     MAX_ORDER_LINES,
@@ -56,13 +57,12 @@ async function loadCatalog(productIds: string[]): Promise<Record<string, Catalog
 
 /** A promo must exist in the `codes` collection (affiliate codes are stored there) and be active. */
 async function loadPromo(rawCode: unknown): Promise<PromoInput | null> {
-    if (rawCode === undefined || rawCode === null || rawCode === "") return null;
-    if (typeof rawCode !== "string" || rawCode.length > 40) throw new ShopOrderError("Invalid promotional code.");
-    const code = rawCode.trim().toUpperCase();
-    const snap = await adminDb.collection("codes").doc(code).get();
-    const data = snap.exists ? snap.data() : null;
-    if (!data || data.active !== true) throw new ShopOrderError("Invalid promotional code.");
-    return { code, discountPercent: typeof data.discountPercent === "number" ? data.discountPercent : 10 };
+    try {
+        return await loadActivePromo(rawCode);
+    } catch (error) {
+        if (error instanceof PromoError) throw new ShopOrderError(error.message);
+        throw error;
+    }
 }
 
 /**

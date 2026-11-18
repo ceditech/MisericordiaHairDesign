@@ -35,11 +35,26 @@ describe("calculateBookingPrice: no tax on services", () => {
         expect(r.totalCents).toBe(32000);
     });
 
-    it("applies a promo discount to the subtotal and the total is subtotal minus discount (no tax)", () => {
-        const r = calculateBookingPrice({ ...base, promoCode: "DB-AFF-ABC123" });
+    it("applies a validated promo at its own percent; total is subtotal minus discount (no tax)", () => {
+        const r = calculateBookingPrice({ ...base, promo: { code: "DB-AFF-ABC123", discountPercent: 10 } });
         expect(r.discountCents).toBe(2000);
         expect(r.taxCents).toBe(0);
         expect(r.totalCents).toBe(18000);
+        expect(calculateBookingPrice({ ...base, promo: { code: "DB-AFF-ABC123", discountPercent: 15 } }).discountCents).toBe(3000);
+    });
+
+    it("gives no discount without a validated promo (code text alone never earns one)", () => {
+        expect(calculateBookingPrice(base).discountCents).toBe(0);
+        expect(calculateBookingPrice({ ...base, promo: null }).discountCents).toBe(0);
+        // a legacy caller passing only a code string is ignored
+        expect(calculateBookingPrice({ ...base, promoCode: "DB-AFF-FAKE00" } as never).discountCents).toBe(0);
+        expect(calculateBookingPrice({ ...base, promoCode: "AFFILIATE10" } as never).discountCents).toBe(0);
+    });
+
+    it("never discounts more than 100% or by a non-positive percent", () => {
+        expect(calculateBookingPrice({ ...base, promo: { code: "X", discountPercent: 150 } }).totalCents).toBe(0);
+        expect(calculateBookingPrice({ ...base, promo: { code: "X", discountPercent: 0 } }).discountCents).toBe(0);
+        expect(calculateBookingPrice({ ...base, promo: { code: "X", discountPercent: -5 } }).discountCents).toBe(0);
     });
 
     it("accepts a numeric style price", () => {
