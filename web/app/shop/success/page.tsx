@@ -1,79 +1,70 @@
 ﻿"use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button, Card, Badge } from "@/components/ui";
 import { CONTACT_EMAIL } from "@/src/content/legal";
 import { CheckCircle, ShoppingBag, ArrowRight, Printer, Share2 } from "lucide-react";
-import { getStatus } from "@/lib/payments/paymentService";
+import { confirmShopOrder, type PublicShopOrder } from "@/src/lib/shop/confirmShopOrder";
+import { useCart } from "@/src/lib/shop/cartStore";
 import { PaymentSession } from "@/lib/payments/types";
-import { getDb } from "@/src/lib/firebase/client";
-import { getDoc, doc } from "firebase/firestore";
 
 function formatCents(cents: number) {
     return `$${(cents / 100).toFixed(2)}`;
 }
 
+/** Maps the server's customer-safe order summary to the shape this page renders. */
+function toSession(order: PublicShopOrder, provider: string | null): PaymentSession {
+    return {
+        id: order.id,
+        provider: (order.provider ?? provider ?? "stripe") as PaymentSession["provider"],
+        choice: "full",
+        amountCents: order.amountCents,
+        currency: "USD",
+        status: order.status === "paid" ? "success" : "pending",
+        sessionType: "shop",
+        shop: {
+            items: order.items,
+            customerEmail: "",
+            customerName: order.customerName ?? undefined,
+            fulfillmentType: order.fulfillmentType,
+            shipping: order.shipping ? { ...order.shipping, shippingCostCents: order.totals?.shippingCents ?? 0 } : undefined,
+        },
+    } as PaymentSession;
+}
+
 function ShopSuccessInner() {
     const searchParams = useSearchParams();
-    const sessionId = searchParams.get("sessionId");
+    const shopOrderId = searchParams.get("shopOrderId");
+    const provider = searchParams.get("provider");
+    const paypalToken = searchParams.get("token"); // PayPal appends its order id as `token` on return
+    const { clearCart } = useCart();
     const [session, setSession] = useState<PaymentSession | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [stillProcessing, setStillProcessing] = useState(false);
+    const [failure, setFailure] = useState<string | null>(null);
+    const [loading, setLoading] = useState(Boolean(shopOrderId));
+    const started = useRef(false);
 
     useEffect(() => {
-        if (!sessionId) {
-            setLoading(false);
-            return;
-        }
+        if (!shopOrderId) return;
+        // Run once (React StrictMode runs effects twice in development; the PayPal capture must not repeat).
+        if (started.current) return;
+        started.current = true;
 
-        let isMounted = true;
-        const checkStatus = async () => {
-            try {
-                // Milestone 10: Prioritize Firestore persistence
-                const db = getDb();
-                const orderDoc = await getDoc(doc(db, "shop_orders", sessionId));
-                
-                if (orderDoc.exists() && isMounted) {
-                    const data = orderDoc.data();
-                    setSession({
-                        id: sessionId,
-                        status: data.status || "success",
-                        amountCents: data.totalCents,
-                        provider: data.provider,
-                        sessionType: 'shop',
-                        shop: {
-                            items: data.items,
-                            fulfillmentType: data.fulfillmentType,
-                            shipping: data.shipping,
-                            customerEmail: data.customerEmail,
-                            customerName: data.customerName
-                        }
-                    } as any);
-                    setLoading(false);
-                    return;
-                }
-
-                // Fallback to payment service polling
-                const statusData = await getStatus(sessionId);
-                if (!isMounted) return;
-
-                if (statusData.status === "success" || statusData.status === "cancelled" || statusData.status === "failed") {
-                    setSession(statusData);
-                    setLoading(false);
-                } else {
-                    // Still pending, check again
-                    setTimeout(checkStatus, 2000);
-                }
-            } catch (err) {
-                console.error("Error fetching session status:", err);
-                if (isMounted) setLoading(false);
+        confirmShopOrder({ shopOrderId, provider, paypalToken }).then((result) => {
+            if (result.state === "paid") {
+                setSession(toSession(result.order, provider));
+                clearCart();
+            } else if (result.state === "pending") {
+                setSession(toSession(result.order, provider));
+                setStillProcessing(true);
+            } else if (result.state === "failed") {
+                setFailure(result.message);
             }
-        };
-
-        checkStatus();
-        return () => { isMounted = false; };
-    }, [sessionId]);
+            setLoading(false);
+        });
+    }, [shopOrderId, provider, paypalToken, clearCart]);
 
     const handlePrint = () => {
         window.print();
@@ -105,6 +96,38 @@ function ShopSuccessInner() {
                     <div className="w-16 h-16 border-4 border-[#9F2D5C] border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
                     <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Confirming Order...</p>
                 </div>
+            </main>
+        );
+    }
+
+    if (failure) {
+        return (
+            <main className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto text-center">
+                <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-4">We Couldn&apos;t Confirm Your Order</h1>
+                <p className="text-slate-500 mb-4">{failure}</p>
+                <p className="text-slate-500 mb-12">
+                    If you were charged, please contact us at <span className="font-bold">{CONTACT_EMAIL}</span> and we will sort it out.
+                </p>
+                <Link
+                    href="/products"
+                    className="bg-[#9F2D5C] hover:bg-[#B8326A] text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg active:scale-95 inline-flex items-center justify-center"
+                >
+                    Return to Shop
+                </Link>
+            </main>
+        );
+    }
+
+    if (session && stillProcessing) {
+        return (
+            <main className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto text-center">
+                <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-4">We&apos;re Confirming Your Payment</h1>
+                <p className="text-slate-500 mb-4">
+                    Your order <span className="font-bold">#{session.id.slice(-6).toUpperCase()}</span> is being processed. This can take a minute.
+                </p>
+                <p className="text-slate-500 mb-12">
+                    Refresh this page shortly, or contact us at <span className="font-bold">{CONTACT_EMAIL}</span> if it does not update.
+                </p>
             </main>
         );
     }
