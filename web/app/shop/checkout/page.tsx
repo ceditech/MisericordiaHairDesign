@@ -7,7 +7,9 @@ import { useCart } from "@/src/lib/shop/cartStore";
 import { useAuth } from "@/src/providers/AuthProvider";
 import { signUpUser } from "@/src/lib/firebase/auth";
 import { getDb } from "@/src/lib/firebase/client";
-import { setDoc, doc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
+import { authFetch } from "@/src/lib/http/authFetch";
+import { SHOP_SHIPPING_FLAT_CENTS, computeShopTotals } from "@/src/lib/shop/orderPricing";
 import type { PaymentProvider, PaymentStatus } from "@/lib/payments/types";
 import { Button, Input, Card, Badge, useToast } from "@/components/ui";
 import { ChevronRight, ShieldCheck, ArrowLeft, ShoppingBag, Info, Truck, Tag } from "lucide-react";
@@ -15,7 +17,6 @@ import StripeCheckout from "@/components/StripeCheckout";
 import { formatUSPhone, isValidUSPhone } from "@/lib/utils";
 
 // --- Helpers ---
-const SHIPPING_FLAT_RATE_CENTS = 1500;
 function formatCents(cents: number) {
     return `$${(cents / 100).toFixed(2)}`;
 }
@@ -45,25 +46,35 @@ function ShopCheckoutInner() {
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [promoCode, setPromoCode] = useState("");
     const [appliedCode, setAppliedCode] = useState<string | null>(null);
+    const [discountPercent, setDiscountPercent] = useState(0);
 
-    // Promo Code logic
-    let discountCents = 0;
-    if (appliedCode) {
-        discountCents = Math.round(cartTotal * 0.10);
-    }
-    
-    const discountedCartTotal = cartTotal - discountCents;
-    const taxCents = Math.round(discountedCartTotal * 0.0825);
-    const shippingCostCents = fulfillmentType === 'shipping' ? SHIPPING_FLAT_RATE_CENTS : 0;
-    const finalTotalCents = discountedCartTotal + taxCents + shippingCostCents;
+    // Totals use the same rules as the server (src/lib/shop/orderPricing.ts); the server
+    // re-prices the order from the catalog when it is created and is the source of truth.
+    const { discountCents, taxCents, shippingCents: shippingCostCents, totalCents: finalTotalCents } = computeShopTotals(
+        cartTotal,
+        appliedCode ? discountPercent : 0,
+        fulfillmentType,
+    );
 
-    const handleApplyPromo = () => {
+    // A promo code must exist and be active in the `codes` collection (affiliate codes are stored there).
+    const handleApplyPromo = async () => {
         const code = promoCode.trim().toUpperCase();
-        if (code === "AFFILIATE10" || code.startsWith("DB-AFF-")) {
-            setAppliedCode(code);
-            showToast?.(`${code} applied! 10% discount added.`, "success");
-        } else if (code) {
-            setErrorMsg("Invalid promotional code.");
+        if (!code) return;
+        try {
+            const snap = await getDoc(doc(getDb(), "codes", code));
+            const data = snap.exists() ? snap.data() : null;
+            if (data && data.active === true) {
+                const percent = typeof data.discountPercent === "number" ? data.discountPercent : 10;
+                setAppliedCode(code);
+                setDiscountPercent(percent);
+                setErrorMsg(null);
+                showToast?.(`${code} applied! ${percent}% discount added.`, "success");
+            } else {
+                setErrorMsg("Invalid promotional code.");
+            }
+        } catch (err) {
+            console.error("[ShopCheckout] Promo lookup failed:", err);
+            setErrorMsg("Could not verify the promotional code. Please try again.");
         }
     };
 
@@ -74,7 +85,7 @@ function ShopCheckoutInner() {
     // Generate a stable shopOrderId on mount (once cart is populated)
     useEffect(() => {
         if (cartCount > 0) {
-            setShopOrderId(`shop_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`);
+            setShopOrderId(`shop_${crypto.randomUUID()}`);
         }
     }, []);
 
@@ -115,36 +126,46 @@ function ShopCheckoutInner() {
     }, [profile, user]);
 
 
-    // ── Persist shop order draft to Firestore before payment ─────────────────
+    // ── Create the order on the server before payment ────────────────────────
+    // The browser cannot write orders (and must not set prices). It sends product ids and
+    // quantities; the server prices the order from the catalog and returns the real totals.
     const persistShopOrderToFirestore = async (id: string): Promise<void> => {
-        const db = getDb();
-        await setDoc(doc(db, "shopOrders", id), {
-            shopOrderId: id,
-            userId: user?.uid ?? null,
-            items: cart.map(item => ({
-                productId: item.productId,
-                name: item.name,
-                quantity: item.quantity,
-                priceCents: item.priceCents,
-                selectedOptions: item.selectedOptions ?? null,
-            })),
-            customerName: checkoutData.name,
-            customerEmail: checkoutData.email,
-            customerPhone: checkoutData.phone,
-            fulfillmentType,
-            shipping: fulfillmentType === "shipping" ? {
-                address: checkoutData.address,
-                city: checkoutData.city,
-                state: checkoutData.state,
-                zipCode: checkoutData.zip,
-                shippingCostCents,
-            } : null,
-            taxCents,
-            totalCents: finalTotalCents,
-            status: "pending_payment",
-            createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp(),
+        const res = await authFetch("/api/shop/orders", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                orderId: id,
+                items: cart.map(item => ({
+                    productId: item.productId,
+                    quantity: item.quantity,
+                    selectedOptions: item.selectedOptions ?? null,
+                })),
+                fulfillmentType,
+                customer: {
+                    name: checkoutData.name,
+                    email: checkoutData.email,
+                    phone: checkoutData.phone,
+                },
+                shipping: fulfillmentType === "shipping" ? {
+                    address: checkoutData.address,
+                    city: checkoutData.city,
+                    state: checkoutData.state,
+                    zip: checkoutData.zip,
+                } : undefined,
+                promoCode: appliedCode ?? undefined,
+            }),
         });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.success) {
+            throw new Error(data.error ?? "We could not create your order. Please try again.");
+        }
+        // The server price is final. If it differs from what the page showed (for example a price changed
+        // since the item was added to the cart), stop before payment and tell the customer.
+        if (data.totals?.totalCents !== finalTotalCents) {
+            throw new Error(
+                `The order total is now ${formatCents(data.totals?.totalCents ?? 0)} because prices changed. Please review your cart and try again.`,
+            );
+        }
     };
 
     // ── PayPal: redirect to PayPal approval page ──────────────────────────────
@@ -295,7 +316,7 @@ function ShopCheckoutInner() {
                                             <p className="text-sm text-slate-500">Delivered to your door</p>
                                         </div>
                                     </div>
-                                    <Badge className="bg-[#9F2D5C]/10 text-[#9F2D5C] border-none font-bold">{formatCents(SHIPPING_FLAT_RATE_CENTS)}</Badge>
+                                    <Badge className="bg-[#9F2D5C]/10 text-[#9F2D5C] border-none font-bold">{formatCents(SHOP_SHIPPING_FLAT_CENTS)}</Badge>
                                 </div>
                             </button>
                         </div>

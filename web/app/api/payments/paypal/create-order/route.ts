@@ -25,7 +25,8 @@ export async function POST(req: NextRequest) {
     const {
       sessionType,
       draftId,
-      orderId,
+      orderId: legacyOrderId,
+      shopOrderId,
       choice = "deposit",
       returnUrl,
       cancelUrl,
@@ -33,10 +34,13 @@ export async function POST(req: NextRequest) {
       sessionType: "booking" | "shop";
       draftId?: string;
       orderId?: string;
+      shopOrderId?: string;
       choice?: "deposit" | "full";
       returnUrl: string;
       cancelUrl: string;
     };
+    // The shop checkout sends `shopOrderId`; `orderId` is accepted for older callers.
+    const orderId = shopOrderId ?? legacyOrderId;
 
     if (!sessionType || !returnUrl || !cancelUrl) {
       return NextResponse.json(
@@ -147,6 +151,10 @@ export async function POST(req: NextRequest) {
       }
 
       const shopOrder = orderSnap.data()!;
+      if (shopOrder.status && shopOrder.status !== "pending_payment") {
+        return NextResponse.json({ error: "This order has already been processed" }, { status: 409 });
+      }
+      // totals come from the server-priced order created by POST /api/shop/orders
       const totalCents: number = shopOrder.totals?.totalCents ?? 0;
 
       if (!totalCents || totalCents <= 0) {
