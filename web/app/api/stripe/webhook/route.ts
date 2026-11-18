@@ -101,13 +101,27 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true });
   } catch (err: any) {
     console.error("[Stripe Webhook] Processing error:", err);
-    // Return 200 to prevent Stripe from retrying for application errors.
-    // If this is a transient infrastructure error, return 500 so Stripe retries.
-    return NextResponse.json(
-      { received: true, warning: "Processing error — see server logs" },
-      { status: 200 }
-    );
+    // The event is not recorded as processed, so a 500 makes Stripe retry it.
+    // Finalization is idempotent (already-confirmed/paid orders are skipped), so retries are safe.
+    return NextResponse.json({ received: false, error: "Processing error" }, { status: 500 });
   }
+}
+
+/**
+ * Checks a completed Checkout Session against what the server stored when it created it.
+ * Returns a reason string when something does not match (the order is then held for review).
+ */
+function verifyStripePayment(
+  session: Stripe.Checkout.Session,
+  expectedSessionId: unknown,
+  expectedCents: unknown,
+): string | null {
+  if (session.payment_status !== "paid") return `payment_status is ${session.payment_status}`;
+  if (typeof expectedSessionId !== "string" || expectedSessionId !== session.id) return "session does not match the one created for this order";
+  if (typeof expectedCents !== "number" || session.amount_total !== expectedCents) {
+    return `amount ${session.amount_total} does not match expected ${expectedCents}`;
+  }
+  return null;
 }
 
 // ─── Booking Finalization ─────────────────────────────────────────────────────
@@ -127,7 +141,29 @@ async function handleBookingPayment(session: Stripe.Checkout.Session, eventId: s
 
   const draft = draftSnap.data()!;
   const bookingId = `booking_${draftId}`;
-  const amountCents = session.amount_total ?? draft.payment?.amountCents ?? 0;
+
+  // Already finalized (e.g. a second event for the same payment): nothing to do
+  if (draft.status === "confirmed" || draft.payment?.status === "paid") {
+    console.log("[Stripe Webhook] Booking already confirmed, skipping:", bookingId);
+    return;
+  }
+
+  // The payment must be complete, be the session created for this draft, and match the priced amount
+  const problem = verifyStripePayment(session, draft.payment?.sessionId, draft.payment?.amountCents);
+  if (problem) {
+    console.error("[Stripe Webhook] Booking payment needs review:", { draftId, session: session.id, problem });
+    await adminDb.collection("bookingDrafts").doc(draftId).update({
+      "payment.status": "payment_review",
+      "payment.reviewReason": problem,
+      "payment.stripeSessionPaid": session.id,
+      "payment.capturedCents": session.amount_total ?? null,
+      status: "payment_review",
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+    return;
+  }
+
+  const amountCents = session.amount_total as number;
   const customerEmail = session.customer_email ?? draft.clientEmail;
 
   // Create canonical booking (server only — client rule will deny writes)
@@ -247,6 +283,28 @@ async function handleShopPayment(session: Stripe.Checkout.Session) {
   }
 
   const orderData = orderSnap.data()!;
+
+  // Already paid (or in review): never decrement inventory twice
+  if (orderData.status && orderData.status !== "pending_payment") {
+    console.log("[Stripe Webhook] Shop order already processed, skipping:", orderId, orderData.status);
+    return;
+  }
+
+  const problem = verifyStripePayment(session, orderData.payment?.sessionId, orderData.totals?.totalCents);
+  if (problem) {
+    console.error("[Stripe Webhook] Shop payment needs review:", { orderId, session: session.id, problem });
+    await orderRef.update({
+      status: "payment_review",
+      "payment.status": "payment_review",
+      "payment.reviewReason": problem,
+      "payment.stripeSessionPaid": session.id,
+      "payment.capturedCents": session.amount_total ?? null,
+      "payment.updatedAt": FieldValue.serverTimestamp(),
+      updatedAt: FieldValue.serverTimestamp(),
+    });
+    return;
+  }
+
   const batch = adminDb.batch();
 
   // Decrement inventory for products that track it (shared with the PayPal capture)
