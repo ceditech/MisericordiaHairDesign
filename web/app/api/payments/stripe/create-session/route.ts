@@ -15,7 +15,8 @@ export async function POST(req: NextRequest) {
     const {
       sessionType,
       draftId,
-      orderId,
+      orderId: legacyOrderId,
+      shopOrderId,
       choice = "deposit",
       successUrl,
       cancelUrl,
@@ -23,10 +24,13 @@ export async function POST(req: NextRequest) {
       sessionType: "booking" | "shop";
       draftId?: string;
       orderId?: string;
+      shopOrderId?: string;
       choice?: "deposit" | "full";
       successUrl: string;
       cancelUrl: string;
     };
+    // The shop checkout sends `shopOrderId`; `orderId` is accepted for older callers.
+    const orderId = shopOrderId ?? legacyOrderId;
 
     if (!sessionType || !successUrl || !cancelUrl) {
       return NextResponse.json(
@@ -169,23 +173,67 @@ export async function POST(req: NextRequest) {
 
       const order = orderSnap.data()!;
       const items: Array<{ name: string; priceCents: number; quantity: number }> = order.items ?? [];
+      // Order created by POST /api/shop/orders (server-priced).
+      const totals = order.totals as
+        | { subtotalCents: number; discountCents: number; taxCents: number; shippingCents: number; totalCents: number }
+        | undefined;
 
+      if (order.status && order.status !== "pending_payment") {
+        return NextResponse.json({ error: "This order has already been processed" }, { status: 409 });
+      }
       if (!items.length) {
         return NextResponse.json({ error: "Order has no items" }, { status: 400 });
+      }
+      if (!totals || !Number.isInteger(totals.totalCents) || totals.totalCents <= 0) {
+        return NextResponse.json({ error: "Invalid order total" }, { status: 400 });
+      }
+
+      const lineItems = items.map((item) => ({
+        price_data: {
+          currency: "usd",
+          product_data: { name: item.name },
+          unit_amount: item.priceCents,
+        },
+        quantity: item.quantity,
+      }));
+      if (totals.taxCents > 0) {
+        lineItems.push({
+          price_data: { currency: "usd", product_data: { name: "Sales tax" }, unit_amount: totals.taxCents },
+          quantity: 1,
+        });
+      }
+      if (totals.shippingCents > 0) {
+        lineItems.push({
+          price_data: { currency: "usd", product_data: { name: "Shipping" }, unit_amount: totals.shippingCents },
+          quantity: 1,
+        });
+      }
+
+      // Safety net: what Stripe will charge must equal the order total.
+      const chargedCents =
+        lineItems.reduce((sum, li) => sum + li.price_data.unit_amount * li.quantity, 0) - (totals.discountCents || 0);
+      if (chargedCents !== totals.totalCents) {
+        console.error("[Stripe] Shop order totals are inconsistent", { orderId, chargedCents, totalCents: totals.totalCents });
+        return NextResponse.json({ error: "Order totals are inconsistent" }, { status: 400 });
+      }
+
+      let discounts: Array<{ coupon: string }> | undefined;
+      if (totals.discountCents > 0) {
+        const coupon = await stripe.coupons.create({
+          amount_off: totals.discountCents,
+          currency: "usd",
+          duration: "once",
+          name: order.promoCode ? `Promo ${order.promoCode}` : "Discount",
+        });
+        discounts = [{ coupon: coupon.id }];
       }
 
       const session = await stripe.checkout.sessions.create({
         mode: "payment",
         payment_method_types: ["card"],
-        line_items: items.map((item) => ({
-          price_data: {
-            currency: "usd",
-            product_data: { name: item.name },
-            unit_amount: item.priceCents,
-          },
-          quantity: item.quantity,
-        })),
-        customer_email: order.clientEmail,
+        line_items: lineItems,
+        ...(discounts ? { discounts } : {}),
+        customer_email: order.customerEmail,
         metadata: {
           sessionType: "shop",
           orderId,
