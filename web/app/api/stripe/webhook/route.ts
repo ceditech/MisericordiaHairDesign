@@ -5,6 +5,7 @@ import { adminDb } from "@/src/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
 import { generateHtmlReceipt } from "@/lib/payments/receipt-generator";
 import { EmailManager } from "@/src/lib/email/EmailManager";
+import { addInventoryDecrements } from "@/src/lib/shop/finalizeShopOrder";
 import { generateElegantReceiptEmail } from "@/src/lib/email/templates/receiptTemplate";
 import Stripe from "stripe";
 
@@ -248,17 +249,8 @@ async function handleShopPayment(session: Stripe.Checkout.Session) {
   const orderData = orderSnap.data()!;
   const batch = adminDb.batch();
 
-  // Decrement inventory for each item in the order
-  if (orderData.items && Array.isArray(orderData.items)) {
-    for (const item of orderData.items) {
-      if (item.productId) {
-        const productRef = adminDb.collection("products").doc(item.productId);
-        batch.update(productRef, {
-          inventory: FieldValue.increment(-item.quantity)
-        });
-      }
-    }
-  }
+  // Decrement inventory for products that track it (shared with the PayPal capture)
+  await addInventoryDecrements(adminDb, batch, orderData.items);
 
   batch.update(orderRef, {
     "payment.status": "paid",

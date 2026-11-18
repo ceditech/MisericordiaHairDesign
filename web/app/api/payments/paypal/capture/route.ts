@@ -4,9 +4,23 @@ import { adminDb } from "@/src/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
 import { generateHtmlReceipt } from "@/lib/payments/receipt-generator";
 import { EmailManager } from "@/src/lib/email/EmailManager";
+import { addInventoryDecrements } from "@/src/lib/shop/finalizeShopOrder";
 import { generateElegantReceiptEmail } from "@/src/lib/email/templates/receiptTemplate";
 
 export const runtime = "nodejs";
+
+/** Fields of a shop order document that the capture step reads. */
+interface ShopOrderDoc {
+  status?: string;
+  items?: Array<{ productId?: string; quantity?: number }>;
+  totals?: { totalCents?: number };
+  payment?: { sessionId?: string };
+}
+
+/** The part of PayPal's capture response used to verify the captured amount. */
+interface CaptureResult {
+  purchase_units?: Array<{ payments?: { captures?: Array<{ amount?: { value?: string } }> } }>;
+}
 
 /**
  * POST /api/payments/paypal/capture
@@ -48,6 +62,26 @@ export async function POST(req: NextRequest) {
         status: "already_processed",
         message: "Payment already captured",
       });
+    }
+
+    // ── SHOP: verify the order BEFORE any money is captured ───────────────────
+    let shopOrder: ShopOrderDoc | null = null;
+    if (sessionType === "shop") {
+      if (!orderId) {
+        return NextResponse.json({ error: "Missing orderId" }, { status: 400 });
+      }
+      const orderSnap = await adminDb.collection("shopOrders").doc(orderId).get();
+      if (!orderSnap.exists) {
+        return NextResponse.json({ error: "Shop order not found" }, { status: 404 });
+      }
+      shopOrder = orderSnap.data() as ShopOrderDoc;
+      if (shopOrder.status && shopOrder.status !== "pending_payment") {
+        return NextResponse.json({ error: "This order has already been processed" }, { status: 409 });
+      }
+      // The PayPal order must be the one created for this shop order
+      if (shopOrder.payment?.sessionId !== paypalOrderId) {
+        return NextResponse.json({ error: "PayPal order does not match this order" }, { status: 409 });
+      }
     }
 
     // ── CAPTURE ───────────────────────────────────────────────────────────────
@@ -176,18 +210,36 @@ export async function POST(req: NextRequest) {
     }
 
     // ── SHOP FINALIZATION ─────────────────────────────────────────────────────
-    if (sessionType === "shop") {
-      if (!orderId) {
-        return NextResponse.json({ error: "Missing orderId" }, { status: 400 });
+    if (sessionType === "shop" && orderId && shopOrder) {
+      const orderRef = adminDb.collection("shopOrders").doc(orderId);
+
+      // The captured amount must equal the order total computed by the server
+      const capturedValue = (captureResult as CaptureResult).purchase_units?.[0]?.payments?.captures?.[0]?.amount?.value;
+      const capturedCents = capturedValue !== undefined ? Math.round(parseFloat(capturedValue) * 100) : NaN;
+      if (!Number.isFinite(capturedCents) || capturedCents !== shopOrder.totals?.totalCents) {
+        console.error("[PayPal] Shop capture amount mismatch", { orderId, capturedCents, expected: shopOrder.totals?.totalCents });
+        await orderRef.update({
+          status: "payment_review",
+          "payment.status": "amount_mismatch",
+          "payment.paypalOrderId": paypalOrderId,
+          "payment.capturedCents": Number.isFinite(capturedCents) ? capturedCents : null,
+          "payment.updatedAt": FieldValue.serverTimestamp(),
+          updatedAt: FieldValue.serverTimestamp(),
+        });
+        return NextResponse.json({ error: "Payment amount did not match the order. We will review it." }, { status: 409 });
       }
 
-      await adminDb.collection("shopOrders").doc(orderId).update({
+      const batch = adminDb.batch();
+      batch.update(orderRef, {
         "payment.status": "paid",
         "payment.paypalOrderId": paypalOrderId,
+        "payment.amountCents": capturedCents,
         "payment.updatedAt": FieldValue.serverTimestamp(),
         status: "paid",
         updatedAt: FieldValue.serverTimestamp(),
       });
+      await addInventoryDecrements(adminDb, batch, shopOrder.items);
+      await batch.commit();
 
       console.log("[PayPal] Shop order paid:", orderId);
       return NextResponse.json({ status: "paid", orderId });
