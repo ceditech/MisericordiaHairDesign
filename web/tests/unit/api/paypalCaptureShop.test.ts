@@ -10,6 +10,7 @@ const state = vi.hoisted(() => ({
     updates: [] as Array<{ col: string; id: string; data: Record<string, unknown> }>,
     captureCalls: [] as string[],
     captureResult: { status: "COMPLETED" } as Record<string, unknown>,
+    emails: [] as string[],
 }));
 
 vi.mock("@/src/lib/firebase/admin", () => {
@@ -56,7 +57,7 @@ vi.mock("@/src/lib/payments/paypalServer", () => ({
         },
     },
 }));
-vi.mock("@/src/lib/email/EmailManager", () => ({ EmailManager: { sendEmail: async () => {} } }));
+vi.mock("@/src/lib/email/EmailManager", () => ({ EmailManager: { sendEmail: async (m: { to: string }) => void state.emails.push(m.to) } }));
 vi.mock("@/lib/payments/receipt-generator", () => ({ generateHtmlReceipt: () => "<p/>" }));
 vi.mock("@/src/lib/email/templates/receiptTemplate", () => ({ generateElegantReceiptEmail: () => "<p/>" }));
 
@@ -88,6 +89,7 @@ beforeEach(() => {
     state.events = {};
     state.updates = [];
     state.captureCalls = [];
+    state.emails = [];
     state.captureResult = completed("66.96");
     vi.spyOn(console, "error").mockImplementation(() => {});
     vi.spyOn(console, "log").mockImplementation(() => {});
@@ -107,6 +109,20 @@ describe("PayPal capture: shop orders", () => {
             ["edge", { increment: -2 }],
             ["gel", { increment: -1 }],
         ]);
+    });
+
+    it("emails the customer and the owner after a verified payment", async () => {
+        state.orders[ID] = pendingOrder({ customerName: "Ann", customerEmail: "ann@example.com" });
+        await shopCall();
+        expect(state.emails).toEqual(["ann@example.com", "sales@edxstore.com"]);
+        expect(state.updates.some((u) => u.col === "shopOrders" && u.data["emails.customerSent"] === true)).toBe(true);
+    });
+
+    it("sends no emails when the amount does not match", async () => {
+        state.orders[ID] = pendingOrder({ customerEmail: "ann@example.com" });
+        state.captureResult = completed("1.00");
+        await shopCall();
+        expect(state.emails).toHaveLength(0);
     });
 
     it("does not touch products that do not track inventory (no negative stock)", async () => {
