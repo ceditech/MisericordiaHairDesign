@@ -685,10 +685,6 @@ function CheckoutPageInner() {
                                     <span className="font-semibold">+{formatCents((addons.find(a => a.id === "take-down")?.price || 45) * 100)}</span>
                                 </div>
                             )}
-                            <div className="flex justify-between text-sm text-text-secondary">
-                                <span>Tax (8.25%)</span>
-                                <span className="font-semibold">{formatCents(pricing.taxCents)}</span>
-                            </div>
                             {pricing.discountCents > 0 && (
                                 <div className="flex justify-between text-sm text-text-secondary text-emerald-400">
                                     <span>Discount</span>

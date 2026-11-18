@@ -1,7 +1,12 @@
 import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
 
 
-export const TAX_RATE = 0.0825;
+/**
+ * Services (bookings) are NOT taxed in Texas, so the booking tax rate is 0.
+ * Shop products are taxed separately (SHOP_TAX_RATE_BPS in src/lib/shop/orderPricing.ts).
+ * `taxCents` stays in the result (always 0) so stored drafts and bookings keep their shape.
+ */
+export const BOOKING_TAX_RATE = 0;
 export const BASE_DEPOSIT_CENTS = 5000;
 
 /**
@@ -95,7 +100,7 @@ export function calculateBookingPrice(input: PricingInput): PricingResult {
     }
 
     const discountedSubtotal = subtotalCents - discountCents;
-    const taxCents = Math.round(discountedSubtotal * TAX_RATE);
+    const taxCents = Math.round(discountedSubtotal * BOOKING_TAX_RATE);
     const totalCents = discountedSubtotal + taxCents;
     
     const depositCents = BASE_DEPOSIT_CENTS + addonDepositCents;
