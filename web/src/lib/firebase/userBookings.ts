@@ -1,5 +1,4 @@
-import { getDb } from "@/src/lib/firebase/client";
-import { collection, query, where, getDocs, orderBy, Timestamp } from "firebase/firestore";
+import { authFetch } from "@/src/lib/http/authFetch";
 
 export interface BookingRecord {
     id: string;
@@ -33,28 +32,22 @@ export async function getBookingsByDate(dateStr: string): Promise<BookingRecord[
 
 
 /**
- * Fetches booking history for a specific user.
+ * Fetches the signed-in customer's booking history.
  * Returns { upcoming: BookingRecord[], past: BookingRecord[] }
  * Past bookings are limited to the last 14 days.
+ *
+ * The bookings come from /api/bookings/mine (the server matches them to the
+ * verified user), because browsers cannot read the `bookings` collection.
  */
 export async function getUserBookingHistory(userId: string) {
-    const db = getDb();
-    const bookingsRef = collection(db, "bookings");
-    
-    // Query all bookings for this user, ordered by creation (or date)
-    // Note: In a production app, we'd ideally have a composite index on [userId, createdAt]
-    const q = query(
-        bookingsRef,
-        where("userId", "==", userId),
-        orderBy("createdAt", "desc")
-    );
+    if (!userId) return { upcoming: [] as BookingRecord[], past: [] as BookingRecord[] };
 
-    const querySnapshot = await getDocs(q);
-    const allBookings: BookingRecord[] = [];
-    
-    querySnapshot.forEach((doc) => {
-        allBookings.push({ id: doc.id, ...doc.data() } as BookingRecord);
-    });
+    const response = await authFetch("/api/bookings/mine");
+    if (!response.ok) {
+        throw new Error(`Failed to load bookings (${response.status})`);
+    }
+    const data = (await response.json()) as { bookings?: BookingRecord[] };
+    const allBookings: BookingRecord[] = data.bookings ?? [];
 
     const now = new Date();
     const twoWeeksAgo = new Date();

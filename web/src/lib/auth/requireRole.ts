@@ -49,7 +49,7 @@ export function defaultAuthDeps(): AuthDeps {
     };
 }
 
-function readBearerToken(req: Request): string {
+export function readBearerToken(req: Request): string {
     const header = req.headers.get("authorization") ?? "";
     const match = /^Bearer\s+(.+)$/i.exec(header.trim());
     if (!match || !match[1].trim()) {
