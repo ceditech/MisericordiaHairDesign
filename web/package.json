@@ -10,6 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "lint:gate": "eslint app/api src/lib lib src/providers",
     "firebase:emulators": "firebase emulators:start",
     "firebase:deploy:dev": "firebase deploy -P default",
     "firebase:deploy:prod": "firebase deploy -P prod",

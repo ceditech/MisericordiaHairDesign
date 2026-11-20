@@ -34,15 +34,19 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
-      # BASELINE steps. Lint is red (265 errors / 148 warnings) and is fixed
-      # in Phase 6. Build passes locally but stays non-blocking until a first
-      # CI run confirms the placeholder env below is sufficient. Then remove
-      # `continue-on-error` (see AUDIT-NOV-16-2026.md, sections 2.1 and 2.8).
-      - name: Lint (baseline, non-blocking)
+      # BLOCKING gate: server and shared code is lint-clean (errors only).
+      # Keep this scope growing as the UI folders are cleaned up.
+      - name: Lint (server and shared code)
+        run: npm run lint:gate
+
+      # BASELINE: whole-repo lint still has UI-side errors (see AUDIT-NOV-16-2026.md,
+      # section 2.8). Informational until those folders are clean.
+      - name: Lint (whole repo, non-blocking)
         continue-on-error: true
         run: npm run lint
-      - name: Build (baseline, non-blocking)
-        continue-on-error: true
+
+      # BLOCKING gate: the production build succeeds.
+      - name: Build
         run: npm run build
         env:
           # Placeholders so the build does not depend on real project values.

@@ -136,7 +136,17 @@ Payment Info:
     return { subject, text, html };
 }
 
-export function buildReminderEmail(booking: any): EmailData {
+/** The booking fields used in the reminder email. */
+export interface ReminderBooking {
+    date?: string;
+    time?: string;
+    clientName?: string;
+    name?: string;
+    styleName?: string;
+    service?: string;
+}
+
+export function buildReminderEmail(booking: ReminderBooking): EmailData {
     const subject = `Reminder: Your appointment tomorrow at Misericordia Hair Design`;
     
     // Fallback logic for date/time if coming from Firestore doc directly
