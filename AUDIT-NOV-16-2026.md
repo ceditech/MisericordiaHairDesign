@@ -271,6 +271,14 @@ Test pyramid, built incrementally (each earlier phase already adds its tests):
 | 6.4 | Remove BOM characters from source files | grep finds none |
 | 6.5 | Upgrade `firebase-admin` to a supported major in its own PR, with the Phase 5 tests as the safety net | Tests and build green; Admin features smoke-tested |
 
+**Progress (updated 2026-11-20).** Lint went from 371 problems (229 errors) to 115 errors / 48 warnings:
+mechanical fixes (unused code, `prefer-const`, JSX entities), `any` removed from `app/api`, `src/lib`, `lib`, `src/providers`
+and `ownerService.ts` (owner stats extracted to `src/lib/owner/ownerStats.ts` with tests), and all `react-hooks` errors fixed.
+`firebase-admin` is on 14.x (6.5 done). CI now blocks on `npm run lint:gate` (server and shared code) and `npm run build`;
+whole-repo lint stays informational. **Remaining:** about 108 `any` in UI folders (`src/components`, `app/checkout`, `app/book`,
+`app/login`, `components/Owner`), 11 `require` imports in scripts/config, and 48 warnings (mostly `<img>`). Grow the `lint:gate`
+scope as each folder is cleaned.
+
 ### 2.9 Phase 7 — Consolidate duplicated code (C-4, D-7)
 
 **Approach (Low-regression):** strangler pattern — one canonical module, thin re-export shims at the old path, migrate importers, then delete shims. One duplicate pair per PR.

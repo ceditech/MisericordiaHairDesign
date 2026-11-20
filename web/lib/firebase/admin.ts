@@ -1,3 +1,4 @@
+import { errorMessage } from "@/src/lib/errors";
 import { applicationDefault, cert, getApps, initializeApp, type Credential } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
@@ -25,8 +26,8 @@ if (!getApps().length) {
                 throw new Error("Service account key is missing 'private_key'. Ensure you copied the full JSON from Firebase Console.");
             }
             credential = cert(serviceAccount);
-        } catch (e: any) {
-            console.error("❌ Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY:", e.message);
+        } catch (e: unknown) {
+            console.error("❌ Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY:", errorMessage(e));
         }
     } else {
         console.warn("⚠️ FIREBASE_SERVICE_ACCOUNT_KEY is missing. Falling back to default credentials.");
@@ -38,8 +39,8 @@ if (!getApps().length) {
             credential: credential || applicationDefault()
         });
         console.log("✅ Firebase Admin initialized successfully");
-    } catch (e: any) {
-        console.error("❌ Firebase Admin initialization failed:", e.message);
+    } catch (e: unknown) {
+        console.error("❌ Firebase Admin initialization failed:", errorMessage(e));
         console.error("👉 ACTION REQUIRED: Add a valid FIREBASE_SERVICE_ACCOUNT_KEY to .env.local");
     }
 }

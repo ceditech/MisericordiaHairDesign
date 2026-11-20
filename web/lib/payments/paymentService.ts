@@ -44,11 +44,13 @@ function delay(ms: number): Promise<void> {
 // Without this, the Map is wiped on every hot-reload, causing getStatus()
 // to throw "Session not found" and the checkout to spin forever.
 
-const globalAny = globalThis as any;
-if (!globalAny.__mockPaymentSessions) {
-    globalAny.__mockPaymentSessions = new Map<string, PaymentSession>();
+const globalStore = globalThis as typeof globalThis & {
+    __mockPaymentSessions?: Map<string, PaymentSession>;
+};
+if (!globalStore.__mockPaymentSessions) {
+    globalStore.__mockPaymentSessions = new Map<string, PaymentSession>();
 }
-const mockSessions: Map<string, PaymentSession> = globalAny.__mockPaymentSessions;
+const mockSessions: Map<string, PaymentSession> = globalStore.__mockPaymentSessions;
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
