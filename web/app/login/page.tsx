@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import { errorCode, isAbortError } from "@/src/lib/errors";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -26,9 +27,9 @@ export default function LoginPage() {
     useEffect(() => {
         const safePush = async (url: string) => {
             try {
-                await (router.push(url) as any);
-            } catch (err: any) {
-                if (err.name !== 'AbortError') throw err;
+                await router.push(url);
+            } catch (err: unknown) {
+                if (!isAbortError(err)) throw err;
             }
         };
 
@@ -70,15 +71,16 @@ export default function LoginPage() {
                 await signInUser(email, password);
             }
             // Redirect handled by useEffect
-        } catch (err: any) {
-            if (err.name === 'AbortError') return; // Ignore router aborts
+        } catch (err: unknown) {
+            if (isAbortError(err)) return; // Ignore router aborts
+            const code = errorCode(err);
             console.error("Auth error:", err);
             let message = "An error occurred. Please try again.";
-            if (err.code === "auth/invalid-credential") message = "Invalid email or password.";
-            if (err.code === "auth/email-already-in-use") message = "An account with this email already exists.";
-            if (err.code === "auth/weak-password") message = "Password should be at least 6 characters.";
-            if (err.code === "auth/user-not-found") message = "No account found with this email.";
-            if (err.code === "auth/wrong-password") message = "Incorrect password.";
+            if (code === "auth/invalid-credential") message = "Invalid email or password.";
+            if (code === "auth/email-already-in-use") message = "An account with this email already exists.";
+            if (code === "auth/weak-password") message = "Password should be at least 6 characters.";
+            if (code === "auth/user-not-found") message = "No account found with this email.";
+            if (code === "auth/wrong-password") message = "Incorrect password.";
             setError(message);
             showToast(message, "error");
         } finally {
@@ -114,14 +116,15 @@ export default function LoginPage() {
 
             showToast("Signed in with Google", "success");
             // Redirect handled by useEffect
-        } catch (err: any) {
-            if (err.name === 'AbortError') return; // Ignore router aborts
+        } catch (err: unknown) {
+            if (isAbortError(err)) return; // Ignore router aborts
+            const code = errorCode(err);
             console.error("Google sign-in error:", err);
-            if (err.code === "auth/account-exists-with-different-credential") {
+            if (code === "auth/account-exists-with-different-credential") {
                 const message = "An account with this email already exists. Please sign in with your email and password instead.";
                 setError(message);
                 showToast(message, "error");
-            } else if (err.code !== "auth/popup-closed-by-user") {
+            } else if (code !== "auth/popup-closed-by-user") {
                 const message = "Failed to sign in with Google. Please try again.";
                 setError(message);
                 showToast(message, "error");

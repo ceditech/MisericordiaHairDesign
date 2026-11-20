@@ -1,3 +1,5 @@
+import type { TimeValue } from "@/src/lib/owner/types";
+
 export interface Review {
     id: number | string;
     name: string;
@@ -6,7 +8,7 @@ export interface Review {
     text: string;
     date: string;
     avatarColor: string;
-    createdAt?: any;
+    createdAt?: TimeValue;
 }
 
 export const REVIEWS: Review[] = [

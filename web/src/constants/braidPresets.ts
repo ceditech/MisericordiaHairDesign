@@ -2,6 +2,8 @@
 
 export interface SizePreset {
     id: string;
+    /** Set on documents stored in Firestore `presets`; absent on the built-in defaults. */
+    type?: "size";
     label: string;
     description: string;
     priceGuidance: string;
@@ -10,6 +12,8 @@ export interface SizePreset {
 
 export interface LengthPreset {
     id: string;
+    /** Set on documents stored in Firestore `presets`; absent on the built-in defaults. */
+    type?: "length";
     label: string;
     inches: string;
     priceAdjustment: number;

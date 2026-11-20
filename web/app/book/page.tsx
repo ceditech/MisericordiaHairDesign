@@ -1,5 +1,6 @@
 "use client";
 
+import { isAbortError } from "@/src/lib/errors";
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { BraidStyle } from "@/src/lib/styles";
@@ -8,6 +9,7 @@ import { saveDraft, loadDraft, clearDraft } from "@/src/lib/bookingDraft";
 import { DEPOSIT_POLICY, CANCELLATION_POLICY, DEPOSIT_AMOUNT, CONTACT_PHONE } from "@/src/content/legal";
 import { getBookingsByDate, BookingRecord } from "@/src/lib/firebase/userBookings";
 import { subscribeToStyles, subscribeToPresets, subscribeToAddons } from "@/src/lib/firebase/ownerService";
+import type { AddonDoc } from "@/src/lib/firebase/ownerService";
 import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
 import { Skeleton, Modal } from "@/components/ui";
 import { calculateBookingPrice, formatCents } from "@/src/lib/pricing";
@@ -142,7 +144,7 @@ function BookingPageInner() {
     const [loadingStyles, setLoadingStyles] = useState(true);
     const [sizePresets, setSizePresets] = useState<SizePreset[]>([]);
     const [lengthPresets, setLengthPresets] = useState<LengthPreset[]>([]);
-    const [addons, setAddons] = useState<any[]>([]);
+    const [addons, setAddons] = useState<AddonDoc[]>([]);
     
     const [currentStep, setCurrentStep] = useState(1);
     const [selectedStyle, setSelectedStyle] = useState<BraidStyle | null>(null);
@@ -158,8 +160,8 @@ function BookingPageInner() {
         });
 
         const unsubPresets = subscribeToPresets((data) => {
-            const sizes = data.filter(p => (p as any).type === "size") as SizePreset[];
-            const lengths = data.filter(p => (p as any).type === "length") as LengthPreset[];
+            const sizes = data.filter(p => p.type === "size") as SizePreset[];
+            const lengths = data.filter(p => p.type === "length") as LengthPreset[];
             setSizePresets(sizes);
             setLengthPresets(lengths);
 
@@ -1123,9 +1125,9 @@ function BookingPageInner() {
                                     if (hasRedirected.current) return;
                                     hasRedirected.current = true;
                                     try {
-                                        await (router.push("/checkout") as any);
-                                    } catch (err: any) {
-                                        if (err.name !== 'AbortError') throw err;
+                                        await router.push("/checkout");
+                                    } catch (err: unknown) {
+                                        if (!isAbortError(err)) throw err;
                                     }
                                 } : nextStep}
                                 disabled={!isStepValid}

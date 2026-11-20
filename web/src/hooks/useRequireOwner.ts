@@ -1,5 +1,6 @@
 "use client";
 
+import { isAbortError } from "@/src/lib/errors";
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "./useAuth";
@@ -17,9 +18,9 @@ export const useRequireOwner = () => {
     useEffect(() => {
         const safePush = async (url: string) => {
             try {
-                await (router.push(url) as any);
-            } catch (err: any) {
-                if (err.name !== 'AbortError') throw err;
+                await router.push(url);
+            } catch (err: unknown) {
+                if (!isAbortError(err)) throw err;
             }
         };
 

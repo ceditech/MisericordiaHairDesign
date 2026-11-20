@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import { errorMessage, isAbortError } from "@/src/lib/errors";
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -92,9 +93,9 @@ function ShopCheckoutInner() {
     useEffect(() => {
         const safePush = async (url: string) => {
             try {
-                await (router.push(url) as any);
-            } catch (err: any) {
-                if (err.name !== 'AbortError') throw err;
+                await router.push(url);
+            } catch (err: unknown) {
+                if (!isAbortError(err)) throw err;
             }
         };
 
@@ -194,10 +195,10 @@ function ShopCheckoutInner() {
             const { approvalLink } = await res.json();
             if (!approvalLink) throw new Error("No PayPal approval link returned.");
             window.location.href = approvalLink;
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("[ShopCheckout] PayPal initiation error:", err);
             setFlowStatus("failed");
-            setErrorMsg(err.message ?? "Failed to initialize PayPal. Please try again.");
+            setErrorMsg(errorMessage(err, "Failed to initialize PayPal. Please try again."));
         }
     };
 

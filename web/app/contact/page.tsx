@@ -1,5 +1,6 @@
 "use client";
 
+import { errorMessage } from "@/src/lib/errors";
 import { DEPOSIT_POLICY, CANCELLATION_POLICY, CONTACT_EMAIL, CONTACT_PHONE, FULL_ADDRESS } from "@/src/content/legal";
 
 import { useState, useRef, useEffect } from "react";
@@ -141,9 +142,9 @@ export default function ContactPage() {
             // Reset form
             setFormData({ name: "", email: "", service: "", message: "" });
             setAttachments([]);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Contact form error:", error);
-            showToast(error.message || "Something went wrong. Please try again.", "error");
+            showToast(errorMessage(error, "Something went wrong. Please try again."), "error");
         } finally {
             setIsSubmitting(false);
         }
