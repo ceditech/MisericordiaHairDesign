@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import { loadConfirmedBooking, ConfirmedBooking, clearDraft } from "@/lib/bookingDraft";
@@ -9,8 +9,6 @@ import { buildIcs, downloadIcs } from "@/lib/calendar/ics";
 import { sendBookingConfirmation } from "@/lib/notifications/notificationService";
 import { buildClientConfirmationEmail, buildProviderConfirmationEmail } from "@/lib/notifications/emailTemplates";
 import { Modal, useToast, Button, Badge } from "@/components/ui";
-import { getDb } from "@/src/lib/firebase/client";
-import { getDoc, doc } from "firebase/firestore";
 import { capturePayPalBooking } from "@/src/lib/bookings/capturePayPalBooking";
 
 function SuccessPageInner() {

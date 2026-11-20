@@ -29,7 +29,7 @@ export class GmailOAuthProvider implements EmailProvider {
             // Must have primary sender configured
             const sender = await SenderRepository.getPrimarySender();
             return !!sender && !!sender.refreshToken;
-        } catch (error) {
+        } catch {
             return false;
         }
     }
@@ -85,7 +85,7 @@ export class GmailOAuthProvider implements EmailProvider {
         const boundary = 'foo123'; // Unique boundary
         const messageId = `<${Date.now()}-${Math.random().toString(36).substring(2)}@misericordiahairdesign.com>`;
         
-        let rawMessage = [
+        const rawMessage = [
             `From: "${options.fromName || sender.name || 'Misericordia Hair Design'}" <${sender.email}>`,
             `To: ${options.to}`,
             `Subject: ${options.subject}`,

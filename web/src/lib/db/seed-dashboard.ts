@@ -3,7 +3,7 @@ import { STORE_PRODUCTS } from "../../data/products";
 import { BRAID_STYLES } from "../../../lib/styles";
 import { DEFAULT_ADDONS } from "../../constants/braidPresets";
 import { MIGRATED_BLOG_POSTS } from "../../../data/seeding/blogPosts";
-import { subMonths, startOfMonth, endOfMonth, eachMonthOfInterval, format, addDays, isWeekend } from "date-fns";
+import { subMonths, endOfMonth, eachMonthOfInterval, format, isWeekend } from "date-fns";
 
 /**
  * Seed data for the Owner Dashboard charts and stats.
@@ -96,7 +96,6 @@ export async function seedDashboardData() {
     let orderCount = 0;
 
     for (const month of months) {
-        const monthStart = startOfMonth(month);
         const monthEnd = endOfMonth(month);
         const daysInMonth = monthEnd.getDate();
 

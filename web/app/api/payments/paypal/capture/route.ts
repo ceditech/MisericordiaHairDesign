@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { paypalServer } from "@/src/lib/payments/paypalServer";
 import { adminDb } from "@/src/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
-import { generateHtmlReceipt } from "@/lib/payments/receipt-generator";
 import { EmailManager } from "@/src/lib/email/EmailManager";
 import { addInventoryDecrements } from "@/src/lib/shop/finalizeShopOrder";
 import type { ShopReceiptOrder } from "@/src/lib/email/templates/shopReceiptTemplate";

@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { collection, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
-import { getDb } from "@/src/lib/firebase/client";
 import { 
     TrendingUp, 
     Calendar, 
@@ -33,7 +31,7 @@ import {
     PieChart,
     Pie
 } from "recharts";
-import { format, subMonths, startOfMonth, endOfMonth, isWithinInterval } from "date-fns";
+import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { 
     useAggregateSales, 
@@ -56,12 +54,6 @@ interface DashboardStats {
     payoutsDue: number;
     serviceRevenue: number;
     shopRevenue: number;
-}
-
-interface ChartData {
-    month: string;
-    completed: number;
-    cancelled: number;
 }
 
 // --- Components ---
@@ -122,7 +114,6 @@ export default function StitchOverview() {
     const { metrics: affiliateMetrics, loading: affiliateLoading } = useAffiliateMetrics();
     const [seeding, setSeeding] = useState(false);
     const [sendingReminders, setSendingReminders] = useState(false);
-    const [exporting, setExporting] = useState(false);
     const [showExportMenu, setShowExportMenu] = useState(false);
     const [showDevMenu, setShowDevMenu] = useState(false);
 
@@ -293,7 +284,7 @@ export default function StitchOverview() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
                     <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-none mb-2">Dashboard Overview</h1>
-                    <p className="text-slate-500 font-medium">Welcome back, <span className="font-bold text-slate-900 dark:text-white">{profile?.name || user?.displayName || user?.email?.split('@')[0] || "Admin"}</span>. Here's what's happening at the studio.</p>
+                    <p className="text-slate-500 font-medium">Welcome back, <span className="font-bold text-slate-900 dark:text-white">{profile?.name || user?.displayName || user?.email?.split('@')[0] || "Admin"}</span>. Here&apos;s what&apos;s happening at the studio.</p>
                 </div>
                 <div className="flex items-center gap-3 relative">
                     {isSuperAdmin && (

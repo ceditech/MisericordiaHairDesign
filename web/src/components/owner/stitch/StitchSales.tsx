@@ -190,7 +190,6 @@ export default function StitchSales() {
                     )}
                     {filtered.map(order => {
                         const badge = statusBadge(order.status, order.fulfillmentStatus);
-                        const total = order.totalCents != null ? order.totalCents / 100 : (order.total ?? 0);
                         const isRefund = badge.label === "Refunded";
                         const isSelected = selectedOrder?.id === order.id;
                         return (

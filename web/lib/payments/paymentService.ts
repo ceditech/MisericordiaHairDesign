@@ -19,13 +19,7 @@ import {
     PaymentBookingContext,
     PaymentShopContext,
 } from "./types";
-import {
-    MOCK_MODE,
-    MOCK_LATENCY_MS,
-    DEPOSIT_CENTS,
-    CURRENCY,
-    PAYMENT_ENDPOINTS,
-} from "./constants";
+import { MOCK_MODE, MOCK_LATENCY_MS, CURRENCY, PAYMENT_ENDPOINTS } from "./constants";
 
 // ─── Mock helpers ─────────────────────────────────────────────────────────────
 

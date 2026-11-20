@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { subscribeToStyles, upsertStyle, deleteStyle } from "@/src/lib/firebase/ownerService";
 import { BraidStyle } from "@/lib/styles";
 import { Button, Card, Input, Badge } from "@/components/ui";
-import { Plus, Edit2, Trash2, Scissors, Save, X, Search, Clock, DollarSign } from "lucide-react";
+import { Plus, Save, X, Search, Clock, DollarSign } from "lucide-react";
 
 export default function StylesTab() {
     const [styles, setStyles] = useState<BraidStyle[]>([]);

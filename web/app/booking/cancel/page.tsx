@@ -1,14 +1,10 @@
 ﻿"use client";
 
-import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Button } from "@/components/ui";
 
 function CancelPageInner() {
-    const searchParams = useSearchParams();
-    const sessionId = searchParams.get("sessionId");
-
     return (
         <main className="min-h-screen flex flex-col items-center justify-center px-6 py-20 bg-slate-50 dark:bg-slate-900/10">
             {/* Warning Icon */}

@@ -2,17 +2,7 @@
 
 import { useState } from "react";
 import { Badge, Card, Button } from "@/components/ui";
-import { 
-    LayoutDashboard, 
-    Users, 
-    Calendar, 
-    ShoppingBag, 
-    Scissors, 
-    Tag, 
-    ChevronRight,
-    TrendingUp,
-    Store
-} from "lucide-react";
+import { LayoutDashboard, Users, Calendar, ShoppingBag, Scissors, ChevronRight, TrendingUp, Store } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Tabs

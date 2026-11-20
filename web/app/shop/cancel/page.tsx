@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { Button, Card, Badge } from "@/components/ui";
+import { Card, Badge } from "@/components/ui";
 import { XCircle, ShoppingCart, ArrowLeft, HelpCircle } from "lucide-react";
 import { CONTACT_EMAIL } from "@/src/content/legal";
 

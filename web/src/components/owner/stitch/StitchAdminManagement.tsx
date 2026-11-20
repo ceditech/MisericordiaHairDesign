@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Users, Plus, Trash2, ShieldCheck, Mail, Search, AlertCircle } from "lucide-react";
 import { useAuth } from "@/src/providers/AuthProvider";
-import { subscribeToAssistants, updateUserRole, findUserByEmail } from "@/src/lib/firebase/ownerService";
+import { subscribeToAssistants, updateUserRole } from "@/src/lib/firebase/ownerService";
 import { authFetch } from "@/src/lib/http/authFetch";
 
 export default function StitchAdminManagement() {
@@ -154,7 +154,7 @@ export default function StitchAdminManagement() {
                             <h3 className="font-bold">Add Assistant</h3>
                         </div>
                         <p className="text-xs text-purple-700/70 dark:text-purple-400 font-medium leading-relaxed">
-                            Enter the details below. If the user doesn't have an account, one will be created and they will receive a welcome email.
+                            Enter the details below. If the user doesn&apos;t have an account, one will be created and they will receive a welcome email.
                         </p>
                         <form onSubmit={handleAddAssistant} className="space-y-3">
                             <div className="relative">

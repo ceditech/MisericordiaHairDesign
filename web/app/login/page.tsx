@@ -7,7 +7,7 @@ import { useAuth } from "@/src/hooks/useAuth";
 import { signInUser, signInWithGoogle, signUpUser } from "@/src/lib/firebase/auth";
 import { getDb } from "@/src/lib/firebase/client";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
-import { Button, Input, Badge, Card } from "@/components/ui";
+import { Button, Input, Card } from "@/components/ui";
 import { useToast } from "@/components/ui/Toast";
 import { LogIn, Mail, Lock, AlertCircle, Loader2, Scissors, Chrome } from "lucide-react";
 

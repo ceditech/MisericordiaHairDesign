@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { subscribeToBookings, cancelBooking } from "@/src/lib/firebase/ownerService";
 import { Button, Card, Badge } from "@/components/ui";
-import { Calendar, User, Clock, Scissors, XCircle, CheckCircle, Search, Filter } from "lucide-react";
-import { format } from "date-fns";
+import { Calendar, User, Clock, Scissors, XCircle, Search } from "lucide-react";
 
 export default function BookingsTab() {
     const [bookings, setBookings] = useState<any[]>([]);

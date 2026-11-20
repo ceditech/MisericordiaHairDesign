@@ -1,24 +1,9 @@
 ﻿"use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Button, Badge, Input, Card, Accordion, useToast } from "@/components/ui";
-import {
-    Users,
-    Gift,
-    CheckCircle,
-    Copy,
-    Mail,
-    ChevronRight,
-    HelpCircle,
-    Phone,
-    MessageCircle,
-    Zap,
-    ExternalLink,
-    ShieldCheck,
-    Coins,
-    Sparkles
-} from "lucide-react";
+import { Users, Gift, CheckCircle, Copy, Mail, ChevronRight, HelpCircle, Phone, ShieldCheck, Coins, Sparkles } from "lucide-react";
 import { AffiliateType, AffiliateProfile } from "@/src/lib/affiliate/types";
 import { createAffiliateProfile, sendAffiliateCodeEmail } from "@/src/lib/affiliate/affiliateService";
 import { CONTACT_PHONE, CONTACT_EMAIL } from "@/src/content/legal";

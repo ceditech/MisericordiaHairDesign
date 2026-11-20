@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import Reviews from "@/components/Reviews";
 import StylesCarousel from "@/components/StylesCarousel";
 import HeroCarousel from "@/components/HeroCarousel";

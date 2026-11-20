@@ -3,7 +3,6 @@ import { headers } from "next/headers";
 import { getStripeServer } from "@/src/lib/payments/stripeServer";
 import { adminDb } from "@/src/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
-import { generateHtmlReceipt } from "@/lib/payments/receipt-generator";
 import { EmailManager } from "@/src/lib/email/EmailManager";
 import { addInventoryDecrements } from "@/src/lib/shop/finalizeShopOrder";
 import { emailStatusFields, sendShopOrderEmails } from "@/src/lib/shop/shopOrderEmails";
@@ -214,18 +213,6 @@ async function handleBookingPayment(session: Stripe.Checkout.Session, eventId: s
 
   // Queue receipt email
   if (customerEmail) {
-    const receiptHtml = generateHtmlReceipt({
-      bookingId,
-      customerEmail,
-      amountUSD: (amountCents / 100).toFixed(2),
-      currency: session.currency ?? "usd",
-      date: new Date().toISOString(),
-      provider: "stripe",
-      paymentIntentId: typeof session.payment_intent === "string"
-        ? session.payment_intent
-        : session.id,
-    });
-
     try {
       const formattedAmount = `$${(amountCents / 100).toFixed(2)} USD`;
       const clientHtml = generateElegantReceiptEmail(draft, bookingId, "client", formattedAmount);

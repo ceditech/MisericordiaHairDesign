@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { subscribeToProducts, upsertProduct, deleteProduct } from "@/src/lib/firebase/ownerService";
-import { STORE_PRODUCTS, Product } from "@/src/data/products";
+import { Product } from "@/src/data/products";
 import { Button, Card, Input, Badge } from "@/components/ui";
-import { Plus, Edit2, Trash2, Package, Save, X, Search, Database } from "lucide-react";
+import { Plus, Edit2, Trash2, Save, X, Search } from "lucide-react";
 
 export default function ProductsTab() {
     const [products, setProducts] = useState<Product[]>([]);

@@ -40,14 +40,6 @@ export default function StitchInventory() {
         return () => unsub();
     }, []);
 
-    const saveEdit = async () => {
-        if (!editingId) return;
-        setSaving(true);
-        try { await upsertProduct({ ...editData, id: editingId } as any); setEditingId(null); }
-        catch (err) { console.error(err); }
-        finally { setSaving(false); }
-    };
-
     const handleDelete = async (id: string) => {
         if (!confirm("Delete this product?")) return;
         try { await deleteProduct(id); } catch (err) { console.error(err); }

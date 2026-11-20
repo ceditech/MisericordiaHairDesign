@@ -1,4 +1,4 @@
-import { collection, getDocs, query, orderBy, where } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { getDb } from "./firebase/client";
 import { Product } from "@/src/data/products";
 import { BraidStyle } from "@/lib/styles";

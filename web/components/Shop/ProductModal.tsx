@@ -3,9 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { Product } from "@/src/data/products";
 import { useCart } from "@/src/lib/shop/cartStore";
-import { Button, Input, Badge, useToast } from "@/components/ui";
+import { Button, Badge, useToast } from "@/components/ui";
 import { X, ShoppingCart, Zap, Star, ShieldCheck } from "lucide-react";
-import Image from "next/image";
 
 interface ProductModalProps {
     product: Product | null;
