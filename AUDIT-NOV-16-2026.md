@@ -285,8 +285,8 @@ scope as each folder is cleaned.
 
 | # | Pair | Canonical choice (proposed) | Steps |
 |---|---|---|---|
-| 7.1 | `web/lib/firebase/admin.ts` vs `web/src/lib/firebase/admin.ts` | `web/src/lib/firebase/admin.ts` (used by all API routes) | Diff; re-export; migrate; delete |
-| 7.2 | `lib/payments/paypal.ts` vs `src/lib/payments/paypalServer.ts` | `src/lib/payments/*Server.ts` | Same |
+| 7.1 | `web/lib/firebase/admin.ts` vs `web/src/lib/firebase/admin.ts` | `web/src/lib/firebase/admin.ts` (used by all API routes) | **Done:** no importers, deleted |
+| 7.2 | `lib/payments/paypal.ts` vs `src/lib/payments/paypalServer.ts` | `src/lib/payments/*Server.ts` | **Done:** no importers, deleted (with the unused mock `paymentService.ts` and `constants.ts`) |
 | 7.3 | `/api/paypal/*` vs `/api/payments/paypal/*`; `/api/stripe/*` vs `/api/payments/stripe/*` | `/api/payments/{provider}/*` | Find client callers; migrate; keep old paths returning 308/410 for one release; remove |
 | 7.4 | `web/components/Owner/*` + `LegacyOwnerDashboard` vs Stitch components | Stitch | Confirm no route imports legacy; delete |
 | 7.5 | `web/lib` vs `web/src/lib` | Decide one root (recommend `web/src`, aliased `@/src/*`) | Move module by module with `git mv`; no behavior change |
