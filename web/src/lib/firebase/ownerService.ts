@@ -3,7 +3,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getDb, getStorageInstance } from "./client";
 import { Product } from "@/src/data/products";
 import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { subscribeToAffiliates } from "@/src/lib/affiliate/affiliateService";
 import type { AffiliateProfile } from "@/src/lib/affiliate/types";
 import { format } from "date-fns";
@@ -360,29 +360,39 @@ export function exportToCSV(data: Array<Record<string, unknown>>, filename: stri
 // --- Dashboard Real-time Hooks ---
 
 /**
+ * `loading` is true until `markLoaded` is called for the current `key`, so changing the key
+ * (for example toggling seed data) starts loading again without setting state in an effect.
+ */
+function useLoadingFor(key: string) {
+    const [loadedKey, setLoadedKey] = useState<string | null>(null);
+    const markLoaded = useCallback(() => setLoadedKey(key), [key]);
+    return [loadedKey !== key, markLoaded] as const;
+}
+
+
+/**
  * Hook to subscribe to all shop orders and bookings, computing aggregated sales metrics.
  */
 export function useAggregateSales(includeSeedData?: boolean) {
     const [bookings, setBookings] = useState<OwnerBooking[]>([]);
     const [orders, setOrders] = useState<OwnerShopOrder[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, markLoaded] = useLoadingFor(String(includeSeedData));
 
     useEffect(() => {
-        setLoading(true);
         const unsubBookings = subscribeToBookings((data) => {
             setBookings(data);
-            setLoading(false);
+            markLoaded();
         }, undefined, includeSeedData);
         const unsubOrders = subscribeToShopOrders((data) => {
             setOrders(data);
-            setLoading(false);
+            markLoaded();
         }, undefined, includeSeedData);
         
         return () => {
             unsubBookings();
             unsubOrders();
         };
-    }, [includeSeedData]);
+    }, [includeSeedData, markLoaded]);
 
     const metrics = useMemo(() => computeSalesMetrics(bookings, orders), [bookings, orders]);
 
@@ -426,10 +436,9 @@ export function useAffiliateMetrics() {
 export function useConversionMetrics(includeSeedData?: boolean) {
     const [bookings, setBookings] = useState<OwnerBooking[]>([]);
     const [drafts, setDrafts] = useState<OwnerBookingDraft[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, markLoaded] = useLoadingFor(String(includeSeedData));
 
     useEffect(() => {
-        setLoading(true);
         const unsubB = subscribeToBookings((data) => {
             // A booking is considered a successful conversion if it is NOT cancelled, 
             // OR if it is cancelled but the refund was forfeited (meaning the business kept the revenue).
@@ -437,10 +446,10 @@ export function useConversionMetrics(includeSeedData?: boolean) {
         }, undefined, includeSeedData);
         const unsubD = subscribeToBookingDrafts((data) => {
             setDrafts(data);
-            setLoading(false);
+            markLoaded();
         }, includeSeedData);
         return () => { unsubB(); unsubD(); };
-    }, [includeSeedData]);
+    }, [includeSeedData, markLoaded]);
 
     const conversionRate = useMemo(() => computeConversionRate(bookings.length, drafts.length), [bookings, drafts]);
 
@@ -452,15 +461,14 @@ export function useConversionMetrics(includeSeedData?: boolean) {
  */
 export function useBusinessTrends(periodMonths: number = 6, includeSeedData?: boolean) {
     const [bookings, setBookings] = useState<OwnerBooking[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, markLoaded] = useLoadingFor(`${periodMonths}:${includeSeedData}`);
 
     useEffect(() => {
-        setLoading(true);
         return subscribeToBookings((data) => {
             setBookings(data);
-            setLoading(false);
+            markLoaded();
         }, undefined, includeSeedData);
-    }, [periodMonths, includeSeedData]);
+    }, [periodMonths, includeSeedData, markLoaded]);
 
     const chartData = useMemo(() => buildBusinessTrends(bookings, periodMonths), [bookings, periodMonths]);
 
@@ -473,24 +481,23 @@ export function useBusinessTrends(periodMonths: number = 6, includeSeedData?: bo
 export function useTopPerformers(includeSeedData?: boolean) {
     const [bookings, setBookings] = useState<OwnerBooking[]>([]);
     const [orders, setOrders] = useState<OwnerShopOrder[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, markLoaded] = useLoadingFor(String(includeSeedData));
 
     useEffect(() => {
-        setLoading(true);
         const unsubBookings = subscribeToBookings((data) => {
             setBookings(data);
-            setLoading(false);
+            markLoaded();
         }, undefined, includeSeedData);
         const unsubOrders = subscribeToShopOrders((data) => {
             setOrders(data);
-            setLoading(false);
+            markLoaded();
         }, undefined, includeSeedData);
         
         return () => {
             unsubBookings();
             unsubOrders();
         };
-    }, [includeSeedData]);
+    }, [includeSeedData, markLoaded]);
 
     const topPerformers = useMemo(() => computeTopPerformers(bookings, orders), [bookings, orders]);
 

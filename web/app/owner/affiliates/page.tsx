@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import DashboardShell from "@/src/components/owner/stitch/DashboardShell";
 import StitchAffiliates from "@/src/components/owner/stitch/StitchAffiliates";
 import { Loader2 } from "lucide-react";
+import { useIsMounted } from "@/src/hooks/useIsMounted";
 
 export default function OwnerAffiliatesPage() {
     const router = useRouter();
-    const [mounted, setMounted] = useState(false);
+    const mounted = useIsMounted();
 
     useEffect(() => {
-        setMounted(true);
         const isStitch = process.env.NEXT_PUBLIC_OWNER_DASH_UI === "stitch";
         if (!isStitch) {
             router.replace("/owner");

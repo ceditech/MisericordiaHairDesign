@@ -1,17 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import LegacyOwnerDashboard from "@/components/Owner/legacy/LegacyOwnerDashboard";
 import StitchOverview from "@/src/components/owner/stitch/StitchOverview";
 import DashboardShell from "@/src/components/owner/stitch/DashboardShell";
 import { Loader2 } from "lucide-react";
+import { useIsMounted } from "@/src/hooks/useIsMounted";
 
 export default function OwnerPage() {
-    const [mounted, setMounted] = useState(false);
+    const mounted = useIsMounted();
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     if (!mounted) {
         return (

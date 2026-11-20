@@ -1,16 +1,13 @@
 ﻿"use client";
 
-import { useState, useEffect } from "react";
 import { useRequireOwner } from "@/src/hooks/useRequireOwner";
 import { Loader2 } from "lucide-react";
+import { useIsMounted } from "@/src/hooks/useIsMounted";
 
 export default function OwnerLayout({ children }: { children: React.ReactNode }) {
     const isOwner = useRequireOwner();
-    const [mounted, setMounted] = useState(false);
+    const mounted = useIsMounted();
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     if (!mounted || !isOwner) {
         return (

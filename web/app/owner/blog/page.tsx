@@ -1,17 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import DashboardShell from "@/src/components/owner/stitch/DashboardShell";
 import StitchBlog from "@/src/components/owner/stitch/StitchBlog";
 import { Loader2 } from "lucide-react";
 import { redirect } from "next/navigation";
+import { useIsMounted } from "@/src/hooks/useIsMounted";
 
 export default function OwnerBlogPage() {
-    const [mounted, setMounted] = useState(false);
+    const mounted = useIsMounted();
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     if (!mounted) {
         return (
