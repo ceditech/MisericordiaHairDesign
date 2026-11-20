@@ -41,6 +41,7 @@ import {
     useConversionMetrics,
     useAffiliateMetrics
 } from "@/src/lib/firebase/ownerService";
+import { isTimestampLike } from "@/src/lib/owner/ownerStats";
 import { useAuth } from "@/src/hooks/useAuth";
 import { authFetch } from "@/src/lib/http/authFetch";
 
@@ -238,7 +239,7 @@ export default function StitchOverview() {
                 Date: b.date,
                 Time: b.time,
                 Status: b.status,
-                Price: ((b.priceCents || b.totalAmountCents || 0) / 100).toFixed(2),
+                Price: (Number(b.priceCents || b.totalAmountCents || 0) / 100).toFixed(2),
                 Deposit: ((b.pricing?.depositPaidCents || b.depositCents || 0) / 100).toFixed(2)
             }));
             exportToCSV(data, "Bookings_Report");
@@ -248,8 +249,8 @@ export default function StitchOverview() {
                 Client: o.clientName || o.customerName || "Unknown",
                 Email: o.clientEmail || o.customerEmail || "Unknown",
                 Status: o.status,
-                Total: ((o.totalAmountCents || (o.totalAmount * 100) || 0) / 100).toFixed(2),
-                Date: o.createdAt?.toDate ? format(o.createdAt.toDate(), 'yyyy-MM-dd HH:mm') : "N/A"
+                Total: ((o.totalAmountCents || ((o.totalAmount ?? 0) * 100) || 0) / 100).toFixed(2),
+                Date: isTimestampLike(o.createdAt) ? format(o.createdAt.toDate(), 'yyyy-MM-dd HH:mm') : "N/A"
             }));
             exportToCSV(data, "Shop_Sales_Report");
         } else if (type === 'inventory') {

@@ -5,7 +5,23 @@ import { Product } from "@/src/data/products";
 import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
 import { useState, useEffect, useMemo } from "react";
 import { subscribeToAffiliates } from "@/src/lib/affiliate/affiliateService";
+import type { AffiliateProfile } from "@/src/lib/affiliate/types";
 import { format } from "date-fns";
+import type { BraidStyle } from "@/lib/styles";
+import type { Review } from "@/src/data/reviews";
+import type { AddonPricing } from "@/lib/pricing";
+import type { OwnerBooking, OwnerBookingDraft, OwnerCode, OwnerShopOrder } from "@/src/lib/owner/types";
+import {
+    buildBusinessTrends,
+    computeAffiliateMetrics,
+    computeConversionRate,
+    computeSalesMetrics,
+    computeTopPerformers,
+    countRecentClients,
+    isConvertedBooking,
+} from "@/src/lib/owner/ownerStats";
+
+export type { OwnerBooking, OwnerBookingDraft, OwnerCode, OwnerShopOrder } from "@/src/lib/owner/types";
 
 const db = getDb();
 const storage = getStorageInstance();
@@ -30,15 +46,15 @@ export interface BlogPost {
 
 // --- Bookings ---
 
-export function subscribeToBookings(callback: (bookings: any[]) => void, limitCount?: number, includeSeedData?: boolean) {
+export function subscribeToBookings(callback: (bookings: OwnerBooking[]) => void, limitCount?: number, includeSeedData?: boolean) {
     let q = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
     if (limitCount) {
         q = query(collection(db, "bookings"), orderBy("createdAt", "desc"), limit(limitCount));
     }
     return onSnapshot(q, (snapshot) => {
-        let bookings = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        let bookings = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as OwnerBooking);
         if (!includeSeedData) {
-            bookings = bookings.filter((b: any) => !b.isSeedData);
+            bookings = bookings.filter((b) => !b.isSeedData);
         }
         callback(bookings);
     }, (error) => {
@@ -49,12 +65,12 @@ export function subscribeToBookings(callback: (bookings: any[]) => void, limitCo
 /**
  * Subscribe to booking drafts for conversion calculation.
  */
-export function subscribeToBookingDrafts(callback: (drafts: any[]) => void, includeSeedData?: boolean) {
+export function subscribeToBookingDrafts(callback: (drafts: OwnerBookingDraft[]) => void, includeSeedData?: boolean) {
     const q = query(collection(db, "bookingDrafts"));
     return onSnapshot(q, (snapshot) => {
-        let drafts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        let drafts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as OwnerBookingDraft);
         if (!includeSeedData) {
-            drafts = drafts.filter((d: any) => !d.isSeedData);
+            drafts = drafts.filter((d) => !d.isSeedData);
         }
         callback(drafts);
     }, (error) => {
@@ -100,15 +116,15 @@ export async function deleteProduct(productId: string) {
 
 // --- Shop Orders ---
 
-export function subscribeToShopOrders(callback: (orders: any[]) => void, limitCount?: number, includeSeedData?: boolean) {
+export function subscribeToShopOrders(callback: (orders: OwnerShopOrder[]) => void, limitCount?: number, includeSeedData?: boolean) {
     let q = query(collection(db, "shopOrders"), orderBy("createdAt", "desc"));
     if (limitCount) {
         q = query(collection(db, "shopOrders"), orderBy("createdAt", "desc"), limit(limitCount));
     }
     return onSnapshot(q, (snapshot) => {
-        let orders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        let orders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as OwnerShopOrder);
         if (!includeSeedData) {
-            orders = orders.filter((o: any) => !o.isSeedData);
+            orders = orders.filter((o) => !o.isSeedData);
         }
         callback(orders);
     }, (error) => {
@@ -118,7 +134,7 @@ export function subscribeToShopOrders(callback: (orders: any[]) => void, limitCo
 
 export async function updateOrderStatus(orderId: string, status: string, fulfillmentStatus?: string) {
     const orderRef = doc(db, "shopOrders", orderId);
-    const updates: any = {
+    const updates: Record<string, unknown> = {
         updatedAt: serverTimestamp()
     };
     if (status) updates.status = status;
@@ -129,20 +145,34 @@ export async function updateOrderStatus(orderId: string, status: string, fulfill
 
 // --- Styles ---
 
-export function subscribeToStyles(callback: (styles: any[]) => void) {
+/**
+ * Fields the owner screen writes to a `styles` document. `duration` and `price` are numbers
+ * there but strings in the static catalog (`BraidStyle`).
+ */
+export type StyleWrite = Omit<Partial<BraidStyle>, "duration" | "price"> & {
+    duration?: string | number;
+    price?: string | number;
+    priceCents?: number;
+    imageUrl?: string;
+    isActive?: boolean;
+};
+
+/** Styles as stored; `T` is the view of the document the caller expects (public pages use `BraidStyle`). */
+export function subscribeToStyles<T = BraidStyle>(callback: (styles: T[]) => void) {
     const q = query(collection(db, "styles"), orderBy("name", "asc"));
     return onSnapshot(q, (snapshot) => {
         const styles = snapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
-        }));
+        }) as T);
         callback(styles);
     }, (error) => {
         console.error("Error subscribing to styles:", error);
     });
 }
 
-export async function upsertStyle(style: any) {
+export async function upsertStyle(style: StyleWrite) {
+    if (!style.id) throw new Error("A style id is required");
     const styleRef = doc(db, "styles", style.id);
     await setDoc(styleRef, {
         ...style,
@@ -184,10 +214,15 @@ export const deletePreset = async (id: string) => {
 
 // --- Addons ---
 
-export const subscribeToAddons = (callback: (data: any[]) => void) => {
+/** A `braidAddons` document. */
+export interface AddonDoc extends AddonPricing {
+    name?: string;
+}
+
+export const subscribeToAddons = (callback: (data: AddonDoc[]) => void) => {
     const q = query(collection(getDb(), "braidAddons"));
     return onSnapshot(q, (snapshot) => {
-        callback(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        callback(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as AddonDoc));
     });
 };
 
@@ -205,13 +240,13 @@ export const deleteAddon = async (id: string) => {
 
 // --- Reviews ---
 
-export function subscribeToReviews(callback: (reviews: any[]) => void) {
+export function subscribeToReviews(callback: (reviews: Review[]) => void) {
     const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
     return onSnapshot(q, (snapshot) => {
         const reviews = snapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
-        }));
+        }) as Review);
         callback(reviews);
     }, (error) => {
         console.error("Error subscribing to reviews:", error);
@@ -219,8 +254,8 @@ export function subscribeToReviews(callback: (reviews: any[]) => void) {
     });
 }
 
-export async function upsertReview(review: any) {
-    const reviewRef = doc(db, "reviews", review.id || doc(collection(db, "reviews")).id);
+export async function upsertReview(review: Partial<Review> & { createdAt?: unknown }) {
+    const reviewRef = doc(db, "reviews", review.id ? String(review.id) : doc(collection(db, "reviews")).id);
     await setDoc(reviewRef, {
         ...review,
         updatedAt: serverTimestamp(),
@@ -262,7 +297,7 @@ export async function upsertBlogPost(post: Partial<BlogPost> & { id?: string }) 
     };
     
     if (post.status === 'published' && !post.publishedAt) {
-        (data as any).publishedAt = serverTimestamp();
+        (data as Record<string, unknown>).publishedAt = serverTimestamp();
     }
 
     await setDoc(blogRef, data, { merge: true });
@@ -301,7 +336,7 @@ export async function uploadFile(file: File, path: string): Promise<string> {
 
 // --- Export Utility ---
 
-export function exportToCSV(data: any[], filename: string) {
+export function exportToCSV(data: Array<Record<string, unknown>>, filename: string) {
     if (!data || !data.length) return;
     
     const headers = Object.keys(data[0]).join(",");
@@ -328,8 +363,8 @@ export function exportToCSV(data: any[], filename: string) {
  * Hook to subscribe to all shop orders and bookings, computing aggregated sales metrics.
  */
 export function useAggregateSales(includeSeedData?: boolean) {
-    const [bookings, setBookings] = useState<any[]>([]);
-    const [orders, setOrders] = useState<any[]>([]);
+    const [bookings, setBookings] = useState<OwnerBooking[]>([]);
+    const [orders, setOrders] = useState<OwnerShopOrder[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -349,40 +384,7 @@ export function useAggregateSales(includeSeedData?: boolean) {
         };
     }, [includeSeedData]);
 
-    const metrics = useMemo(() => {
-        const serviceRevenue = bookings
-            .filter(b => b.status === 'completed')
-            .reduce((sum, b) => {
-                const amount = b.isSeedData 
-                    ? (b.totalCents || b.amountCents || b.priceCents || 0)
-                    : (b.amountPaidCents || b.pricing?.amountDueCents || b.pricing?.depositCents || 0);
-                return sum + amount;
-            }, 0);
-
-        const shopRevenue = orders
-            .filter(o => o.status !== 'cancelled')
-            .reduce((sum, o) => {
-                const amount = o.totalAmountCents || (o.totalAmount * 100) || 0;
-                return sum + amount;
-            }, 0);
-
-        const totalDeposits = bookings
-            .filter(b => b.status !== 'cancelled')
-            .reduce((sum, b) => {
-                const deposit = b.pricing?.depositPaidCents || b.depositCents || 0;
-                return sum + deposit;
-            }, 0);
-
-        return {
-            totalRevenue: (serviceRevenue + shopRevenue) / 100,
-            serviceRevenue: serviceRevenue / 100,
-            shopRevenue: shopRevenue / 100,
-            totalDeposits: totalDeposits / 100,
-            bookingsCount: bookings.length,
-            ordersCount: orders.length,
-            revenueTarget: 15000, 
-        };
-    }, [bookings, orders]);
+    const metrics = useMemo(() => computeSalesMetrics(bookings, orders), [bookings, orders]);
 
     return { metrics, bookings, orders, loading };
 }
@@ -391,8 +393,8 @@ export function useAggregateSales(includeSeedData?: boolean) {
  * Hook to subscribe to affiliates and compute performance metrics.
  */
 export function useAffiliateMetrics() {
-    const [affiliates, setAffiliates] = useState<any[]>([]);
-    const [codes, setCodes] = useState<any[]>([]);
+    const [affiliates, setAffiliates] = useState<AffiliateProfile[]>([]);
+    const [codes, setCodes] = useState<OwnerCode[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -403,7 +405,7 @@ export function useAffiliateMetrics() {
         // Also subscribe to codes to get usage counts
         const qCodes = query(collection(getDb(), "codes"));
         const unsubCodes = onSnapshot(qCodes, (snap) => {
-            setCodes(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            setCodes(snap.docs.map(doc => ({ id: doc.id, ...doc.data() }) as OwnerCode));
             setLoading(false);
         });
 
@@ -413,25 +415,7 @@ export function useAffiliateMetrics() {
         };
     }, []);
 
-    const metrics = useMemo(() => {
-        const unpaidCommissions = affiliates.reduce((sum, a) => {
-            return sum + (a.payoutsDueCents || 0);
-        }, 0);
-
-        const totalUsages = codes.reduce((sum, c) => sum + (c.usageCount || 0), 0);
-        const clientUsages = codes.filter(c => c.category === 'client').reduce((sum, c) => sum + (c.usageCount || 0), 0);
-        const generalUsages = codes.filter(c => c.category === 'general').reduce((sum, c) => sum + (c.usageCount || 0), 0);
-
-        return {
-            totalCount: affiliates.length,
-            clientCount: affiliates.filter(a => a.type === 'client').length,
-            generalCount: affiliates.filter(a => a.type === 'general').length,
-            totalUsages,
-            clientUsages,
-            generalUsages,
-            payoutsDue: unpaidCommissions / 100,
-        };
-    }, [affiliates, codes]);
+    const metrics = useMemo(() => computeAffiliateMetrics(affiliates, codes), [affiliates, codes]);
 
     return { metrics, affiliates, loading };
 }
@@ -440,8 +424,8 @@ export function useAffiliateMetrics() {
  * Hook to compute real-time conversion rate (Bookings / Total Drafts).
  */
 export function useConversionMetrics(includeSeedData?: boolean) {
-    const [bookings, setBookings] = useState<any[]>([]);
-    const [drafts, setDrafts] = useState<any[]>([]);
+    const [bookings, setBookings] = useState<OwnerBooking[]>([]);
+    const [drafts, setDrafts] = useState<OwnerBookingDraft[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -449,12 +433,7 @@ export function useConversionMetrics(includeSeedData?: boolean) {
         const unsubB = subscribeToBookings((data) => {
             // A booking is considered a successful conversion if it is NOT cancelled, 
             // OR if it is cancelled but the refund was forfeited (meaning the business kept the revenue).
-            const convertedBookings = data.filter(b => {
-                if (b.status !== 'cancelled') return true;
-                if (b.forfeited === true || b.refundStatus === 'forfeited') return true;
-                return false;
-            });
-            setBookings(convertedBookings);
+            setBookings(data.filter(isConvertedBooking));
         }, undefined, includeSeedData);
         const unsubD = subscribeToBookingDrafts((data) => {
             setDrafts(data);
@@ -463,12 +442,7 @@ export function useConversionMetrics(includeSeedData?: boolean) {
         return () => { unsubB(); unsubD(); };
     }, [includeSeedData]);
 
-    const conversionRate = useMemo(() => {
-        if (drafts.length === 0) return 0;
-        // Calculation: (Confirmed Bookings / Total Drafts Initiated)
-        // We multiply by 100 for percentage
-        return Math.min(100, (bookings.length / drafts.length) * 100);
-    }, [bookings, drafts]);
+    const conversionRate = useMemo(() => computeConversionRate(bookings.length, drafts.length), [bookings, drafts]);
 
     return { conversionRate, loading };
 }
@@ -477,7 +451,7 @@ export function useConversionMetrics(includeSeedData?: boolean) {
  * Hook to compute business trends (bookings over time) for charts.
  */
 export function useBusinessTrends(periodMonths: number = 6, includeSeedData?: boolean) {
-    const [bookings, setBookings] = useState<any[]>([]);
+    const [bookings, setBookings] = useState<OwnerBooking[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -488,33 +462,7 @@ export function useBusinessTrends(periodMonths: number = 6, includeSeedData?: bo
         }, undefined, includeSeedData);
     }, [periodMonths, includeSeedData]);
 
-    const chartData = useMemo(() => {
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const data: any[] = [];
-        const now = new Date();
-
-        for (let i = periodMonths - 1; i >= 0; i--) {
-            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-            data.push({
-                name: monthNames[d.getMonth()],
-                completed: 0,
-                cancelled: 0,
-                year: d.getFullYear(),
-                month: d.getMonth()
-            });
-        }
-
-        bookings.forEach(b => {
-            const date = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || Date.now());
-            const entry = data.find(m => m.month === date.getMonth() && m.year === date.getFullYear());
-            if (entry) {
-                if (b.status === 'cancelled') entry.cancelled++;
-                else entry.completed++;
-            }
-        });
-
-        return data;
-    }, [bookings, periodMonths]);
+    const chartData = useMemo(() => buildBusinessTrends(bookings, periodMonths), [bookings, periodMonths]);
 
     return { chartData, loading };
 }
@@ -523,8 +471,8 @@ export function useBusinessTrends(periodMonths: number = 6, includeSeedData?: bo
  * Hook to compute top performing services and products.
  */
 export function useTopPerformers(includeSeedData?: boolean) {
-    const [bookings, setBookings] = useState<any[]>([]);
-    const [orders, setOrders] = useState<any[]>([]);
+    const [bookings, setBookings] = useState<OwnerBooking[]>([]);
+    const [orders, setOrders] = useState<OwnerShopOrder[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -544,88 +492,7 @@ export function useTopPerformers(includeSeedData?: boolean) {
         };
     }, [includeSeedData]);
 
-    const topPerformers = useMemo(() => {
-        const parsePrice = (b: any) => {
-            const val = b.amountCents || b.amountPaidCents || b.priceCents || b.totalAmountCents || b.totalPriceCents;
-            if (typeof val === 'number') return val / 100;
-            if (typeof val === 'string') {
-                const numeric = parseFloat(val.replace(/[^0-9.]/g, ''));
-                return isNaN(numeric) ? 0 : numeric;
-            }
-            // Fallback to legacy 'price' or 'totalAmount' fields if cents are missing
-            const legacyVal = b.price || b.totalAmount || b.totalPrice || 0;
-            if (typeof legacyVal === 'number') return legacyVal;
-            if (typeof legacyVal === 'string') {
-                const numeric = parseFloat(legacyVal.replace(/[^0-9.]/g, ''));
-                return isNaN(numeric) ? 0 : numeric;
-            }
-            return 0;
-        };
-
-        // Services
-        const serviceMap: Record<string, { count: number; name: string; price: number; img?: string }> = {};
-        bookings.forEach(b => {
-            const name = b.styleName || b.service || "Unknown Service";
-            const price = parsePrice(b);
-            const img = b.styleImage || b.imageUrl;
-            
-            if (!serviceMap[name]) {
-                serviceMap[name] = { 
-                    count: 0, 
-                    name, 
-                    price: price,
-                    img: img
-                };
-            } else {
-                // If we found a price > 0, update it (to avoid $0 from test bookings)
-                if (serviceMap[name].price === 0 && price > 0) {
-                    serviceMap[name].price = price;
-                }
-                // If we found an image and didn't have one, update it
-                if (!serviceMap[name].img && img) {
-                    serviceMap[name].img = img;
-                }
-            }
-            serviceMap[name].count++;
-        });
-        const topServices = Object.values(serviceMap)
-            .sort((a, b) => b.count - a.count)
-            .slice(0, 3);
-
-        // Products
-        const productMap: Record<string, { count: number; name: string; price: number; img?: string }> = {};
-        orders.forEach(o => {
-            if (o.status !== 'cancelled') {
-                (o.items || []).forEach((item: any) => {
-                    const name = item.name || "Unknown Product";
-                    const price = parsePrice(item);
-                    const img = item.imageUrl || item.image;
-
-                    if (!productMap[name]) {
-                        productMap[name] = { 
-                            count: 0, 
-                            name, 
-                            price: price,
-                            img: img
-                        };
-                    } else {
-                        if (productMap[name].price === 0 && price > 0) {
-                            productMap[name].price = price;
-                        }
-                        if (!productMap[name].img && img) {
-                            productMap[name].img = img;
-                        }
-                    }
-                    productMap[name].count += (item.quantity || 1);
-                });
-            }
-        });
-        const topProducts = Object.values(productMap)
-            .sort((a, b) => b.count - a.count)
-            .slice(0, 3);
-
-        return { topServices, topProducts };
-    }, [bookings, orders]);
+    const topPerformers = useMemo(() => computeTopPerformers(bookings, orders), [bookings, orders]);
 
     return { ...topPerformers, loading };
 }
@@ -659,21 +526,8 @@ export function useNewClientsCount(includeSeedData?: boolean) {
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         
         return subscribeToBookings((data) => {
-            // Calculate unique clients from bookings in the last 30 days
-            // This guarantees sync with the bookings count card
-            const recentBookings = data.filter(b => {
-                const createdAt = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt);
-                return createdAt >= thirtyDaysAgo;
-            });
-            
-            const uniqueClients = new Set();
-            recentBookings.forEach(b => {
-                // Try to find a unique identifier for the client
-                const identifier = b.clientEmail || b.email || b.clientPhone || b.phone || b.clientName || b.name || b.id;
-                if (identifier) uniqueClients.add(identifier);
-            });
-            
-            setCount(uniqueClients.size);
+            // Unique clients from bookings in the last 30 days (keeps the card in sync with the bookings count)
+            setCount(countRecentClients(data, thirtyDaysAgo));
             setLoading(false);
         }, undefined, includeSeedData);
     }, [includeSeedData]);
@@ -683,15 +537,24 @@ export function useNewClientsCount(includeSeedData?: boolean) {
 
 // --- Admin Management ---
 
+/** A `users` document as the admin screen lists it. */
+export interface AssistantUser {
+    id: string;
+    role?: string | null;
+    email?: string;
+    name?: string;
+    displayName?: string;
+}
+
 /**
  * Subscribe to users with the 'assistant' role.
  */
-export function subscribeToAssistants(callback: (assistants: any[]) => void) {
+export function subscribeToAssistants(callback: (assistants: AssistantUser[]) => void) {
     const q = query(collection(db, "users"), orderBy("updatedAt", "desc"));
     return onSnapshot(q, (snapshot) => {
         const assistants = snapshot.docs
-            .map(doc => ({ id: doc.id, ...doc.data() }))
-            .filter((u: any) => u.role === "assistant");
+            .map(doc => ({ id: doc.id, ...doc.data() }) as AssistantUser)
+            .filter((u) => u.role === "assistant");
         callback(assistants);
     }, (error) => {
         console.error("Error subscribing to assistants:", error);
