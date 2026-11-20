@@ -19,6 +19,8 @@ export default function AffiliatesTab() {
 
     useEffect(() => {
         if (typeof window !== 'undefined' && window.location.search.includes('demo=true')) {
+            // Demo mode (?demo=true) only; reads the URL after hydration
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setAffiliates([
                 { 
                     id: 'aff_1', 

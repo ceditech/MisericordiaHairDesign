@@ -2,39 +2,37 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { useTheme } from "./ThemeProvider";
 import { Button, Drawer, Tooltip } from "./ui";
 import { useCart } from "@/src/lib/shop/cartStore";
 
 import { useAuth } from "@/src/hooks/useAuth";
+import { useIsMounted } from "@/src/hooks/useIsMounted";
+
+function subscribeToHash(onChange: () => void) {
+    window.addEventListener("hashchange", onChange);
+    return () => window.removeEventListener("hashchange", onChange);
+}
+const getHash = () => window.location.hash;
+const getServerHash = () => "";
 
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [currentHash, setCurrentHash] = useState("");
-    const [mounted, setMounted] = useState(false);
+    const currentHash = useSyncExternalStore(subscribeToHash, getHash, getServerHash);
+    const mounted = useIsMounted();
     const pathname = usePathname();
     const { theme, setTheme, resolvedTheme } = useTheme();
     const { cartCount } = useCart();
     const { user, role, signOut } = useAuth();
 
-    // Set mounted to true after initial hydration
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
-    // Track hash changes for anchor link highlighting
-    useEffect(() => {
-        const updateHash = () => setCurrentHash(window.location.hash);
-        updateHash();
-        window.addEventListener("hashchange", updateHash);
-        return () => window.removeEventListener("hashchange", updateHash);
-    }, []);
-
-    // Close mobile menu on route change
-    useEffect(() => {
+    // Close the mobile menu when the route changes
+    const [menuPathname, setMenuPathname] = useState(pathname);
+    if (menuPathname !== pathname) {
+        setMenuPathname(pathname);
         setMobileMenuOpen(false);
-    }, [pathname]);
+    }
 
     const isActiveLink = (href: string) => {
         if (href.startsWith("/#")) {
@@ -116,7 +114,7 @@ export default function Header() {
                 <div className="flex justify-between items-center h-20">
                     {/* Logo */}
                     <div className="flex items-center gap-2">
-                        <Logo />
+                        {Logo()}
                     </div>
 
                     {/* Desktop Navigation */}
@@ -136,9 +134,9 @@ export default function Header() {
 
                         <div className="h-6 w-px bg-border mx-2" />
 
-                        <AuthButton />
+                        {AuthButton()}
 
-                        <ThemeToggle />
+                        {ThemeToggle()}
 
                         {/* Cart Icon */}
                         <Tooltip content="View Cart" position="bottom">
@@ -171,7 +169,7 @@ export default function Header() {
                                 </span>
                             )}
                         </Link>
-                        <ThemeToggle />
+                        {ThemeToggle()}
                         <button
                             onClick={() => setMobileMenuOpen(true)}
                             className="text-text-secondary p-2 hover:text-brand-primary transition-colors focus-visible:ring-2 focus-visible:ring-brand-primary outline-none"

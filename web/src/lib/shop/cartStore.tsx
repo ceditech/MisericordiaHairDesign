@@ -36,6 +36,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         const savedCart = localStorage.getItem(CART_STORAGE_KEY);
         if (savedCart) {
             try {
+                // Restoring the saved cart after hydration (server render has no localStorage)
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setCart(JSON.parse(savedCart));
             } catch (e) {
                 console.error("Failed to parse cart from storage", e);

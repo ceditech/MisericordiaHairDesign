@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useSyncExternalStore } from "react";
+import { useIsMounted } from "@/src/hooks/useIsMounted";
 
 type Theme = "light" | "dark" | "system";
 
@@ -12,6 +13,26 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+// The chosen theme lives in localStorage; this tiny store lets React read it without an effect.
+const THEME_KEY = "theme";
+const themeListeners = new Set<() => void>();
+
+function subscribeToTheme(onChange: () => void) {
+    themeListeners.add(onChange);
+    window.addEventListener("storage", onChange);
+    return () => {
+        themeListeners.delete(onChange);
+        window.removeEventListener("storage", onChange);
+    };
+}
+
+function getStoredTheme(): Theme {
+    const stored = localStorage.getItem(THEME_KEY);
+    return stored === "light" || stored === "dark" || stored === "system" ? stored : "system";
+}
+
+const getServerTheme = (): Theme => "system";
+
 export function useTheme() {
     const context = useContext(ThemeContext);
     if (!context) {
@@ -21,18 +42,9 @@ export function useTheme() {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const [theme, setThemeState] = useState<Theme>("system");
+    const theme = useSyncExternalStore(subscribeToTheme, getStoredTheme, getServerTheme);
     const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
-    const [mounted, setMounted] = useState(false);
-
-    // Initialize theme from localStorage or system preference
-    useEffect(() => {
-        setMounted(true);
-        const stored = localStorage.getItem("theme") as Theme | null;
-        if (stored && ["light", "dark", "system"].includes(stored)) {
-            setThemeState(stored);
-        }
-    }, []);
+    const mounted = useIsMounted();
 
     // Update resolved theme based on theme setting
     useEffect(() => {
@@ -69,8 +81,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }, [resolvedTheme, mounted]);
 
     const setTheme = (newTheme: Theme) => {
-        setThemeState(newTheme);
-        localStorage.setItem("theme", newTheme);
+        localStorage.setItem(THEME_KEY, newTheme);
+        themeListeners.forEach((notify) => notify());
     };
 
     return (

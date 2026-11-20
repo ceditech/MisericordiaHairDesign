@@ -1,8 +1,9 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
+import { useIsMounted } from "@/src/hooks/useIsMounted";
 
 type ToastVariant = "success" | "error" | "info" | "warning";
 
@@ -29,11 +30,8 @@ export function useToast() {
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
     const [toasts, setToasts] = useState<Toast[]>([]);
-    const [mounted, setMounted] = useState(false);
+    const mounted = useIsMounted();
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     const showToast = useCallback((message: string, variant: ToastVariant = "info", duration = 5000) => {
         const id = Math.random().toString(36).substring(7);

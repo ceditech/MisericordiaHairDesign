@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Product } from "@/src/data/products";
 import { useCart } from "@/src/lib/shop/cartStore";
 import { Button, Badge, useToast } from "@/components/ui";
@@ -19,7 +19,10 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
     const [mainImage, setMainImage] = useState<string>("");
 
-    useEffect(() => {
+    // Reset the form whenever a different product is shown
+    const [shownProduct, setShownProduct] = useState<Product | null>(null);
+    if (product !== shownProduct) {
+        setShownProduct(product);
         if (product) {
             setMainImage(product.images[0]);
             setQuantity(1);
@@ -31,7 +34,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
             });
             setSelectedOptions(defaults);
         }
-    }, [product]);
+    }
 
     if (!product || !isOpen) return null;
 

@@ -1,17 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import DashboardShell from "@/src/components/owner/stitch/DashboardShell";
 import StitchAppointments from "@/src/components/owner/stitch/StitchAppointments";
 import { Loader2 } from "lucide-react";
 import { redirect } from "next/navigation";
+import { useIsMounted } from "@/src/hooks/useIsMounted";
 
 export default function OwnerAppointmentsPage() {
-    const [mounted, setMounted] = useState(false);
+    const mounted = useIsMounted();
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     if (!mounted) {
         return (

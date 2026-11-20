@@ -146,22 +146,17 @@ export default function OurStylesPage() {
         const unsubscribe = subscribeToStyles((data) => {
             setStyles(data);
             setLoading(false);
-        });
-        return () => unsubscribe();
-    }, []);
-
-    useEffect(() => {
-        if (!loading && styles.length > 0) {
-            const params = new URLSearchParams(window.location.search);
-            const styleId = params.get("style");
-            if (styleId) {
-                const found = styles.find(s => s.id === styleId);
+            // Open the style named in the URL (?style=<id>) once styles have loaded
+            if (data.length > 0) {
+                const styleId = new URLSearchParams(window.location.search).get("style");
+                const found = styleId ? data.find(s => s.id === styleId) : undefined;
                 if (found) {
                     setSelectedStyle(found);
                 }
             }
-        }
-    }, [loading, styles]);
+        });
+        return () => unsubscribe();
+    }, []);
 
     const scroll = (direction: "left" | "right") => {
         if (scrollContainerRef.current) {

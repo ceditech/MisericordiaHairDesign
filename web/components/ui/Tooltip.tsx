@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 interface TooltipProps {
     content: string;
@@ -11,16 +11,17 @@ interface TooltipProps {
 
 export function Tooltip({ content, children, position = "top", delay = 0 }: TooltipProps) {
     const [isVisible, setIsVisible] = useState(false);
-    let timeout: NodeJS.Timeout;
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     const showTooltip = () => {
-        timeout = setTimeout(() => {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
             setIsVisible(true);
         }, delay);
     };
 
     const hideTooltip = () => {
-        clearInterval(timeout);
+        clearTimeout(timeoutRef.current);
         setIsVisible(false);
     };
 
