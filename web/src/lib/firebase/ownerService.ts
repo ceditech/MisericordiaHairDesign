@@ -7,9 +7,9 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { subscribeToAffiliates } from "@/src/lib/affiliate/affiliateService";
 import type { AffiliateProfile } from "@/src/lib/affiliate/types";
 import { format } from "date-fns";
-import type { BraidStyle } from "@/lib/styles";
+import type { BraidStyle } from "@/src/lib/styles";
 import type { Review } from "@/src/data/reviews";
-import type { AddonPricing } from "@/lib/pricing";
+import type { AddonPricing } from "@/src/lib/pricing";
 import type { OwnerBooking, OwnerBookingDraft, OwnerCode, OwnerShopOrder } from "@/src/lib/owner/types";
 import {
     buildBusinessTrends,

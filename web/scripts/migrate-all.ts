@@ -6,7 +6,7 @@ config({ path: resolve(process.cwd(), ".env.local") });
 
 import { adminDb } from "../src/lib/firebase/admin";
 import { STORE_PRODUCTS } from "../src/data/products";
-import { BRAID_STYLES } from "../lib/styles";
+import { BRAID_STYLES } from "@/src/lib/styles";
 import { REVIEWS } from "../src/data/reviews";
 import { SIZE_PRESETS, LENGTH_PRESETS, DEFAULT_ADDONS } from "../src/constants/braidPresets";
 import { FieldValue } from "firebase-admin/firestore";

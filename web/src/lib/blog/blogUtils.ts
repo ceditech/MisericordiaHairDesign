@@ -1,4 +1,4 @@
-import { BlogPost } from "../../data/blogPosts";
+import { BlogPost } from "@/data/blogPosts";
 
 /**
  * Calculates reading time in minutes based on word count.

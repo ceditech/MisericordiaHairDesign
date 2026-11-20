@@ -1,7 +1,7 @@
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { getDb } from "./firebase/client";
 import { Product } from "@/src/data/products";
-import { BraidStyle } from "@/lib/styles";
+import { BraidStyle } from "@/src/lib/styles";
 import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
 
 const db = getDb();

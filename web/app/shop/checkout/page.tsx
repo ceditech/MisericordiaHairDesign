@@ -9,11 +9,11 @@ import { getDb } from "@/src/lib/firebase/client";
 import { doc, getDoc } from "firebase/firestore";
 import { authFetch } from "@/src/lib/http/authFetch";
 import { SHOP_SHIPPING_FLAT_CENTS, computeShopTotals } from "@/src/lib/shop/orderPricing";
-import type { PaymentProvider, PaymentStatus } from "@/lib/payments/types";
+import type { PaymentProvider, PaymentStatus } from "@/src/lib/payments/types";
 import { Button, Input, Card, Badge, useToast } from "@/components/ui";
 import { ShieldCheck, ArrowLeft, Info, Tag } from "lucide-react";
 import StripeCheckout from "@/components/StripeCheckout";
-import { formatUSPhone, isValidUSPhone } from "@/lib/utils";
+import { formatUSPhone, isValidUSPhone } from "@/src/lib/utils";
 
 // --- Helpers ---
 function formatCents(cents: number) {

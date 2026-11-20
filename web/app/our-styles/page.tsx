@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { BraidStyle } from "@/lib/styles";
+import { BraidStyle } from "@/src/lib/styles";
 import { SIZE_PRESETS, LENGTH_PRESETS, ADDON_WASHING } from "@/src/constants/braidPresets";
 import { subscribeToStyles } from "@/src/lib/firebase/ownerService";
 import { Skeleton } from "@/components/ui";

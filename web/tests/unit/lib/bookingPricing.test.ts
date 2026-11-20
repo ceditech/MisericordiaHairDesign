@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calculateBookingPrice } from "@/lib/pricing";
+import { calculateBookingPrice } from "@/src/lib/pricing";
 
 /**
  * Booking (service) pricing. Services are NOT taxed (Texas policy per the owner);

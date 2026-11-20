@@ -4,7 +4,7 @@ import { use } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BLOG_POSTS } from "@/data/blogPosts";
-import { getRelatedPosts } from "@/lib/blog/blogUtils";
+import { getRelatedPosts } from "@/src/lib/blog/blogUtils";
 import { Button, Badge, Card, useToast } from "@/components/ui";
 
 export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {

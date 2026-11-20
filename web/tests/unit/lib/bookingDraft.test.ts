@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { newDraftId, sanitizeDraftForPersistence, type BookingDraft } from "@/lib/bookingDraft";
+import { newDraftId, sanitizeDraftForPersistence, type BookingDraft } from "@/src/lib/bookingDraft";
 
 const draft: BookingDraft = {
     currentStep: 4,

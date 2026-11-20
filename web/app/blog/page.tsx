@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useMemo } from "react";
 import { BLOG_POSTS, BlogCategory } from "@/data/blogPosts";
-import { filterPosts } from "@/lib/blog/blogUtils";
+import { filterPosts } from "@/src/lib/blog/blogUtils";
 import { Button, Input, Badge, Card, useToast } from "@/components/ui";
 
 export default function BlogPage() {

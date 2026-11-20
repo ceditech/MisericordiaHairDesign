@@ -53,7 +53,7 @@ vi.mock("firebase-admin/firestore", () => ({
     FieldValue: { serverTimestamp: () => "TS", increment: (n: number) => ({ increment: n }) },
 }));
 vi.mock("@/src/lib/email/EmailManager", () => ({ EmailManager: { sendEmail: async (m: { to: string }) => { if (state.failEmails) throw new Error("smtp down"); state.emails.push(m.to); } } }));
-vi.mock("@/lib/payments/receipt-generator", () => ({ generateHtmlReceipt: () => "<p/>" }));
+vi.mock("@/src/lib/payments/receipt-generator", () => ({ generateHtmlReceipt: () => "<p/>" }));
 vi.mock("@/src/lib/email/templates/receiptTemplate", () => ({ generateElegantReceiptEmail: () => "<p/>" }));
 vi.mock("@/src/lib/affiliate/affiliateTracker", () => ({ processAffiliateConversion: async () => {} }));
 

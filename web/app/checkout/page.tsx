@@ -3,11 +3,11 @@
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useToast } from "@/components/ui";
-import { loadDraft, isDraftValid, BookingDraft, saveConfirmedBooking, sanitizeDraftForPersistence, newDraftId } from "@/lib/bookingDraft";
-import { BRAID_STYLES, BraidStyle } from "@/lib/styles";
-import { calculateBookingPrice, formatCents } from "@/lib/pricing";
+import { loadDraft, isDraftValid, BookingDraft, saveConfirmedBooking, sanitizeDraftForPersistence, newDraftId } from "@/src/lib/bookingDraft";
+import { BRAID_STYLES, BraidStyle } from "@/src/lib/styles";
+import { calculateBookingPrice, formatCents } from "@/src/lib/pricing";
 
-import type { PaymentProvider, PaymentChoice, PaymentStatus } from "@/lib/payments/types";
+import type { PaymentProvider, PaymentChoice, PaymentStatus } from "@/src/lib/payments/types";
 import { subscribeToStyles, subscribeToPresets, subscribeToAddons } from "@/src/lib/firebase/ownerService";
 import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
 import { DEPOSIT_POLICY, CANCELLATION_POLICY, PRICE_NOTE_POLICY } from "@/src/content/legal";
