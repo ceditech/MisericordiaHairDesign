@@ -1,4 +1,4 @@
-import { ConfirmedBooking } from "@/lib/bookingDraft";
+import { ConfirmedBooking } from "@/src/lib/bookingDraft";
 
 /**
  * Mock Notification Service

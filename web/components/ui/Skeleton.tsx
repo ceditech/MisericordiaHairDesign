@@ -1,5 +1,5 @@
 import { HTMLAttributes } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/src/lib/utils";
 
 export interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
     variant?: "text" | "circular" | "rectangular";

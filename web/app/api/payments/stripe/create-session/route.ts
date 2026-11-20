@@ -1,14 +1,14 @@
-import type { BraidStyle } from "@/lib/styles";
+import type { BraidStyle } from "@/src/lib/styles";
 import type { LengthPreset, SizePreset } from "@/src/constants/braidPresets";
-import type { AddonPricing } from "@/lib/pricing";
+import type { AddonPricing } from "@/src/lib/pricing";
 
 import { errorMessage } from "@/src/lib/errors";
 import { NextRequest, NextResponse } from "next/server";
 import { getStripeServer } from "@/src/lib/payments/stripeServer";
 import { adminDb } from "@/src/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
-import { calculateBookingPrice } from "@/lib/pricing";
-import { BRAID_STYLES } from "@/lib/styles";
+import { calculateBookingPrice } from "@/src/lib/pricing";
+import { BRAID_STYLES } from "@/src/lib/styles";
 import { loadActivePromo, PromoError } from "@/src/lib/promo/loadActivePromo";
 
 /** A `presets` document: a size or length preset tagged with its `type`. */

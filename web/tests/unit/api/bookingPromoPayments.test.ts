@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
-import { BRAID_STYLES } from "@/lib/styles";
-import { parseStylePriceCents } from "@/lib/pricing";
+import { BRAID_STYLES } from "@/src/lib/styles";
+import { parseStylePriceCents } from "@/src/lib/pricing";
 
 type Doc = Record<string, unknown> | undefined;
 

@@ -1,4 +1,4 @@
-import { ConfirmedBooking } from "@/lib/bookingDraft";
+import { ConfirmedBooking } from "@/src/lib/bookingDraft";
 import { DEPOSIT_POLICY, CANCELLATION_POLICY } from "@/src/content/legal";
 
 interface EmailData {

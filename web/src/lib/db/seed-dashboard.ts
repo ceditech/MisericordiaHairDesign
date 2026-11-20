@@ -1,6 +1,6 @@
 import { adminDb } from "../firebase/admin";
 import { STORE_PRODUCTS } from "../../data/products";
-import { BRAID_STYLES, type BraidStyle } from "../../../lib/styles";
+import { BRAID_STYLES, type BraidStyle } from "@/src/lib/styles";
 import { DEFAULT_ADDONS } from "../../constants/braidPresets";
 import { MIGRATED_BLOG_POSTS } from "../../../data/seeding/blogPosts";
 import { subMonths, endOfMonth, eachMonthOfInterval, format, isWeekend } from "date-fns";

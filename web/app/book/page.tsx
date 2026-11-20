@@ -2,16 +2,16 @@
 
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { BraidStyle } from "@/lib/styles";
+import { BraidStyle } from "@/src/lib/styles";
 import { useAuth } from "@/src/providers/AuthProvider";
-import { saveDraft, loadDraft, clearDraft } from "@/lib/bookingDraft";
+import { saveDraft, loadDraft, clearDraft } from "@/src/lib/bookingDraft";
 import { DEPOSIT_POLICY, CANCELLATION_POLICY, DEPOSIT_AMOUNT, CONTACT_PHONE } from "@/src/content/legal";
 import { getBookingsByDate, BookingRecord } from "@/src/lib/firebase/userBookings";
 import { subscribeToStyles, subscribeToPresets, subscribeToAddons } from "@/src/lib/firebase/ownerService";
 import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
 import { Skeleton, Modal } from "@/components/ui";
-import { calculateBookingPrice, formatCents } from "@/lib/pricing";
-import { formatUSPhone, isValidUSPhone } from "@/lib/utils";
+import { calculateBookingPrice, formatCents } from "@/src/lib/pricing";
+import { formatUSPhone, isValidUSPhone } from "@/src/lib/utils";
 
 
 

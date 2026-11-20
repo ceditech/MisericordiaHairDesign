@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminDb } from "@/src/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
-import { buildReminderEmail } from "@/lib/notifications/emailTemplates";
+import { buildReminderEmail } from "@/src/lib/notifications/emailTemplates";
 import { format, addDays } from "date-fns";
 import { EmailManager } from "@/src/lib/email/EmailManager";
 import { requireCronSecretOrRole } from "@/src/lib/auth/requireCronSecretOrRole";

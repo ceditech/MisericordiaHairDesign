@@ -58,7 +58,7 @@ vi.mock("@/src/lib/payments/paypalServer", () => ({
     },
 }));
 vi.mock("@/src/lib/email/EmailManager", () => ({ EmailManager: { sendEmail: async (m: { to: string }) => void state.emails.push(m.to) } }));
-vi.mock("@/lib/payments/receipt-generator", () => ({ generateHtmlReceipt: () => "<p/>" }));
+vi.mock("@/src/lib/payments/receipt-generator", () => ({ generateHtmlReceipt: () => "<p/>" }));
 vi.mock("@/src/lib/email/templates/receiptTemplate", () => ({ generateElegantReceiptEmail: () => "<p/>" }));
 
 import { POST } from "@/app/api/payments/paypal/capture/route";

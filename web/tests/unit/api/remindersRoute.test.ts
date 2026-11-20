@@ -42,7 +42,7 @@ vi.mock("firebase-admin/firestore", () => ({ FieldValue: { serverTimestamp: () =
 vi.mock("@/src/lib/email/EmailManager", () => ({
     EmailManager: { sendEmail: async (m: { to: string }) => { state.emails.push(m.to); } },
 }));
-vi.mock("@/lib/notifications/emailTemplates", () => ({
+vi.mock("@/src/lib/notifications/emailTemplates", () => ({
     buildReminderEmail: () => ({ subject: "Reminder", html: "<p>hi</p>" }),
 }));
 

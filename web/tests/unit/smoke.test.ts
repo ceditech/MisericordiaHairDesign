@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cn, formatUSPhone } from "@/lib/utils";
+import { cn, formatUSPhone } from "@/src/lib/utils";
 
 // Smoke test: proves the harness runs TypeScript and resolves the "@/" alias.
 // It also pins the current behavior of two pure helpers (characterization).

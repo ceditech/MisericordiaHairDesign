@@ -8,7 +8,7 @@ import { CONTACT_EMAIL } from "@/src/content/legal";
 import { CheckCircle, ShoppingBag, ArrowRight, Printer, Share2 } from "lucide-react";
 import { confirmShopOrder, type PublicShopOrder } from "@/src/lib/shop/confirmShopOrder";
 import { useCart } from "@/src/lib/shop/cartStore";
-import { PaymentSession } from "@/lib/payments/types";
+import { PaymentSession } from "@/src/lib/payments/types";
 
 function formatCents(cents: number) {
     return `$${(cents / 100).toFixed(2)}`;

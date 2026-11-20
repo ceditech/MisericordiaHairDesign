@@ -3,11 +3,11 @@
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
-import { loadConfirmedBooking, ConfirmedBooking, clearDraft } from "@/lib/bookingDraft";
-import { BRAID_STYLES } from "@/lib/styles";
-import { buildIcs, downloadIcs } from "@/lib/calendar/ics";
-import { sendBookingConfirmation } from "@/lib/notifications/notificationService";
-import { buildClientConfirmationEmail, buildProviderConfirmationEmail } from "@/lib/notifications/emailTemplates";
+import { loadConfirmedBooking, ConfirmedBooking, clearDraft } from "@/src/lib/bookingDraft";
+import { BRAID_STYLES } from "@/src/lib/styles";
+import { buildIcs, downloadIcs } from "@/src/lib/calendar/ics";
+import { sendBookingConfirmation } from "@/src/lib/notifications/notificationService";
+import { buildClientConfirmationEmail, buildProviderConfirmationEmail } from "@/src/lib/notifications/emailTemplates";
 import { Modal, useToast, Button, Badge } from "@/components/ui";
 import { capturePayPalBooking } from "@/src/lib/bookings/capturePayPalBooking";
 

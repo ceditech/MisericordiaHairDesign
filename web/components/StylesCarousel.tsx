@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { BRAID_STYLES, BraidStyle } from "@/lib/styles";
+import { BRAID_STYLES, BraidStyle } from "@/src/lib/styles";
 import { subscribeToStyles } from "@/src/lib/firebase/ownerService";
 
 export default function StylesCarousel() {

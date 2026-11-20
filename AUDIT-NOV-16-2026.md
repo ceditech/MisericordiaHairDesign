@@ -289,7 +289,7 @@ scope as each folder is cleaned.
 | 7.2 | `lib/payments/paypal.ts` vs `src/lib/payments/paypalServer.ts` | `src/lib/payments/*Server.ts` | **Done:** no importers, deleted (with the unused mock `paymentService.ts` and `constants.ts`) |
 | 7.3 | `/api/paypal/*` vs `/api/payments/paypal/*`; `/api/stripe/*` vs `/api/payments/stripe/*` | `/api/payments/{provider}/*` | Find client callers; migrate; keep old paths returning 308/410 for one release; remove |
 | 7.4 | `web/components/Owner/*` + `LegacyOwnerDashboard` vs Stitch components | Stitch | Confirm no route imports legacy; delete |
-| 7.5 | `web/lib` vs `web/src/lib` | Decide one root (recommend `web/src`, aliased `@/src/*`) | Move module by module with `git mv`; no behavior change |
+| 7.5 | `web/lib` vs `web/src/lib` | Decide one root (recommend `web/src`, aliased `@/src/*`) | **Done:** all of `web/lib` moved to `web/src/lib` with `git mv`; imports are `@/src/lib/*`; no behavior change |
 
 Each step: tests green before and after; no functional change in the same commit.
 
