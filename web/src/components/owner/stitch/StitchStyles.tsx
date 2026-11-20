@@ -88,14 +88,6 @@ export default function StitchStyles() {
     }, []);
 
     // Style Handlers
-    const saveEdit = async () => {
-        if (!editingId) return;
-        setSaving(true);
-        try { await upsertStyle({ ...editData, id: editingId }); setEditingId(null); }
-        catch (err) { console.error(err); }
-        finally { setSaving(false); }
-    };
-
     const handleDelete = async (id: string) => {
         if (!confirm("Delete this style?")) return;
         try { await deleteStyle(id); } catch (err) { console.error(err); }

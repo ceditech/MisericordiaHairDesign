@@ -27,7 +27,7 @@ export default function ProductsPage() {
     const categories = useMemo(() => ["All", ...Array.from(new Set(products.map(p => p.category)))], [products]);
 
     const filteredProducts = useMemo(() => {
-        let result = products.filter(p => {
+        const result = products.filter(p => {
             const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 p.shortDescription.toLowerCase().includes(searchQuery.toLowerCase());
             const matchesCategory = activeCategory === "All" || p.category === activeCategory;

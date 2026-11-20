@@ -37,7 +37,6 @@ export async function processAffiliateConversion(data: {
         }
 
         const affiliateId = codeData.affiliateId;
-        const discountPercent = codeData.discountPercent || 10;
         const category = codeData.category || "unknown";
 
         // 1. Increment Usage Count on the Code

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { subscribeToShopOrders, updateOrderStatus } from "@/src/lib/firebase/ownerService";
 import { Card, Badge, Button } from "@/components/ui";
-import { ShoppingBag, Package, Truck, User, Search, CheckCircle, Clock } from "lucide-react";
+import { ShoppingBag, Truck, User, Search, CheckCircle } from "lucide-react";
 import { format } from "date-fns";
 
 export default function OrdersTab() {

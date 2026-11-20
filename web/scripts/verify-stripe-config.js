@@ -45,7 +45,7 @@ async function verify() {
     console.log('Testing connectivity to Stripe API...');
     
     // Test connectivity
-    const balance = await stripe.balance.retrieve();
+    await stripe.balance.retrieve();
     console.log('✅ Connectivity successful! Stripe account balance retrieved.');
     console.log('Current Default API Version used by SDK:', stripe.getApiField('version'));
     

@@ -5,14 +5,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useCart } from "@/src/lib/shop/cartStore";
 import { useAuth } from "@/src/providers/AuthProvider";
-import { signUpUser } from "@/src/lib/firebase/auth";
 import { getDb } from "@/src/lib/firebase/client";
 import { doc, getDoc } from "firebase/firestore";
 import { authFetch } from "@/src/lib/http/authFetch";
 import { SHOP_SHIPPING_FLAT_CENTS, computeShopTotals } from "@/src/lib/shop/orderPricing";
 import type { PaymentProvider, PaymentStatus } from "@/lib/payments/types";
 import { Button, Input, Card, Badge, useToast } from "@/components/ui";
-import { ChevronRight, ShieldCheck, ArrowLeft, ShoppingBag, Info, Truck, Tag } from "lucide-react";
+import { ShieldCheck, ArrowLeft, Info, Tag } from "lucide-react";
 import StripeCheckout from "@/components/StripeCheckout";
 import { formatUSPhone, isValidUSPhone } from "@/lib/utils";
 
@@ -22,7 +21,7 @@ function formatCents(cents: number) {
 }
 
 function ShopCheckoutInner() {
-    const { cart, cartTotal, cartCount, clearCart } = useCart();
+    const { cart, cartTotal, cartCount } = useCart();
     const { user, profile } = useAuth();
     const router = useRouter();
 

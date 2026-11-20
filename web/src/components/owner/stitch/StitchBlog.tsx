@@ -1,10 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { 
-    subscribeToBlogPosts, upsertBlogPost, deleteBlogPost, getBlogStats, uploadFile,
-    type BlogPost 
-} from "@/src/lib/firebase/ownerService";
+import { subscribeToBlogPosts, upsertBlogPost, deleteBlogPost, uploadFile, type BlogPost } from "@/src/lib/firebase/ownerService";
 import { 
     FileText, Plus, Trash2, Edit3, Save, X, Calendar, User, Eye, 
     MessageSquare, TrendingUp, Search, Filter, Image as ImageIcon,
@@ -102,7 +99,7 @@ export default function StitchBlog() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
                     <h1 className="text-4xl font-extrabold font-headline tracking-tight text-slate-900 dark:text-white">Blog Management</h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">Create and manage your shop's content, styling tips, and updates.</p>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1">Create and manage your shop&apos;s content, styling tips, and updates.</p>
                 </div>
                 <button 
                     onClick={() => { setIsAdding(true); setFormData({ title: "", content: "", author: "Misericordia Team", status: "draft", category: "Styling Tips" }); }}

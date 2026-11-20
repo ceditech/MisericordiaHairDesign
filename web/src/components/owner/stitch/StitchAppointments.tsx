@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { collection, query, onSnapshot, orderBy, doc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { getDb } from "@/src/lib/firebase/client";
 import { authFetch } from "@/src/lib/http/authFetch";
-import { Calendar, Search, ChevronRight, X, CheckCircle, XCircle, Clock, Filter, TrendingUp, DollarSign, Ban, ReceiptText } from "lucide-react";
+import { Calendar, Search, ChevronRight, X, CheckCircle, XCircle, TrendingUp, DollarSign, Ban, ReceiptText } from "lucide-react";
 
 type Booking = {
     id: string;

@@ -5,7 +5,6 @@ import { DEPOSIT_POLICY, CANCELLATION_POLICY, CONTACT_EMAIL, CONTACT_PHONE, FULL
 import { useState, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { BRAID_STYLES } from "@/lib/styles";
-import { Facebook, Instagram } from "lucide-react";
 import { Button, Input, Textarea, Card, Badge, useToast, Tooltip } from "@/components/ui";
 
 // Dynamically import BraidsMap component to avoid SSR issues with Leaflet

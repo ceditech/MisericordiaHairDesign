@@ -11,7 +11,6 @@ function cn(...inputs: ClassValue[]) {
 import Image from "next/image";
 import { subscribeToReviews } from "@/src/lib/firebase/ownerService";
 import { Review, REVIEWS } from "@/src/data/reviews";
-import { Skeleton } from "@/components/ui";
 
 const GoogleIcon = ({ className }: { className?: string }) => (
     <svg viewBox="0 0 24 24" className={cn("w-5 h-5", className)} xmlns="http://www.w3.org/2000/svg">
@@ -46,7 +45,7 @@ const StarIcon = ({ filled }: { filled: boolean }) => (
 
 export default function Reviews() {
     const [reviews, setReviews] = useState<Review[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [, setLoading] = useState(true);
 
     // Subscribe to reviews
     React.useEffect(() => {
@@ -186,7 +185,7 @@ export default function Reviews() {
 
                                     {/* Review Text */}
                                     <p className="text-text-secondary text-sm italic leading-relaxed mb-6 flex-grow">
-                                        "{review.text}"
+                                        &quot;{review.text}&quot;
                                     </p>
 
                                     {/* Read more */}

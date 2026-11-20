@@ -3,13 +3,9 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/src/providers/AuthProvider";
 import { getUserBookingHistory, BookingRecord } from "@/src/lib/firebase/userBookings";
-import { Card, Button, Badge } from "@/components/ui";
-import { 
-    Calendar, Clock, User, LogOut, ChevronRight,
-    MapPin, Sparkles, Scissors, AlertCircle, RefreshCw
-} from "lucide-react";
+import { Card, Badge } from "@/components/ui";
+import { Calendar, Clock, User, LogOut, MapPin, Sparkles, Scissors, RefreshCw } from "lucide-react";
 import Link from "next/link";
-import { format } from "date-fns";
 
 export default function ClientDashboardPage() {
     const { user, profile, loading, signOut } = useAuth();

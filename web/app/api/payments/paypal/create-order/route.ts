@@ -142,7 +142,6 @@ export async function POST(req: NextRequest) {
 
       console.log(`[PayPal] Server-calculated price: ${amountCents}c (Choice: ${choice})`);
 
-      const amountUSD = (amountCents / 100).toFixed(2);
       const description = `Misericordia Hair Designs — ${draft.styleName ?? "Braiding Service"} (${choice === "deposit" ? "Deposit" : "Full Payment"})`;
 
       const order = await paypalServer.createOrder(amountCents, "USD", description, urls);
@@ -190,7 +189,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Invalid order total" }, { status: 400 });
       }
 
-      const amountUSD = (totalCents / 100).toFixed(2);
       const order = await paypalServer.createOrder(totalCents, "USD", "Misericordia Hair Designs Shop Order", urls);
 
       const approvalLink = findApprovalLink(order.links);

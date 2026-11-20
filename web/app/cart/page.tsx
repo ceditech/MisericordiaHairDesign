@@ -3,8 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { useCart } from "@/src/lib/shop/cartStore";
-import { Button, Card, Badge } from "@/components/ui";
-import { ShoppingBag, Trash2, Plus, Minus, ArrowLeft, ShieldCheck, Truck, Clock } from "lucide-react";
+import { Card, Badge } from "@/components/ui";
+import { ShoppingBag, Trash2, Plus, Minus, ArrowLeft, ShieldCheck, Clock } from "lucide-react";
 
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, cartTotal, cartCount } = useCart();

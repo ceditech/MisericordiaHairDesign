@@ -1,15 +1,4 @@
-import { 
-    collection, 
-    addDoc, 
-    setDoc, 
-    doc, 
-    serverTimestamp, 
-    query, 
-    where, 
-    getDocs,
-    onSnapshot,
-    orderBy
-} from "firebase/firestore";
+import { collection, query, onSnapshot, orderBy } from "firebase/firestore";
 import { getDb } from "../firebase/client";
 import { AffiliateType, AffiliateProfile } from "./types";
 

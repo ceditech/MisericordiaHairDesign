@@ -1,19 +1,4 @@
-import { 
-    collection, 
-    query, 
-    orderBy, 
-    onSnapshot, 
-    doc, 
-    updateDoc, 
-    deleteDoc, 
-    setDoc, 
-    serverTimestamp,
-    getDocs,
-    limit,
-    Timestamp,
-    addDoc,
-    getCountFromServer
-} from "firebase/firestore";
+import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, setDoc, serverTimestamp, getDocs, limit, Timestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getDb, getStorageInstance } from "./client";
 import { Product } from "@/src/data/products";

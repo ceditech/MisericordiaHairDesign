@@ -1,14 +1,12 @@
 "use client";
 
-import { useState, useEffect, useRef, Suspense } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useToast } from "@/components/ui";
-import { loadDraft, clearDraft, isDraftValid, BookingDraft, saveConfirmedBooking, sanitizeDraftForPersistence, newDraftId } from "@/lib/bookingDraft";
+import { loadDraft, isDraftValid, BookingDraft, saveConfirmedBooking, sanitizeDraftForPersistence, newDraftId } from "@/lib/bookingDraft";
 import { BRAID_STYLES, BraidStyle } from "@/lib/styles";
 import { calculateBookingPrice, formatCents } from "@/lib/pricing";
 
-import { CURRENCY } from "@/lib/payments/constants";
 import type { PaymentProvider, PaymentChoice, PaymentStatus } from "@/lib/payments/types";
 import { subscribeToStyles, subscribeToPresets, subscribeToAddons } from "@/src/lib/firebase/ownerService";
 import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
@@ -87,7 +85,6 @@ function MethodCard({ provider, selected, onSelect, icon, label, description }: 
 // ─── Main component ───────────────────────────────────────────────────────────
 
 function CheckoutPageInner() {
-    const router = useRouter();
 
     const { showToast } = useToast();
     const [draft, setDraft] = useState<BookingDraft | null>(null);
@@ -100,7 +97,6 @@ function CheckoutPageInner() {
     const [promoCode, setPromoCode] = useState("");
     const [appliedCode, setAppliedCode] = useState<string | null>(null);
     const [appliedDiscountPercent, setAppliedDiscountPercent] = useState(0);
-    const hasRedirected = useRef(false);
     // draftId is the server-side identifier for this booking session (stable per draft load)
     const [draftId, setDraftId] = useState<string | null>(null);
 

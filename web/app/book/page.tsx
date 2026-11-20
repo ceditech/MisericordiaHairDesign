@@ -2,10 +2,9 @@
 
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import Link from "next/link";
-import { BRAID_STYLES, BraidStyle } from "@/lib/styles";
+import { BraidStyle } from "@/lib/styles";
 import { useAuth } from "@/src/providers/AuthProvider";
-import { saveDraft, loadDraft, clearDraft, BookingDraft } from "@/lib/bookingDraft";
+import { saveDraft, loadDraft, clearDraft } from "@/lib/bookingDraft";
 import { DEPOSIT_POLICY, CANCELLATION_POLICY, DEPOSIT_AMOUNT, CONTACT_PHONE } from "@/src/content/legal";
 import { getBookingsByDate, BookingRecord } from "@/src/lib/firebase/userBookings";
 import { subscribeToStyles, subscribeToPresets, subscribeToAddons } from "@/src/lib/firebase/ownerService";
@@ -27,7 +26,7 @@ function parseMaxDurationHours(duration: string | undefined): number {
     if (!match) return 4;
     
     // Take the larger value if it's a range like "4-6 hours"
-    let val = parseFloat(match[match.length - 1]);
+    const val = parseFloat(match[match.length - 1]);
     
     // Check if it's in minutes
     if (duration.toLowerCase().includes("min")) {
@@ -67,9 +66,9 @@ function generateSlots(maxDurationHours: number, selectedDateStr: string, existi
     const timeToMinutes = (timeStr: string) => {
         if (!timeStr) return 0;
         const [time, period] = timeStr.split(" ");
-        let [hStr, mStr] = time.split(":");
+        const [hStr, mStr] = time.split(":");
         let h = parseInt(hStr, 10);
-        let m = parseInt(mStr, 10);
+        const m = parseInt(mStr, 10);
         if (period === "PM" && h < 12) h += 12;
         if (period === "AM" && h === 12) h = 0;
         return h * 60 + m;
@@ -670,7 +669,7 @@ function BookingPageInner() {
                         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <h2 className="text-4xl font-bold mb-2 text-slate-900 dark:text-white">Select Date &amp; Time</h2>
                             <p className="text-slate-500 dark:text-slate-400 mb-8">
-                                Available slots reflect your style's estimated duration
+                                Available slots reflect your style&apos;s estimated duration
                                 <span className="ml-1 font-semibold text-[#9F2D5C]">({selectedStyle?.duration})</span>.
                             </p>
                             <div className="bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-800">
@@ -1173,7 +1172,7 @@ function BookingPageInner() {
                         <span className="material-icons text-[#9F2D5C] text-3xl">event_busy</span>
                     </div>
                     <p className="text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
-                        We're sorry, but there are no available slots for <strong className="text-slate-900 dark:text-white">{bookingData.date}</strong>. 
+                        We&apos;re sorry, but there are no available slots for <strong className="text-slate-900 dark:text-white">{bookingData.date}</strong>. 
                         This may be because we are fully booked, or the remaining time before our <strong>9:00 PM</strong> closing time is not enough to complete your selected style (<span className="text-[#9F2D5C] font-semibold">{selectedStyle?.duration}</span>).
                     </p>
                     <button

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { subscribeToAffiliates, createAffiliateProfile } from "@/src/lib/affiliate/affiliateService";
 import { AffiliateProfile, AffiliateType } from "@/src/lib/affiliate/types";
 import { Card, Button, Input, Badge } from "@/components/ui";
-import { Users, UserPlus, Mail, Tag, Calendar, ShieldCheck, Plus, X } from "lucide-react";
+import { Users, UserPlus, Mail, Calendar, ShieldCheck, Plus, X } from "lucide-react";
 import { format } from "date-fns";
 
 export default function AffiliatesTab() {
