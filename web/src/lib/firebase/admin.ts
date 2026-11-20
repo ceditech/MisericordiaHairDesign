@@ -1,3 +1,4 @@
+import { errorMessage } from "../errors";
 import { applicationDefault, cert, getApps, initializeApp, type App } from "firebase-admin/app";
 import { getAuth, type Auth } from "firebase-admin/auth";
 import { getFirestore, type Firestore } from "firebase-admin/firestore";
@@ -15,8 +16,8 @@ function loadServiceAccountFromEnv() {
     try {
       const decoded = Buffer.from(accountBase64, "base64").toString("utf8");
       return JSON.parse(decoded);
-    } catch (err: any) {
-      console.error("[Firebase Admin] Failed to decode FIREBASE_SERVICE_ACCOUNT_KEY_BASE64:", err.message);
+    } catch (err: unknown) {
+      console.error("[Firebase Admin] Failed to decode FIREBASE_SERVICE_ACCOUNT_KEY_BASE64:", errorMessage(err));
     }
   }
 
@@ -28,8 +29,8 @@ function loadServiceAccountFromEnv() {
         clean = clean.slice(1, -1);
       }
       return JSON.parse(clean);
-    } catch (err: any) {
-      console.error("[Firebase Admin] Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY JSON:", err.message);
+    } catch (err: unknown) {
+      console.error("[Firebase Admin] Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY JSON:", errorMessage(err));
     }
   }
 

@@ -1,6 +1,6 @@
 import { adminDb } from "../firebase/admin";
 import { STORE_PRODUCTS } from "../../data/products";
-import { BRAID_STYLES } from "../../../lib/styles";
+import { BRAID_STYLES, type BraidStyle } from "../../../lib/styles";
 import { DEFAULT_ADDONS } from "../../constants/braidPresets";
 import { MIGRATED_BLOG_POSTS } from "../../../data/seeding/blogPosts";
 import { subMonths, endOfMonth, eachMonthOfInterval, format, isWeekend } from "date-fns";
@@ -51,7 +51,7 @@ export async function seedDashboardData() {
 
     // 2. Get styles for bookings
     const stylesSnap = await adminDb.collection("styles").get();
-    const styles = stylesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+    const styles = stylesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }) as BraidStyle);
 
     // 2. Ensure products are in Firestore
     console.log("Seeding products...");

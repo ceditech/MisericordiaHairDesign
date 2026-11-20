@@ -69,11 +69,11 @@ export class GmailOAuthProvider implements EmailProvider {
             };
 
             if (sender!.isPrimary) {
-                SenderRepository.savePrimarySender(updatedConfig).catch((err: any) => 
+                SenderRepository.savePrimarySender(updatedConfig).catch((err: unknown) => 
                     console.error("[GmailOAuthProvider] Failed to save primary sender refreshed token", err)
                 );
             } else {
-                SenderRepository.saveSender(sender!.email, updatedConfig).catch((err: any) => 
+                SenderRepository.saveSender(sender!.email, updatedConfig).catch((err: unknown) => 
                     console.error(`[GmailOAuthProvider] Failed to save sender ${sender!.email} refreshed token`, err)
                 );
             }

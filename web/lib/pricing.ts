@@ -33,6 +33,13 @@ export function parseStylePriceCents(price: string | number): number {
     return Math.round(parseFloat(match[1]) * 100);
 }
 
+/** Add-on price and deposit in dollars (from the `braidAddons` collection). */
+export interface AddonPricing {
+    id: string;
+    price: number;
+    deposit: number;
+}
+
 export interface PricingResult {
     baseCents: number;
     sizeAdjustmentCents: number;
@@ -56,7 +63,7 @@ export interface PricingInput {
     takeDownAddon: boolean;
     sizePresets?: SizePreset[];
     lengthPresets?: LengthPreset[];
-    addons?: any[];
+    addons?: AddonPricing[];
     /**
      * A promo already validated against the `codes` collection (active, with its percent).
      * Never derived from the code text: callers must look the code up first.
@@ -71,8 +78,8 @@ export function calculateBookingPrice(input: PricingInput): PricingResult {
     const size = input.sizePresets?.find(s => s.id === input.sizeId) || { priceAdjustment: 0 };
     const length = input.lengthPresets?.find(l => l.id === input.lengthId) || { priceAdjustment: 0 };
     
-    const sizeAdjustmentCents = (size as any).priceAdjustment * 100;
-    const lengthAdjustmentCents = (length as any).priceAdjustment * 100;
+    const sizeAdjustmentCents = size.priceAdjustment * 100;
+    const lengthAdjustmentCents = length.priceAdjustment * 100;
     
     let addonCents = 0;
     let addonDepositCents = 0;

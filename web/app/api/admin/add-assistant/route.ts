@@ -1,3 +1,4 @@
+import { errorCode } from "@/src/lib/errors";
 import { NextRequest, NextResponse } from "next/server";
 import { adminAuth, adminDb } from "@/src/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
@@ -31,8 +32,8 @@ export const POST = withAuth(["superAdmin"], async (req: NextRequest, auth) => {
         try {
             const userRecord = await adminAuth.getUserByEmail(email);
             uid = userRecord.uid;
-        } catch (error: any) {
-            if (error.code === 'auth/user-not-found') {
+        } catch (error: unknown) {
+            if (errorCode(error) === 'auth/user-not-found') {
                 // User doesn't exist, create them
                 const newUser = await adminAuth.createUser({
                     email,
@@ -113,7 +114,7 @@ export const POST = withAuth(["superAdmin"], async (req: NextRequest, auth) => {
                 bodyHtml,
             });
             emailSent = true;
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("[Add Assistant API] Email Error:", error);
             emailError = "Email could not be sent";
         }
@@ -127,7 +128,7 @@ export const POST = withAuth(["superAdmin"], async (req: NextRequest, auth) => {
             }
         });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("[Add Assistant API] Error:", error);
         return NextResponse.json({ 
             success: false, 

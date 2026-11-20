@@ -1,3 +1,4 @@
+import { errorMessage } from "@/src/lib/errors";
 import { NextRequest, NextResponse } from "next/server";
 import { paypalServer } from "@/src/lib/payments/paypalServer";
 import { adminDb } from "@/src/lib/firebase/admin";
@@ -208,7 +209,7 @@ export async function POST(req: NextRequest) {
             to: customerEmail,
             subject: `Booking Confirmed - Misericordia Hair Design #${bookingId}`,
             bodyHtml: clientHtml,
-          } as any);
+          });
           
           // Notify the owner
           await EmailManager.sendEmail({
@@ -284,10 +285,10 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ error: "Invalid sessionType" }, { status: 400 });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("[PayPal] capture error:", err);
     return NextResponse.json(
-      { error: err.message ?? "Internal server error" },
+      { error: errorMessage(err) },
       { status: 500 }
     );
   }

@@ -136,7 +136,7 @@ export async function POST(req: NextRequest) {
                         </p>
                     </div>
                 `
-            } as any);
+            });
             console.log(`[Affiliate API] Welcome email sent to ${email}`);
         } catch (emailError) {
             console.error("[Affiliate API] Error sending welcome email:", emailError);
