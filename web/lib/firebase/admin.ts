@@ -1,9 +1,12 @@
-import * as admin from 'firebase-admin';
+import { applicationDefault, cert, getApps, initializeApp, type Credential } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+import { getFirestore } from 'firebase-admin/firestore';
+import { getStorage } from 'firebase-admin/storage';
 
 // Initialize Firebase Admin SDK
 // This only executes on the server side
-if (!admin.apps.length) {
-    let credential;
+if (!getApps().length) {
+    let credential: Credential | undefined;
     const serviceAccountVar = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
 
     if (serviceAccountVar) {
@@ -21,7 +24,7 @@ if (!admin.apps.length) {
             if (!serviceAccount.private_key) {
                 throw new Error("Service account key is missing 'private_key'. Ensure you copied the full JSON from Firebase Console.");
             }
-            credential = admin.credential.cert(serviceAccount);
+            credential = cert(serviceAccount);
         } catch (e: any) {
             console.error("❌ Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY:", e.message);
         }
@@ -30,9 +33,9 @@ if (!admin.apps.length) {
     }
 
     try {
-        admin.initializeApp({
+        initializeApp({
             projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'dedesbraids',
-            credential: credential || admin.credential.applicationDefault()
+            credential: credential || applicationDefault()
         });
         console.log("✅ Firebase Admin initialized successfully");
     } catch (e: any) {
@@ -41,6 +44,6 @@ if (!admin.apps.length) {
     }
 }
 
-export const adminDb = admin.firestore();
-export const adminAuth = admin.auth();
-export const adminStorage = admin.storage();
+export const adminDb = getFirestore();
+export const adminAuth = getAuth();
+export const adminStorage = getStorage();

@@ -1,4 +1,7 @@
-import * as admin from "firebase-admin";
+import { applicationDefault, cert, getApps, initializeApp, type App } from "firebase-admin/app";
+import { getAuth, type Auth } from "firebase-admin/auth";
+import { getFirestore, type Firestore } from "firebase-admin/firestore";
+import { getStorage, type Storage } from "firebase-admin/storage";
 
 /**
  * loadServiceAccountFromEnv
@@ -37,7 +40,7 @@ function loadServiceAccountFromEnv() {
 let initialized = false;
 function ensureInit() {
   if (initialized) return;
-  if (admin.apps.length > 0) {
+  if (getApps().length > 0) {
     initialized = true;
     return;
   }
@@ -47,14 +50,14 @@ function ensureInit() {
     if (serviceAccount.private_key) {
       serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, "\n");
     }
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
+    initializeApp({
+      credential: cert(serviceAccount),
       storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || `${serviceAccount.project_id}.firebasestorage.app`,
     });
     initialized = true;
   } else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-    admin.initializeApp({
-      credential: admin.credential.applicationDefault(),
+    initializeApp({
+      credential: applicationDefault(),
     });
     initialized = true;
   } else {
@@ -68,31 +71,22 @@ function ensureInit() {
   }
 }
 
-// Proxied singletons for export
-export const adminDb = new Proxy({} as admin.firestore.Firestore, {
-  get: (_, prop) => {
-    ensureInit();
-    return (admin.firestore() as any)[prop];
-  }
-});
+/**
+ * Lazily-initialized singletons. The proxy defers initialization until first use (so builds
+ * without credentials do not crash) and binds methods to the real SDK object.
+ */
+function lazy<T extends object>(resolve: () => T): T {
+  return new Proxy({} as T, {
+    get: (_, prop) => {
+      ensureInit();
+      const target = resolve() as Record<string | symbol, unknown>;
+      const value = target[prop];
+      return typeof value === "function" ? (value as (...args: unknown[]) => unknown).bind(target) : value;
+    },
+  });
+}
 
-export const adminAuth = new Proxy({} as admin.auth.Auth, {
-  get: (_, prop) => {
-    ensureInit();
-    return (admin.auth() as any)[prop];
-  }
-});
-
-export const adminStorage = new Proxy({} as admin.storage.Storage, {
-  get: (_, prop) => {
-    ensureInit();
-    return (admin.storage() as any)[prop];
-  }
-});
-
-export const adminApp = new Proxy({} as admin.app.App, {
-  get: (_, prop) => {
-    ensureInit();
-    return (admin.apps[0] as any)[prop];
-  }
-});
+export const adminDb: Firestore = lazy(() => getFirestore());
+export const adminAuth: Auth = lazy(() => getAuth());
+export const adminStorage: Storage = lazy(() => getStorage());
+export const adminApp: App = lazy(() => getApps()[0]);
