@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
     });
 
     return NextResponse.json(availability);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[API Availability] Error fetching availability:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }

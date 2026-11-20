@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
                 to: "sales@edxstore.com",
                 subject: `New Contact Inquiry: ${name} - ${service}`,
                 bodyHtml: emailHtml,
-            } as any);
+            });
         } catch (emailError) {
             console.error("[Contact API] Email sending failed:", emailError);
             // We don't fail the whole request if email fails, 
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
             messageId: messageRef.id 
         });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("[Contact API] Error:", error);
         return NextResponse.json(
             { error: "Internal server error" },

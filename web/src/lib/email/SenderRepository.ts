@@ -7,7 +7,7 @@ export interface GmailSenderConfig {
     refreshToken: string;
     expiryDate: number;
     isPrimary?: boolean;
-    updatedAt?: any;
+    updatedAt?: unknown;
 }
 
 /**

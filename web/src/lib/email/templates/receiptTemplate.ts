@@ -1,5 +1,23 @@
+/** The booking-draft fields shown in the receipt email. */
+export interface ReceiptDraft {
+    clientName?: string;
+    clientEmail?: string;
+    clientPhone?: string;
+    date?: string;
+    time?: string;
+    styleName?: string;
+    sizeName?: string;
+    lengthName?: string;
+    duration?: string;
+    washingAddon?: boolean;
+    takeDownAddon?: boolean;
+    notes?: string;
+    photoUrl?: string;
+    paymentChoice?: string;
+}
+
 export function generateElegantReceiptEmail(
-    draft: any,
+    draft: ReceiptDraft,
     bookingId: string,
     role: "client" | "owner",
     amountPaidFormatted: string,

@@ -46,7 +46,7 @@ export const POST = withAuth(["owner", "admin", "assistant"], async (req: NextRe
         }
 
         return NextResponse.json({ success: true });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Error reactivating booking:", error);
         return NextResponse.json({ error: "Failed to reactivate booking" }, { status: 500 });
     }

@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
     };
 
     return NextResponse.json(sanitized);
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("[Booking Confirmation API] Error:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }

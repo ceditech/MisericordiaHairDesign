@@ -1,3 +1,4 @@
+import { errorMessage } from "@/src/lib/errors";
 import { NextRequest, NextResponse } from "next/server";
 import { getStripeServer } from "@/src/lib/payments/stripeServer";
 
@@ -44,10 +45,10 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
             clientSecret: paymentIntent.client_secret,
         });
-    } catch (err: any) {
+    } catch (err: unknown) {
         console.error("[Stripe] Create PaymentIntent failed:", err);
         return NextResponse.json(
-            { error: err.message || "Internal server error" },
+            { error: errorMessage(err) },
             { status: 500 }
         );
     }

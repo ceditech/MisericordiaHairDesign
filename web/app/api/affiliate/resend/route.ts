@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
                     </p>
                 </div>
             `
-        } as any);
+        });
 
         return NextResponse.json({ ok: true });
 

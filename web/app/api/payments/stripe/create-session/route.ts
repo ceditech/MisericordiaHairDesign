@@ -1,3 +1,8 @@
+import type { BraidStyle } from "@/lib/styles";
+import type { LengthPreset, SizePreset } from "@/src/constants/braidPresets";
+import type { AddonPricing } from "@/lib/pricing";
+
+import { errorMessage } from "@/src/lib/errors";
 import { NextRequest, NextResponse } from "next/server";
 import { getStripeServer } from "@/src/lib/payments/stripeServer";
 import { adminDb } from "@/src/lib/firebase/admin";
@@ -5,6 +10,9 @@ import { FieldValue } from "firebase-admin/firestore";
 import { calculateBookingPrice } from "@/lib/pricing";
 import { BRAID_STYLES } from "@/lib/styles";
 import { loadActivePromo, PromoError } from "@/src/lib/promo/loadActivePromo";
+
+/** A `presets` document: a size or length preset tagged with its `type`. */
+type PresetDoc = (SizePreset | LengthPreset) & { type?: string };
 
 export const runtime = "nodejs";
 
@@ -74,11 +82,11 @@ export async function POST(req: NextRequest) {
         adminDb.collection("styles").get()
       ]);
       
-      const styles = stylesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
-      const presets = presetsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
-      const sizePresets = presets.filter((p: any) => p.type === "size");
-      const lengthPresets = presets.filter((p: any) => p.type === "length");
-      const addons = addonsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+      const styles = stylesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }) as BraidStyle);
+      const presets = presetsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }) as PresetDoc);
+      const sizePresets = presets.filter((p) => p.type === "size") as SizePreset[];
+      const lengthPresets = presets.filter((p) => p.type === "length") as LengthPreset[];
+      const addons = addonsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }) as AddonPricing);
 
       // The discount comes only from an active code in the `codes` collection
 
@@ -103,7 +111,7 @@ export async function POST(req: NextRequest) {
 
       // RE-CALCULATE PRICING ON SERVER (Security: Do not trust draft values)
       // Try to find in live styles first, fallback to static config
-      const liveStyle = styles.find((s: any) => s.id === draft.styleId);
+      const liveStyle = styles.find((s) => s.id === draft.styleId);
       const staticStyle = BRAID_STYLES.find((s) => s.id === draft.styleId) || BRAID_STYLES[0];
       const style = liveStyle || staticStyle;
 
@@ -278,10 +286,10 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ error: "Invalid sessionType" }, { status: 400 });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("[Stripe] create-session error:", err);
     return NextResponse.json(
-      { error: err.message ?? "Internal server error" },
+      { error: errorMessage(err) },
       { status: 500 }
     );
   }

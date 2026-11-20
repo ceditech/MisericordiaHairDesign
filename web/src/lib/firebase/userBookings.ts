@@ -8,7 +8,7 @@ export interface BookingRecord {
     date: string;
     time: string;
     status: string;
-    createdAt: any;
+    createdAt: unknown;
     // ... other fields as needed
 }
 

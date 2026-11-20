@@ -1,3 +1,4 @@
+import { errorMessage } from "@/src/lib/errors";
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { getStripeServer } from "@/src/lib/payments/stripeServer";
@@ -33,10 +34,10 @@ export async function POST(req: NextRequest) {
   let event: Stripe.Event;
   try {
     event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
-  } catch (err: any) {
-    console.error("[Stripe Webhook] Signature verification failed:", err.message);
+  } catch (err: unknown) {
+    console.error("[Stripe Webhook] Signature verification failed:", errorMessage(err));
     return NextResponse.json(
-      { error: `Webhook signature error: ${err.message}` },
+      { error: `Webhook signature error: ${errorMessage(err)}` },
       { status: 400 }
     );
   }
@@ -99,7 +100,7 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ received: true });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("[Stripe Webhook] Processing error:", err);
     // The event is not recorded as processed, so a 500 makes Stripe retry it.
     // Finalization is idempotent (already-confirmed/paid orders are skipped), so retries are safe.
@@ -220,7 +221,7 @@ async function handleBookingPayment(session: Stripe.Checkout.Session, eventId: s
         to: customerEmail,
         subject: `Booking Confirmed - Misericordia Hair Design #${bookingId}`,
         bodyHtml: clientHtml,
-      } as any);
+      });
       console.log("[Stripe Webhook] Receipt sent to:", customerEmail);
 
       // Notify the owner of the new booking
