@@ -67,8 +67,8 @@ export default function StitchStyles() {
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
-        const unsubStyles = subscribeToStyles((data) => {
-            setStyles(data as StyleRecord[]);
+        const unsubStyles = subscribeToStyles<StyleRecord>((data) => {
+            setStyles(data);
             setLoading(false);
         });
 
