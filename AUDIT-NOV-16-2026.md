@@ -70,7 +70,7 @@ A booking and e-commerce site for **Misericordia Hair Designs**, a hair-braiding
 - `/api/affiliate/generate` also uses `Math.random()` for codes and shows no uniqueness check.
 
 **D-2 CRITICAL — Client-trusted payment amounts.**
-- `POST /api/stripe/create-payment-intent` takes `amountCents` from the request body and creates the PaymentIntent with it (any positive value, non-integers not rejected, no booking linkage). The Checkout Session route recalculates server-side and is the correct pattern.
+- **Resolved by removal (Phase 7.3):** `POST /api/stripe/create-payment-intent` had no caller and was deleted. It took `amountCents` from the request body and creates the PaymentIntent with it (any positive value, non-integers not rejected, no booking linkage). The Checkout Session route recalculates server-side and is the correct pattern.
 - `POST /api/paypal/capture-order` captures any `orderId` with no tie to a booking/amount.
 - `payments/stripe/create-session` (shop branch) builds line items from `shopOrders/{id}.items[].priceCents`; it is safe only if `shopOrders` documents are written server-side with prices from the catalog **(verify who writes `shopOrders`)**.
 
@@ -208,7 +208,7 @@ Phase 5 is listed after cleanup, but the **test harness is created in Phase 0** 
 | # | Task | Acceptance criteria |
 |---|---|---|
 | 2.1 | Unit-test current `lib/pricing.ts` behavior (characterization tests) before touching it | Tests pin existing outputs for deposit/full/addons/promo/affiliate cases |
-| 2.2 | `create-payment-intent`: accept `{bookingId|draftId, choice}`, load the booking/draft, compute amount server-side, ignore client `amountCents`; integer-only; verify booking belongs to caller or is an unpaid draft; attach `bookingId` metadata used by the webhook | Tampered amount ignored; non-existent booking 404; metadata present |
+| 2.2 | **Resolved by removal:** route had no caller and was deleted (see 7.3); if an Elements checkout is built later, price it server-side per this task. Original: `create-payment-intent`: accept `{bookingId|draftId, choice}`, load the booking/draft, compute amount server-side, ignore client `amountCents`; integer-only; verify booking belongs to caller or is an unpaid draft; attach `bookingId` metadata used by the webhook | Tampered amount ignored; non-existent booking 404; metadata present |
 | 2.3 | PayPal `create-order`: compute amount server-side from the booking; store `paypalOrderId` on the booking | Created order amount equals server amount |
 | 2.4 | PayPal `capture-order`/`capture`: verify the order was created by us (lookup by stored `paypalOrderId`), verify captured amount/currency equals the booking's expected amount, then update the booking idempotently | Unknown order ID rejected; mismatched amount flagged; double capture is a no-op |
 | 2.5 | Shop: confirm `shopOrders` are created server-side with prices from the product catalog; if created from the client, move creation to a server route that prices from `products` | Client cannot set `priceCents`; Firestore rules deny client writes to `shopOrders` price fields |
@@ -287,7 +287,7 @@ scope as each folder is cleaned.
 |---|---|---|---|
 | 7.1 | `web/lib/firebase/admin.ts` vs `web/src/lib/firebase/admin.ts` | `web/src/lib/firebase/admin.ts` (used by all API routes) | **Done:** no importers, deleted |
 | 7.2 | `lib/payments/paypal.ts` vs `src/lib/payments/paypalServer.ts` | `src/lib/payments/*Server.ts` | **Done:** no importers, deleted (with the unused mock `paymentService.ts` and `constants.ts`) |
-| 7.3 | `/api/paypal/*` vs `/api/payments/paypal/*`; `/api/stripe/*` vs `/api/payments/stripe/*` | `/api/payments/{provider}/*` | Find client callers; migrate; keep old paths returning 308/410 for one release; remove |
+| 7.3 | **Partly done:** `/api/stripe/create-payment-intent` (no caller, trusted client amount) deleted; `/api/stripe/webhook` kept. Remaining: `/api/paypal/*` vs `/api/payments/paypal/*`; `/api/stripe/*` vs `/api/payments/stripe/*` | `/api/payments/{provider}/*` | Find client callers; migrate; keep old paths returning 308/410 for one release; remove |
 | 7.4 | `web/components/Owner/*` + `LegacyOwnerDashboard` vs Stitch components | Stitch | Confirm no route imports legacy; delete |
 | 7.5 | `web/lib` vs `web/src/lib` | Decide one root (recommend `web/src`, aliased `@/src/*`) | **Done:** all of `web/lib` moved to `web/src/lib` with `git mv`; imports are `@/src/lib/*`; no behavior change |
 
