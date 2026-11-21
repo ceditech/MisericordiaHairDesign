@@ -1,10 +1,15 @@
 "use client";
 
-import { errorCode, errorMessage } from "@/src/lib/errors";
+import { errorMessage } from "@/src/lib/errors";
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useToast } from "@/components/ui";
-import { loadDraft, isDraftValid, BookingDraft, saveConfirmedBooking, sanitizeDraftForPersistence, newDraftId } from "@/src/lib/bookingDraft";
+import { loadDraft, isDraftValid, BookingDraft, saveConfirmedBooking, newDraftId } from "@/src/lib/bookingDraft";
+import { buildBookingDraftDocument, buildConfirmedBooking } from "@/src/lib/checkout/draftDocument";
+import { normalizePromoCode, promoDiscountPercent } from "@/src/lib/checkout/promo";
+import { resolveInspirationPhotoUrl } from "@/src/lib/checkout/photo";
+import { attemptAccountCreation } from "@/src/lib/checkout/accountCreation";
+import { createPayPalOrder } from "@/src/lib/checkout/paypal";
 import { BRAID_STYLES, BraidStyle } from "@/src/lib/styles";
 import { calculateBookingPrice, formatCents } from "@/src/lib/pricing";
 
@@ -201,7 +206,7 @@ function CheckoutPageInner() {
     const amountLabel = formatCents(pricing.totalCents);
 
     const handleApplyPromo = async () => {
-        const code = promoCode.trim().toUpperCase();
+        const code = normalizePromoCode(promoCode);
         if (!code) return;
 
         setErrorMsg(null);
@@ -210,9 +215,8 @@ function CheckoutPageInner() {
             const codeRef = doc(getDb(), "codes", code);
             const codeSnap = await getDoc(codeRef);
 
-            const data = codeSnap.exists() ? codeSnap.data() : null;
-            if (data && data.active === true) {
-                const pct = typeof data.discountPercent === "number" && data.discountPercent > 0 && data.discountPercent <= 100 ? data.discountPercent : 10;
+            const pct = promoDiscountPercent(codeSnap.exists() ? codeSnap.data() : null);
+            if (pct !== null) {
                 setAppliedCode(code);
                 setAppliedDiscountPercent(pct);
                 showToast?.(`${code} applied! ${pct}% discount added.`, "success");
@@ -233,7 +237,6 @@ function CheckoutPageInner() {
         }
 
         const db = getDb();
-        let currentUserId = user?.uid ?? null;
 
         console.log("[Checkout] Persisting draft...", {
             id,
@@ -242,136 +245,60 @@ function CheckoutPageInner() {
             uid: user?.uid
         });
 
-        // 1. Separate Auth Logic
-        const attemptAccountCreation = async () => {
-            if (!user && draft.createAccount && draft.password) {
-                console.log("[Checkout] Attempting automatic account creation...");
-                try {
-                    const userCredential = await signUpUser(draft.email, draft.password);
-                    const newUser = userCredential.user;
-                    currentUserId = newUser.uid;
-
-                    console.log("[Checkout] Account created, writing user profile...", { uid: newUser.uid });
-                    await setDoc(doc(db, "users", newUser.uid), {
-                        userId: newUser.uid,
-                        email: draft.email,
-                        displayName: draft.name,
-                        phone: draft.phone,
-                        role: "client",
-                        createdAt: serverTimestamp(),
-                        updatedAt: serverTimestamp(),
-                    });
-                } catch (err: unknown) {
-                    const code = errorCode(err);
-                    if (code === "auth/email-already-in-use") {
-                        console.warn("[Checkout] Email in use. Proceeding as guest linked to this email.");
-                        // Handle gracefully: we don't set currentUserId, but we don't block the booking.
-                    } else if (code === "auth/invalid-email") {
-                        throw new Error("The email provided is invalid. Please double-check it.");
-                    } else {
-                        console.error("[Checkout] Account creation failed:", code, errorMessage(err, ""));
-                        // We continue with guest flow but log it
-                    }
-                }
-            }
-        };
-
         try {
-            // Run account creation (don't let it block the entire persistence if it has minor issues, 
-            // but we await it so we have currentUserId if it succeeds)
-            await attemptAccountCreation().catch(e => {
+            // 1. Create the account first (if the visitor asked for one) so the draft can be linked to it.
+            const newUserId = await attemptAccountCreation(!!user, draft, {
+                signUp: signUpUser,
+                writeProfile: (uid, d) => setDoc(doc(db, "users", uid), {
+                    userId: uid,
+                    email: d.email,
+                    displayName: d.name,
+                    phone: d.phone,
+                    role: "client",
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp(),
+                }),
+            }).catch(e => {
                 setErrorMsg(e.message);
-                throw e; 
+                throw e;
             });
 
             // 2. Persist the updated draft state
-            const emailToUse = draft.email;
-            const phoneToUse = draft.phone;
-
-            let photoUrl = null;
-            if (draft.photoPreview && draft.photoPreview.startsWith("data:image")) {
-                try {
-                    console.log("[Checkout] Uploading inspiration photo...", { draftId: id });
-                    // Dynamically detect MIME type and extension from the data URL
-                    const mimeType = draft.photoPreview.match(/data:([^;]+);/)?.[1] || "image/jpeg";
-                    const extension = mimeType.split("/")[1] || "jpg";
-                    
-                    const storage = getStorageInstance();
-                    const photoRef = ref(storage, `bookingDrafts/${id}/inspiration_${Date.now()}.${extension}`);
-                    
-                    const metadata = {
-                        contentType: mimeType,
-                    };
-
-                    const uploadPromise = uploadString(photoRef, draft.photoPreview, "data_url", metadata);
-                    const timeoutPromise = new Promise<never>((_, reject) =>
-                        setTimeout(() => reject(new Error("Inspiration Upload Timeout (15s)")), 15000)
-                    );
-                    
-                    await Promise.race([uploadPromise, timeoutPromise]);
-                    photoUrl = await getDownloadURL(photoRef);
-                    console.log("[Checkout] Photo uploaded successfully:", photoUrl);
-                } catch (uploadErr) {
-                    console.error("[Checkout] Photo upload failed:", uploadErr);
-                    // We don't throw here to avoid blocking the entire booking if only the photo fails,
-                    // but we log it clearly.
-                }
-            } else if (draft.photoPreview && draft.photoPreview.startsWith("http")) {
-                photoUrl = draft.photoPreview;
-            }
-
-            // Never persist the account password (or other client-only fields) to Firestore.
-            const safeDraft = sanitizeDraftForPersistence(draft);
+            const photoUrl = await resolveInspirationPhotoUrl(draft.photoPreview, id, {
+                upload: (path, dataUrl, contentType) =>
+                    uploadString(ref(getStorageInstance(), path), dataUrl, "data_url", { contentType }),
+                getUrl: (path) => getDownloadURL(ref(getStorageInstance(), path)),
+            });
 
             await setDoc(doc(db, "bookingDrafts", id), {
-                ...safeDraft,
-                id,
-                userId: currentUserId || null,
-                styleId: draft.styleId || null,
-                styleName: style.name || null,
-                sizeName: sizePresets.find(s => s.id === draft.sizeId)?.label || null,
-                lengthName: lengthPresets.find(l => l.id === draft.lengthId)?.label || null,
-                date: draft.date || null,
-                time: draft.time || null,
-                clientName: draft.name || null,
-                clientEmail: emailToUse || null,
-                clientPhone: phoneToUse || null,
-                photoUrl: photoUrl || null,
-                amountPaidLabel: formatCents(amountDueNow),
-                paymentChoice,
-                promoCode: appliedCode || null,
-                provider: providerName,
-                pricing: {
-                    baseCents: pricing.baseCents,
-                    subtotalCents: pricing.subtotalCents,
-                    discountCents: pricing.discountCents,
-                    taxCents: pricing.taxCents,
-                    totalCents: pricing.totalCents,
-                    depositCents: pricing.depositCents,
+                ...buildBookingDraftDocument({
+                    draft,
+                    id,
+                    userId: user?.uid ?? newUserId,
+                    style,
+                    sizePresets,
+                    lengthPresets,
+                    photoUrl,
                     amountDueCents: amountDueNow,
-                },
+                    paymentChoice,
+                    promoCode: appliedCode,
+                    provider: providerName,
+                    pricing,
+                }),
                 updatedAt: serverTimestamp(),
             });
 
             // 3. Save to localStorage for success page
-            saveConfirmedBooking({
-                styleName: style.name,
-                sizeName: sizePresets.find(s => s.id === draft.sizeId)?.label || "Medium",
-                lengthName: lengthPresets.find(l => l.id === draft.lengthId)?.label || "Shoulder",
-                washingAddon: !!draft.washingAddon,
-                takeDownAddon: !!draft.takeDownAddon,
-                duration: style.duration,
-                price: String(style.price),
-                date: draft.date,
-                time: draft.time,
-                clientName: draft.name,
-                clientEmail: emailToUse,
-                clientPhone: phoneToUse,
-                amountPaidLabel: formatCents(amountDueNow),
+            saveConfirmedBooking(buildConfirmedBooking({
+                draft,
+                id,
+                style,
+                sizePresets,
+                lengthPresets,
+                amountDueCents: amountDueNow,
                 paymentChoice,
                 provider: providerName,
-                draftId: id
-            });
+            }));
         } catch (err: unknown) {
             console.error("[Checkout] Fatal draft persistence error:", err);
             setFlowStatus("failed");
@@ -392,32 +319,9 @@ function CheckoutPageInner() {
 
         try {
             await persistDraftToFirestore(draftId, "paypal");
-            const res = await fetch("/api/payments/paypal/create-order", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    sessionType: "booking",
-                    draftId,
-                    choice: paymentChoice,
-                    returnUrl: `${window.location.origin}/booking/success?provider=paypal&draftId=${draftId}`,
-                    cancelUrl: `${window.location.origin}/checkout?cancelled=true`,
-                }),
-            });
+            const approvalLink = await createPayPalOrder({ draftId, choice: paymentChoice, origin: window.location.origin });
 
-            const data = await res.json().catch(() => ({}));
-
-            if (!res.ok) {
-                if (res.status === 401) {
-                    throw new Error("PayPal configuration error (Incomplete Credentials). Check your environment variables.");
-                }
-                throw new Error(data.error ?? `Server error (${res.status})`);
-            }
-
-            if (!data.approvalLink) {
-                throw new Error("No PayPal approval link returned by server.");
-            }
-
-            window.location.href = data.approvalLink;
+            window.location.href = approvalLink;
         } catch (err: unknown) {
             console.error("[Checkout] PayPal initiation error:", err);
             setFlowStatus("failed");
