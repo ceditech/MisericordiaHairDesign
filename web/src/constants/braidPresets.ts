@@ -54,3 +54,6 @@ export const DEFAULT_ADDONS = [
     { id: "size-smallest-addon", name: "Add: Smallest Braid Size Upgrade", price: 60, deposit: 60 },
     { id: "beads-accessories", name: "Add: Beads / Accessories", price: 10, deposit: 10 },
 ];
+
+/** Firestore collection holding size/length presets: read by pricing and the storefront, written by the owner screen. */
+export const PRESETS_COLLECTION = "presets";
