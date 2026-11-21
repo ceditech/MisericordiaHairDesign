@@ -8,7 +8,7 @@ import { getStripeServer } from "@/src/lib/payments/stripeServer";
 import { adminDb } from "@/src/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
 import { calculateBookingPrice } from "@/src/lib/pricing";
-import { BRAID_STYLES } from "@/src/lib/styles";
+import { resolveBookingStyle } from "@/src/lib/styles";
 import { loadActivePromo, PromoError } from "@/src/lib/promo/loadActivePromo";
 
 /** A `presets` document: a size or length preset tagged with its `type`. */
@@ -111,11 +111,11 @@ export async function POST(req: NextRequest) {
 
       // RE-CALCULATE PRICING ON SERVER (Security: Do not trust draft values)
       // Try to find in live styles first, fallback to static config
-      const liveStyle = styles.find((s) => s.id === draft.styleId);
-      const staticStyle = BRAID_STYLES.find((s) => s.id === draft.styleId) || BRAID_STYLES[0];
-      const style = liveStyle || staticStyle;
-
-      console.log(`[Stripe] Using style: ${style.name} (${style.id}), Price: ${style.price} (From ${liveStyle ? 'Firestore' : 'Static Config'})`);
+      const style = resolveBookingStyle(draft.styleId, styles);
+      if (!style) {
+        return NextResponse.json({ error: "The style on this booking is no longer available. Please choose a style again." }, { status: 400 });
+      }
+      console.log(`[Stripe] Using style: ${style.name} (${style.id}), Price: ${style.price}`);
 
       const recalculated = calculateBookingPrice({
         stylePrice: style.price,

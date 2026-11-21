@@ -100,3 +100,20 @@ describe.each([
         expect(state.charged).toEqual([]);
     });
 });
+
+describe.each([
+    ["Stripe", stripeCall],
+    ["PayPal", paypalCall],
+])("%s booking payment: unknown style", (_name, call) => {
+    it("rejects a draft whose style id is unknown instead of pricing it as another style", async () => {
+        state.drafts.d1 = { ...draft(), styleId: "no-such-style" };
+        expect((await call()).status).toBe(400);
+        expect(state.charged).toEqual([]);
+    });
+
+    it("rejects a draft with no style id", async () => {
+        state.drafts.d1 = { clientEmail: "a@b.co" };
+        expect((await call()).status).toBe(400);
+        expect(state.charged).toEqual([]);
+    });
+});
