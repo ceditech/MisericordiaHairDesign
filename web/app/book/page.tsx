@@ -14,123 +14,12 @@ import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
 import { Skeleton, Modal } from "@/components/ui";
 import { calculateBookingPrice, formatCents } from "@/src/lib/pricing";
 import { formatUSPhone, isValidUSPhone } from "@/src/lib/utils";
+import { parseMaxDurationHours, generateSlots } from "@/src/lib/bookings/slots";
+import { getMonthData, isDatePast } from "@/src/lib/bookings/calendar";
+import { isStepValid as isStepValidFor, validatePhoto } from "@/src/lib/bookings/stepValidity";
 
 
 
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
-
-
-function parseMaxDurationHours(duration: string | undefined): number {
-    if (!duration || typeof duration !== 'string') return 4;
-    const match = duration.match(/(\d+(\.\d+)?)/g);
-    if (!match) return 4;
-    
-    // Take the larger value if it's a range like "4-6 hours"
-    const val = parseFloat(match[match.length - 1]);
-    
-    // Check if it's in minutes
-    if (duration.toLowerCase().includes("min")) {
-        return val / 60;
-    }
-    
-    return val;
-}
-
-export interface TimeSlot {
-    time: string;
-    available: boolean;
-}
-
-/** Generate 30-minute time slots from 9:00 AM up to closingHour */
-function generateSlots(maxDurationHours: number, selectedDateStr: string, existingBookings: BookingRecord[] = [], allStyles: BraidStyle[] = []): TimeSlot[] {
-    const OPEN_HOUR = 9;   // 9:00 AM
-    const CLOSE_HOUR = 21; // 9:00 PM
-
-    const startMinutes = OPEN_HOUR * 60;
-    const endMinutes = CLOSE_HOUR * 60;
-    const lastPossibleStartMinutes = endMinutes - (maxDurationHours * 60);
-
-    const slots: TimeSlot[] = [];
-    const now = new Date();
-    const isToday = (() => {
-        if (!selectedDateStr) return false;
-        const d = new Date(selectedDateStr);
-        return (
-            d.getFullYear() === now.getFullYear() &&
-            d.getMonth() === now.getMonth() &&
-            d.getDate() === now.getDate()
-        );
-    })();
-
-    // Helper: "9:30 AM" -> 570 minutes from midnight
-    const timeToMinutes = (timeStr: string) => {
-        if (!timeStr) return 0;
-        const [time, period] = timeStr.split(" ");
-        const [hStr, mStr] = time.split(":");
-        let h = parseInt(hStr, 10);
-        const m = parseInt(mStr, 10);
-        if (period === "PM" && h < 12) h += 12;
-        if (period === "AM" && h === 12) h = 0;
-        return h * 60 + m;
-    };
-
-    const occupiedRanges = (existingBookings || []).map(b => {
-        if (!b.time) return null;
-        const start = timeToMinutes(b.time);
-        const style = allStyles.find(s => s.id === b.styleId || s.name === b.styleName);
-        const durationHours = style ? parseMaxDurationHours(style.duration) : 4;
-        return { start, end: start + (durationHours * 60) };
-    }).filter(Boolean) as Array<{start: number, end: number}>;
-
-    for (let current = startMinutes; current <= endMinutes - 30; current += 30) {
-        let available = true;
-
-        // Filter past times for today
-        if (isToday) {
-            const nowMinutes = now.getHours() * 60 + now.getMinutes();
-            if (current <= nowMinutes) available = false;
-        }
-
-        // Check if starting here would exceed closing time based on duration
-        if (current > lastPossibleStartMinutes) {
-            available = false;
-        }
-
-        const slotEnd = current + (maxDurationHours * 60);
-        const hasOverlap = occupiedRanges.some(range => {
-            return Math.max(current, range.start) < Math.min(slotEnd, range.end);
-        });
-
-        if (hasOverlap) available = false;
-
-        const h = Math.floor(current / 60);
-        const m = current % 60;
-        const suffix = h < 12 ? "AM" : "PM";
-        const displayHour = h === 0 ? 12 : h > 12 ? h - 12 : h;
-        const displayMin = m === 0 ? "00" : "30";
-        slots.push({
-            time: `${displayHour}:${displayMin} ${suffix}`,
-            available
-        });
-    }
-
-    return slots;
-}
-
-
-/** Validate an image file: type and size */
-function validatePhoto(file: File): string | null {
-    const allowed = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/heic"];
-    if (!allowed.includes(file.type) && !file.type.startsWith("image/")) {
-        return "Please upload a valid image file (JPG, PNG, WEBP, GIF).";
-    }
-    if (file.size > 5 * 1024 * 1024) {
-        return "Photo must be under 5 MB.";
-    }
-    return null;
-}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -334,20 +223,6 @@ function BookingPageInner() {
     const [viewDate, setViewDate] = useState(new Date());
 
     // ── Calendar helpers ───────────────────────────────────────────────────────
-    const getMonthData = (date: Date) => {
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const firstDayOfMonth = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        return { year, month, firstDayOfMonth, daysInMonth };
-    };
-
-    const isDatePast = (day: number, month: number, year: number) => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        return new Date(year, month, day) < today;
-    };
-
     const changeMonth = (offset: number) => {
         setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + offset, 1));
     };
@@ -461,20 +336,14 @@ function BookingPageInner() {
     ];
 
     // ── Validation per step ────────────────────────────────────────────────────
-    const isStepValid = (() => {
-        switch (currentStep) {
-            case 1: return !!selectedStyle;
-            case 2: return !!bookingData.date && !!bookingData.time;
-            case 3:
-                return (
-                    !!bookingData.name.trim() &&
-                    !!bookingData.email.trim() &&
-                    isValidUSPhone(bookingData.phone)
-                );
-            case 4: return true;
-            default: return false;
-        }
-    })();
+    const isStepValid = isStepValidFor(currentStep, {
+        hasStyle: !!selectedStyle,
+        date: bookingData.date,
+        time: bookingData.time,
+        name: bookingData.name,
+        email: bookingData.email,
+        phone: bookingData.phone,
+    });
 
     /** Reusable Customization Block */
     const CustomizationSection = () => (
