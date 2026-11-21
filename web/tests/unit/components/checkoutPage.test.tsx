@@ -323,6 +323,99 @@ describe("checkout page", () => {
         });
     });
 
+    describe("layout and controls", () => {
+        const pressed = (id: string) => document.getElementById(id)?.getAttribute("aria-pressed");
+
+        it("starts on the deposit option and card payment, and switches both", async () => {
+            seed({ createAccount: false });
+            render(<CheckoutPage />);
+            await screen.findByRole("button", { name: "stripe-pay" });
+            expect(pressed("choice-deposit")).toBe("true");
+            expect(pressed("choice-full")).toBe("false");
+            expect(pressed("payment-method-stripe")).toBe("true");
+            expect(document.getElementById("paypal-pay-button")).toBeNull();
+
+            fireEvent.click(document.getElementById("choice-full") as HTMLElement);
+            expect(pressed("choice-full")).toBe("true");
+            expect(pressed("choice-deposit")).toBe("false");
+
+            fireEvent.click(document.getElementById("payment-method-paypal") as HTMLElement);
+            expect(pressed("payment-method-paypal")).toBe("true");
+            expect(document.getElementById("paypal-pay-button")).toBeTruthy();
+            expect(screen.queryByRole("button", { name: "stripe-pay" })).toBeNull();
+        });
+
+        it("shows the balance and the deposit note only while paying a deposit", async () => {
+            seed({ createAccount: false });
+            render(<CheckoutPage />);
+            await screen.findByText("Balance at appointment");
+            expect(screen.getByText(/Non-refundable · Applied to total at appointment/)).toBeTruthy();
+
+            fireEvent.click(document.getElementById("choice-full") as HTMLElement);
+            expect(screen.queryByText("Balance at appointment")).toBeNull();
+            expect(screen.queryByText(/Non-refundable · Applied to total at appointment/)).toBeNull();
+        });
+
+        it("labels the PayPal button with the amount due and shows progress while the order is created", async () => {
+            mocks.fetch.mockReturnValue(new Promise(() => {}));
+            seed({ createAccount: false });
+            render(<CheckoutPage />);
+            fireEvent.click(await screen.findByRole("button", { name: /PayPal/ }));
+            expect(screen.getByText(/^Pay \$\d+\.\d{2} with PayPal$/)).toBeTruthy();
+
+            fireEvent.click(document.getElementById("paypal-pay-button") as HTMLElement);
+            expect(await screen.findByText("Redirecting to PayPal…")).toBeTruthy();
+            expect((document.getElementById("paypal-pay-button") as HTMLButtonElement).disabled).toBe(true);
+        });
+
+        it("dismisses the error banner", async () => {
+            mocks.fetch.mockResolvedValue({ ok: false, status: 500, json: async () => ({ error: "Order exploded" }) });
+            seed({ createAccount: false });
+            render(<CheckoutPage />);
+            await payPal();
+            await screen.findByText("Order exploded");
+
+            fireEvent.click(screen.getByRole("button", { name: "Dismiss error" }));
+            expect(screen.queryByText("Order exploded")).toBeNull();
+        });
+
+        it("shows the booking details, the policies, and the inspiration photo only when there is one", async () => {
+            seed({ createAccount: false });
+            const view = render(<CheckoutPage />);
+            expect(await screen.findByText("November 25, 2026")).toBeTruthy();
+            expect(screen.getByText("Ada Lovelace")).toBeTruthy();
+            expect(screen.getByText("ada@example.com")).toBeTruthy();
+            expect(screen.getByText("Cancellation Policy")).toBeTruthy();
+            expect(screen.getByText("Price Note Policy")).toBeTruthy();
+            expect(screen.getByAltText("Inspiration")).toBeTruthy();
+            view.unmount();
+
+            seed({ createAccount: false, photoPreview: "" });
+            render(<CheckoutPage />);
+            await screen.findByText("Ada Lovelace");
+            expect(screen.queryByAltText("Inspiration")).toBeNull();
+        });
+
+        it("shows a discount line once a code is applied", async () => {
+            mocks.getDoc.mockResolvedValue({ exists: () => true, data: () => ({ active: true, discountPercent: 20 }) });
+            seed({ createAccount: false });
+            render(<CheckoutPage />);
+            expect(await screen.findByText("Estimated total")).toBeTruthy();
+            expect(screen.queryByText("Discount")).toBeNull();
+
+            fireEvent.change(screen.getByPlaceholderText("Promo Code"), { target: { value: "summer" } });
+            expect((screen.getByRole("button", { name: "Apply" }) as HTMLButtonElement).disabled).toBe(false);
+            fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+            expect(await screen.findByText("Discount")).toBeTruthy();
+        });
+
+        it("keeps Apply disabled while the code field is empty", async () => {
+            seed({ createAccount: false });
+            render(<CheckoutPage />);
+            expect((await screen.findByRole("button", { name: "Apply" }) as HTMLButtonElement).disabled).toBe(true);
+        });
+    });
+
     describe("promo codes", () => {
         const apply = async (code: string) => {
             fireEvent.change(await screen.findByPlaceholderText("Promo Code"), { target: { value: code } });
