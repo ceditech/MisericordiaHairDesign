@@ -11,17 +11,16 @@ import { getBookingsByDate, BookingRecord } from "@/src/lib/firebase/userBooking
 import { subscribeToStyles, subscribeToPresets, subscribeToAddons } from "@/src/lib/firebase/ownerService";
 import type { AddonDoc } from "@/src/lib/firebase/ownerService";
 import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
-import { CONTACT_PHONE } from "@/src/content/legal";
-import { Skeleton } from "@/components/ui";
 import { ProgressStepper } from "@/components/book/ProgressStepper";
 import { DraftRestoredBanner } from "@/components/book/DraftRestoredBanner";
 import { NoSlotsModal } from "@/components/book/NoSlotsModal";
-import { ReviewSummary } from "@/components/book/ReviewSummary";
+import { StyleStep } from "@/components/book/steps/StyleStep";
+import { TimeStep } from "@/components/book/steps/TimeStep";
+import { DetailsStep } from "@/components/book/steps/DetailsStep";
+import { ReviewStep } from "@/components/book/steps/ReviewStep";
 import { CustomizationSection, type CustomizationValues } from "@/components/book/CustomizationSection";
 import { calculateBookingPrice, formatCents } from "@/src/lib/pricing";
-import { formatUSPhone, isValidUSPhone } from "@/src/lib/utils";
 import { parseMaxDurationHours, generateSlots } from "@/src/lib/bookings/slots";
-import { getMonthData, isDatePast, formatBookingDate, MONTH_NAMES } from "@/src/lib/bookings/calendar";
 import { isStepValid as isStepValidFor, validatePhoto } from "@/src/lib/bookings/stepValidity";
 
 
@@ -180,9 +179,6 @@ function BookingPageInner() {
         setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + offset, 1));
     };
 
-    const { year, month, firstDayOfMonth, daysInMonth } = getMonthData(viewDate);
-    const monthName = MONTH_NAMES[month];
-
     // ── Photo handler ──────────────────────────────────────────────────────────
     const handlePhotoUpload = (file: File | undefined) => {
         if (!file) return;
@@ -245,7 +241,6 @@ function BookingPageInner() {
     // ── Slot generation ────────────────────────────────────────────────────────
     const maxDuration = selectedStyle ? parseMaxDurationHours(selectedStyle.duration) : 4;
     const availableSlots = generateSlots(maxDuration, bookingData.date, existingBookings, styles);
-    const hasAvailableSlots = availableSlots.some(s => s.available);
 
 
     // ── Computed Totals ────────────────────────────────────────────────────────
@@ -298,6 +293,8 @@ function BookingPageInner() {
         phone: bookingData.phone,
     });
 
+    const updateBooking = (patch: Partial<BookingFormData>) => setBookingData((prev) => ({ ...prev, ...patch }));
+
     const customizationProps = {
         styleName: selectedStyle?.name,
         sizePresets,
@@ -309,8 +306,9 @@ function BookingPageInner() {
             washingAddon: bookingData.washingAddon,
             takeDownAddon: bookingData.takeDownAddon,
         },
-        onChange: (patch: Partial<CustomizationValues>) => setBookingData((prev) => ({ ...prev, ...patch })),
+        onChange: (patch: Partial<CustomizationValues>) => updateBooking(patch),
     };
+    const customization = <CustomizationSection {...customizationProps} />;
 
     return (
         <main className="max-w-7xl mx-auto px-6 py-12">
@@ -330,363 +328,54 @@ function BookingPageInner() {
 
                     {/* Step 1 — Style */}
                     {currentStep === 1 && (
-                        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            <div className="mb-10">
-                                <h2 className="text-4xl font-bold text-slate-900 dark:text-white mb-3">Select Braid Style</h2>
-                                <p className="text-lg text-slate-500 dark:text-slate-400">Choose the perfect look for your next appointment.</p>
-                            </div>
-
-                            {loadingStyles ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                                    {[1, 2, 3].map(i => (
-                                        <Skeleton key={i} className="aspect-[4/5] rounded-[2rem]" />
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                                    {styles.map((style) => (
-                                        <div
-                                            key={style.id}
-                                            onClick={() => {
-                                                setSelectedStyle(style);
-                                                // Reset time if duration changed (new style may have fewer slots)
-                                                setBookingData((prev) => ({ ...prev, time: "" }));
-                                            }}
-                                            className={`group relative bg-white dark:bg-slate-800 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:scale-[1.03] border-4 cursor-pointer ${selectedStyle?.id === style.id ? "border-[#9F2D5C]" : "border-transparent"}`}
-                                        >
-                                            <div className="aspect-[4/5] relative overflow-hidden">
-                                                <img alt={style.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src={style.image} />
-                                                {selectedStyle?.id === style.id && (
-                                                    <div className="absolute top-4 right-4 animate-in zoom-in duration-300">
-                                                        <div className="bg-[#9F2D5C] text-white p-2 rounded-full flex items-center justify-center shadow-xl">
-                                                            <span className="material-icons text-base">check</span>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className="p-5 text-center">
-                                                <h3 className="font-bold text-lg text-slate-900 dark:text-white group-hover:text-[#9F2D5C] transition-colors">{style.name}</h3>
-                                                <p className="text-xs text-slate-400 mt-1">{style.duration}</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-
-                            {/* Options for Selected Style */}
-                            {selectedStyle && <CustomizationSection {...customizationProps} />}
-                        </div>
+                        <StyleStep
+                            styles={styles}
+                            loadingStyles={loadingStyles}
+                            selectedStyle={selectedStyle}
+                            onSelectStyle={(style) => {
+                                setSelectedStyle(style);
+                                // Reset time if duration changed (new style may have fewer slots)
+                                updateBooking({ time: "" });
+                            }}
+                            customization={customization}
+                        />
                     )}
 
                     {/* Step 2 — Date & Time */}
                     {currentStep === 2 && (
-                        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            <h2 className="text-4xl font-bold mb-2 text-slate-900 dark:text-white">Select Date &amp; Time</h2>
-                            <p className="text-slate-500 dark:text-slate-400 mb-8">
-                                Available slots reflect your style&apos;s estimated duration
-                                <span className="ml-1 font-semibold text-[#9F2D5C]">({selectedStyle?.duration})</span>.
-                            </p>
-                            <div className="bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-800">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                                    {/* Calendar */}
-                                    <div>
-                                        <div className="flex items-center justify-between mb-6">
-                                            <p className="font-bold uppercase tracking-widest text-xs text-slate-400">{monthName} {year}</p>
-                                            <div className="flex gap-2">
-                                                <button onClick={() => changeMonth(-1)} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors" aria-label="Previous month">
-                                                    <span className="material-icons text-sm">chevron_left</span>
-                                                </button>
-                                                <button onClick={() => changeMonth(1)} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors" aria-label="Next month">
-                                                    <span className="material-icons text-sm">chevron_right</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div className="grid grid-cols-7 gap-2 text-center">
-                                            {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
-                                                <div key={`${d}-${i}`} className="text-[10px] font-bold text-slate-400 py-2">{d}</div>
-                                            ))}
-                                            {Array.from({ length: firstDayOfMonth }).map((_, i) => (
-                                                <div key={`pad-${i}`} className="aspect-square" />
-                                            ))}
-                                            {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((d) => {
-                                                const isSunday = new Date(year, month, d).getDay() === 0;
-                                                const isDisabled = isDatePast(d, month, year) || isSunday;
-                                                const dateStr = formatBookingDate(year, month, d);
-                                                const isSelected = bookingData.date === dateStr;
-                                                return (
-                                                    <button
-                                                        key={d}
-                                                        disabled={isDisabled}
-                                                        onClick={() => {
-                                                            setBookingData((prev) => ({ ...prev, date: dateStr, time: "" }));
-                                                        }}
-                                                        className={`aspect-square flex items-center justify-center rounded-xl text-sm font-semibold transition-all ${isDisabled
-                                                            ? "opacity-20 cursor-not-allowed"
-                                                            : isSelected
-                                                                ? "bg-brand-primary text-white shadow-lg"
-                                                                : "bg-surface/50 hover:bg-surface text-text-primary border border-border"
-                                                            }`}
-                                                    >
-                                                        {d}
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-
-                                    {/* Time Slots */}
-                                    <div>
-                                        <p className="font-bold mb-1 uppercase tracking-widest text-xs text-text-muted">Available Slots</p>
-                                        <p className="text-[10px] text-text-muted mb-4">Business hours: 9:00 AM – 9:00 PM · 30-min intervals</p>
-                                        {isLoadingBookings ? (
-                                            <div className="flex flex-col items-center justify-center h-48 text-center text-text-muted">
-                                                <div className="w-8 h-8 border-4 border-brand-primary border-t-transparent rounded-full animate-spin mb-4"></div>
-                                                <p className="text-sm">Checking availability...</p>
-                                            </div>
-                                        ) : !bookingData.date ? (
-                                            <div className="flex flex-col items-center justify-center h-48 text-center text-text-muted">
-                                                <span className="material-icons text-4xl mb-3 opacity-30">calendar_today</span>
-                                                <p className="text-sm">Select a date to see available slots</p>
-                                            </div>
-                                        ) : !hasAvailableSlots ? (
-                                            <div className="flex flex-col items-center justify-center p-6 text-center bg-[#9F2D5C]/5 border border-[#9F2D5C]/20 rounded-2xl animate-in zoom-in-95 duration-300">
-                                                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm mb-4">
-                                                    <span className="material-icons text-[#9F2D5C] text-2xl">event_busy</span>
-                                                </div>
-                                                <h4 className="text-slate-900 dark:text-white font-bold text-base mb-2">No Slots Available</h4>
-                                                <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-                                                    We are fully booked or it is past business hours. Please select the next day or a following date.
-                                                </p>
-                                                <div className="inline-flex items-center justify-center bg-white dark:bg-slate-800 px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm gap-2">
-                                                    <span className="material-icons text-[14px] text-slate-400">phone</span>
-                                                    <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">Urgent? Call {CONTACT_PHONE}</span>
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div className="space-y-3 overflow-y-auto max-h-80 pr-1">
-                                                {availableSlots.map((slot) => (
-                                                    <button
-                                                        key={slot.time}
-                                                        disabled={!slot.available}
-                                                        onClick={() => setBookingData((prev) => ({ ...prev, time: slot.time }))}
-                                                        className={`w-full py-3 rounded-xl font-bold border-2 transition-all text-sm flex items-center justify-center ${
-                                                            !slot.available
-                                                                ? "border-border bg-surface text-text-muted opacity-50 cursor-not-allowed"
-                                                                : bookingData.time === slot.time
-                                                                    ? "border-brand-primary bg-brand-primary/5 text-brand-primary"
-                                                                    : "border-border bg-surface hover:border-brand-primary/40 text-text-primary"
-                                                            }`}
-                                                    >
-                                                        {slot.time}
-                                                        {!slot.available && (
-                                                            <span className="text-xs font-normal ml-2 opacity-70">
-                                                                (Unavailable)
-                                                            </span>
-                                                        )}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <CustomizationSection {...customizationProps} />
-                        </div>
+                        <TimeStep
+                            styleDuration={selectedStyle?.duration}
+                            viewDate={viewDate}
+                            onChangeMonth={changeMonth}
+                            date={bookingData.date}
+                            time={bookingData.time}
+                            availableSlots={availableSlots}
+                            isLoadingBookings={isLoadingBookings}
+                            update={updateBooking}
+                            customization={customization}
+                        />
                     )}
 
                     {/* Step 3 — Client Details */}
                     {currentStep === 3 && (
-                        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            <h2 className="text-4xl font-bold mb-8 text-slate-900 dark:text-white">Your Information</h2>
-                            <div className="bg-white dark:bg-slate-800 p-10 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-800">
-                                <div className="space-y-8">
-
-                                    {/* Name + Email */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-4">
-                                                Full Name <span className="text-red-400">*</span>
-                                            </label>
-                                            <input
-                                                type="text"
-                                                value={bookingData.name}
-                                                onChange={(e) => setBookingData((prev) => ({ ...prev, name: e.target.value }))}
-                                                className="w-full bg-[#f8f6f7] dark:bg-slate-900 border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#9F2D5C] outline-none"
-                                                placeholder="Jane Doe"
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-4">
-                                                Email Address <span className="text-red-400">*</span>
-                                            </label>
-                                            <input
-                                                type="email"
-                                                value={bookingData.email}
-                                                onChange={(e) => setBookingData((prev) => ({ ...prev, email: e.target.value }))}
-                                                className="w-full bg-[#f8f6f7] dark:bg-slate-900 border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#9F2D5C] outline-none"
-                                                placeholder="jane@example.com"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Phone */}
-                                    <div className="space-y-2">
-                                        <label className={`text-[10px] font-bold uppercase tracking-widest ml-4 ${bookingData.phone && !isValidUSPhone(bookingData.phone) ? 'text-red-500' : 'text-slate-400'}`}>
-                                            Phone Number <span className="text-red-400">*</span>
-                                        </label>
-                                        <input
-                                            type="tel"
-                                            value={bookingData.phone}
-                                            onChange={(e) => setBookingData((prev) => ({ ...prev, phone: formatUSPhone(e.target.value) }))}
-                                            className={`w-full rounded-2xl p-4 outline-none transition-all ${
-                                                bookingData.phone && !isValidUSPhone(bookingData.phone) 
-                                                ? 'bg-red-50 dark:bg-red-900/10 border-2 border-red-500 text-red-600 focus:ring-2 focus:ring-red-500 focus:border-red-500' 
-                                                : 'bg-[#f8f6f7] dark:bg-slate-900 border-none focus:ring-2 focus:ring-[#9F2D5C]'
-                                            }`}
-                                            placeholder="(555) 000-0000"
-                                        />
-                                        {bookingData.phone && !isValidUSPhone(bookingData.phone) && (
-                                            <p className="text-[10px] text-red-500 font-bold ml-4 animate-in fade-in">Please enter a valid 10-digit US phone number.</p>
-                                        )}
-                                    </div>
-
-                                    {/* Account Creation for Guest Users */}
-                                    {!user && (
-                                        <div className="p-8 rounded-3xl bg-[#9F2D5C]/5 border border-[#9F2D5C]/10 space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-xl bg-[#9F2D5C] flex items-center justify-center shadow-lg shadow-[#9F2D5C]/20">
-                                                    <span className="material-icons text-white text-base">person_add</span>
-                                                </div>
-                                                <div>
-                                                    <h3 className="font-bold text-slate-900 dark:text-white">Create an Account</h3>
-                                                    <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Recommended</p>
-                                                </div>
-                                            </div>
-
-                                            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                                                Save your appointment and speed up future bookings. You&apos;ll be able to manage your history and get referral rewards!
-                                            </p>
-
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                                                <div className="space-y-2">
-                                                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-4">Password</label>
-                                                    <input
-                                                        type="password"
-                                                        value={bookingData.password}
-                                                        onChange={(e) => setBookingData(prev => ({ ...prev, password: e.target.value }))}
-                                                        className="w-full bg-white dark:bg-slate-900 border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#9F2D5C] outline-none"
-                                                        placeholder="••••••••"
-                                                    />
-                                                </div>
-                                                <div className="flex items-end pb-3">
-                                                    <label className="flex items-center gap-3 cursor-pointer group">
-                                                        <div className="relative">
-                                                            <input
-                                                                type="checkbox"
-                                                                checked={bookingData.createAccount}
-                                                                onChange={(e) => setBookingData(prev => ({ ...prev, createAccount: e.target.checked }))}
-                                                                className="peer hidden"
-                                                            />
-                                                            <div className="w-6 h-6 rounded-lg border-2 border-slate-200 dark:border-slate-700 peer-checked:bg-[#9F2D5C] peer-checked:border-[#9F2D5C] transition-all flex items-center justify-center">
-                                                                <span className="material-icons text-white text-[14px]">check</span>
-                                                            </div>
-                                                        </div>
-                                                        <span className="text-sm font-bold text-slate-500 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Apply this password</span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* Special Requests */}
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-4">Special Requests</label>
-                                        <textarea
-                                            rows={4}
-                                            value={bookingData.notes}
-                                            onChange={(e) => setBookingData((prev) => ({ ...prev, notes: e.target.value }))}
-                                            className="w-full bg-[#f8f6f7] dark:bg-slate-900 border-none rounded-2xl p-4 focus:ring-2 focus:ring-[#9F2D5C] outline-none resize-none"
-                                            placeholder="Any specifics we should know?"
-                                        />
-                                    </div>
-
-                                    {/* Inspiration Photo */}
-                                    <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-700">
-                                        <div className="flex items-center justify-between ml-4">
-                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Inspiration Photo</label>
-                                            <span className="text-[10px] font-medium text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-full">Optional</span>
-                                        </div>
-
-                                        {photoError && (
-                                            <div className="flex items-center gap-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-2xl px-5 py-3 text-xs font-semibold">
-                                                <span className="material-icons text-sm">error_outline</span>
-                                                {photoError}
-                                            </div>
-                                        )}
-
-                                        {!bookingData.photoPreview ? (
-                                            <div className="relative">
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    onChange={(e) => handlePhotoUpload(e.target.files?.[0])}
-                                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                                />
-                                                <div className={`border-2 border-dashed rounded-2xl p-8 text-center hover:border-[#9F2D5C] hover:bg-[#9F2D5C]/5 transition-all group ${photoError ? "border-red-300 dark:border-red-700" : "border-slate-200 dark:border-slate-700"}`}>
-                                                    <span className="material-icons text-4xl text-slate-300 dark:text-slate-600 group-hover:text-[#9F2D5C] mb-2 block">add_a_photo</span>
-                                                    <p className="text-sm font-bold text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white">Click to upload inspiration photo</p>
-                                                    <p className="text-[10px] text-slate-400 mt-1 uppercase tracking-tight">JPG, PNG, WEBP · Up to 5 MB</p>
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div className="relative group rounded-3xl overflow-hidden aspect-video bg-slate-100 dark:bg-slate-900 shadow-inner">
-                                                <img src={bookingData.photoPreview} alt="Inspiration Preview" className="w-full h-full object-contain" />
-                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                                                    <button
-                                                        onClick={removePhoto}
-                                                        className="bg-white text-red-500 p-3 rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all"
-                                                        aria-label="Remove photo"
-                                                    >
-                                                        <span className="material-icons">delete</span>
-                                                    </button>
-                                                    <label className="bg-white text-[#9F2D5C] p-3 rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all cursor-pointer" aria-label="Replace photo">
-                                                        <span className="material-icons">refresh</span>
-                                                        <input
-                                                            type="file"
-                                                            accept="image/*"
-                                                            className="hidden"
-                                                            onChange={(e) => handlePhotoUpload(e.target.files?.[0])}
-                                                        />
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        )}
-                                        <p className="text-[11px] text-slate-400 ml-4 italic">Show us the style you&apos;re aiming for!</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+                        <DetailsStep
+                            bookingData={bookingData}
+                            update={updateBooking}
+                            isSignedIn={!!user}
+                            photoError={photoError}
+                            onPhotoUpload={handlePhotoUpload}
+                            onRemovePhoto={removePhoto}
+                        />
                     )}
 
                     {/* Step 4 — Review */}
                     {currentStep === 4 && (
-                        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            <h2 className="text-4xl font-bold mb-8 text-slate-900 dark:text-white">Review Appointment</h2>
-                            <ReviewSummary
-                                styleName={selectedStyle?.name}
-                                styleDuration={selectedStyle?.duration}
-                                date={bookingData.date}
-                                time={bookingData.time}
-                                name={bookingData.name}
-                                email={bookingData.email}
-                                phone={bookingData.phone}
-                                photoPreview={bookingData.photoPreview}
-                            />
-
-                            <CustomizationSection {...customizationProps} />
-                        </div>
+                        <ReviewStep
+                            styleName={selectedStyle?.name}
+                            styleDuration={selectedStyle?.duration}
+                            bookingData={bookingData}
+                            customization={customization}
+                        />
                     )}
 
 
