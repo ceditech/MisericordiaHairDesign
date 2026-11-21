@@ -6,12 +6,17 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { BraidStyle } from "@/src/lib/styles";
 import { useAuth } from "@/src/providers/AuthProvider";
 import { saveDraft, loadDraft, clearDraft } from "@/src/lib/bookingDraft";
-import { DEPOSIT_POLICY, CANCELLATION_POLICY, DEPOSIT_AMOUNT, CONTACT_PHONE } from "@/src/content/legal";
 import { getBookingsByDate, BookingRecord } from "@/src/lib/firebase/userBookings";
 import { subscribeToStyles, subscribeToPresets, subscribeToAddons } from "@/src/lib/firebase/ownerService";
 import type { AddonDoc } from "@/src/lib/firebase/ownerService";
 import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
-import { Skeleton, Modal } from "@/components/ui";
+import { CONTACT_PHONE } from "@/src/content/legal";
+import { Skeleton } from "@/components/ui";
+import { ProgressStepper } from "@/components/book/ProgressStepper";
+import { DraftRestoredBanner } from "@/components/book/DraftRestoredBanner";
+import { NoSlotsModal } from "@/components/book/NoSlotsModal";
+import { ReviewSummary } from "@/components/book/ReviewSummary";
+import { CustomizationSection, type CustomizationValues } from "@/components/book/CustomizationSection";
 import { calculateBookingPrice, formatCents } from "@/src/lib/pricing";
 import { formatUSPhone, isValidUSPhone } from "@/src/lib/utils";
 import { parseMaxDurationHours, generateSlots } from "@/src/lib/bookings/slots";
@@ -359,141 +364,31 @@ function BookingPageInner() {
         phone: bookingData.phone,
     });
 
-    /** Reusable Customization Block */
-    const CustomizationSection = () => (
-        <div className="mt-12 bg-slate-50 dark:bg-slate-800/50 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 fade-in zoom-in duration-500">
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Customize Your {selectedStyle?.name}</h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                {/* Size */}
-                <div className="space-y-3">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Available Size Options</label>
-                    <div className="space-y-2">
-                        {sizePresets.map(preset => (
-                            <button
-                                key={preset.id}
-                                onClick={() => setBookingData(prev => ({ ...prev, sizeId: preset.id }))}
-                                className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center justify-between ${bookingData.sizeId === preset.id ? 'border-[#9F2D5C] bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10' : 'border-transparent bg-white dark:bg-slate-900 hover:border-slate-200 dark:hover:border-slate-700'}`}
-                            >
-                                <div>
-                                    <p className={`font-bold text-sm ${bookingData.sizeId === preset.id ? 'text-[#9F2D5C]' : 'text-slate-900 dark:text-white'}`}>{preset.label}</p>
-                                    <p className="text-[10px] text-slate-500 mt-0.5">{preset.description} ({preset.priceGuidance})</p>
-                                </div>
-                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${bookingData.sizeId === preset.id ? 'border-[#9F2D5C] bg-[#9F2D5C]' : 'border-slate-300 dark:border-slate-600'}`}>
-                                    {bookingData.sizeId === preset.id && <span className="material-icons text-white text-[12px]">check</span>}
-                                </div>
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Length */}
-                <div className="space-y-3">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Available Length Options</label>
-                    <div className="space-y-2">
-                        {lengthPresets.map(preset => (
-                            <button
-                                key={preset.id}
-                                onClick={() => setBookingData(prev => ({ ...prev, lengthId: preset.id }))}
-                                className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center justify-between ${bookingData.lengthId === preset.id ? 'border-[#9F2D5C] bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10' : 'border-transparent bg-white dark:bg-slate-900 hover:border-slate-200 dark:hover:border-slate-700'}`}
-                            >
-                                <div>
-                                    <p className={`font-bold text-sm ${bookingData.lengthId === preset.id ? 'text-[#9F2D5C]' : 'text-slate-900 dark:text-white'}`}>{preset.label}</p>
-                                    <p className="text-[10px] text-slate-500 mt-0.5">{preset.inches}</p>
-                                </div>
-                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${bookingData.lengthId === preset.id ? 'border-[#9F2D5C] bg-[#9F2D5C]' : 'border-slate-300 dark:border-slate-600'}`}>
-                                    {bookingData.lengthId === preset.id && <span className="material-icons text-white text-[12px]">check</span>}
-                                </div>
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
-            {/* Add-ons */}
-            <div className="border-t border-slate-200 dark:border-slate-700/50 pt-8 space-y-4">
-                <label className="flex flex-row items-center gap-4 bg-white dark:bg-slate-900 p-5 rounded-2xl cursor-pointer hover:shadow-md transition-shadow border border-slate-100 dark:border-slate-800">
-                    <input
-                        type="checkbox"
-                        checked={bookingData.washingAddon}
-                        onChange={(e) => setBookingData(prev => ({ ...prev, washingAddon: e.target.checked }))}
-                        className="w-6 h-6 rounded-md border-slate-300 text-[#9F2D5C] focus:ring-[#9F2D5C] bg-slate-100 dark:bg-slate-800"
-                    />
-                    <div>
-                        <p className="font-bold text-sm text-slate-900 dark:text-white">Add Washing Service (+${addons.find(a => a.id === 'wash')?.price || 25})</p>
-                        <p className="text-xs text-slate-500">Start your appointment with a clean, prepped foundation.</p>
-                    </div>
-                </label>
-                <label className="flex flex-row items-center gap-4 bg-white dark:bg-slate-900 p-5 rounded-2xl cursor-pointer hover:shadow-md transition-shadow border border-slate-100 dark:border-slate-800">
-                    <input
-                        type="checkbox"
-                        checked={bookingData.takeDownAddon}
-                        onChange={(e) => setBookingData(prev => ({ ...prev, takeDownAddon: e.target.checked }))}
-                        className="w-6 h-6 rounded-md border-slate-300 text-[#9F2D5C] focus:ring-[#9F2D5C] bg-slate-100 dark:bg-slate-800"
-                    />
-                    <div>
-                        <p className="font-bold text-sm text-slate-900 dark:text-white">Add Take Down Service (+${addons.find(a => a.id === 'take-down')?.price || 45})</p>
-                        <p className="text-xs text-slate-500">Professional removal of your previous style.</p>
-                    </div>
-                </label>
-            </div>
-        </div>
-    );
+    const customizationProps = {
+        styleName: selectedStyle?.name,
+        sizePresets,
+        lengthPresets,
+        addons,
+        values: {
+            sizeId: bookingData.sizeId,
+            lengthId: bookingData.lengthId,
+            washingAddon: bookingData.washingAddon,
+            takeDownAddon: bookingData.takeDownAddon,
+        },
+        onChange: (patch: Partial<CustomizationValues>) => setBookingData((prev) => ({ ...prev, ...patch })),
+    };
 
     return (
         <main className="max-w-7xl mx-auto px-6 py-12">
             {/* Draft Restored Banner */}
             {draftRestored && (
-                <div className="max-w-4xl mx-auto mb-8 flex items-center gap-4 bg-[#9F2D5C]/8 dark:bg-[#9F2D5C]/10 border border-[#9F2D5C]/20 rounded-2xl px-6 py-4">
-                    <span className="material-icons text-[#9F2D5C] text-base">restore</span>
-                    <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex-1">
-                        We restored your booking draft. Pick up right where you left off!
-                    </p>
-                    <button
-                        onClick={() => { clearDraft(); setDraftRestored(false); window.location.reload(); }}
-                        className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors"
-                        aria-label="Dismiss and clear draft"
-                    >
-                        Start over
-                    </button>
-                    <button
-                        onClick={() => setDraftRestored(false)}
-                        className="text-slate-400 hover:text-slate-600 transition-colors"
-                        aria-label="Dismiss banner"
-                    >
-                        <span className="material-icons text-base">close</span>
-                    </button>
-                </div>
+                <DraftRestoredBanner
+                    onStartOver={() => { clearDraft(); setDraftRestored(false); window.location.reload(); }}
+                    onDismiss={() => setDraftRestored(false)}
+                />
             )}
 
-            {/* Progress Stepper */}
-            <nav className="max-w-4xl mx-auto mb-16">
-                <div className="flex items-center justify-between relative">
-                    <div className="absolute top-5 left-0 w-full h-0.5 bg-slate-100 dark:bg-slate-800 -z-10" />
-                    {steps.map((item) => (
-                        <div key={item.step} className="flex flex-col items-center gap-2">
-                            <div
-                                className={`w-10 h-10 rounded-full flex items-center justify-center shadow-sm z-10 transition-all ${currentStep >= item.step
-                                    ? "bg-[#9F2D5C] text-white"
-                                    : "bg-slate-100 dark:bg-slate-800 text-slate-400"
-                                    }`}
-                            >
-                                {currentStep > item.step ? (
-                                    <span className="material-icons text-base">check</span>
-                                ) : (
-                                    <span className="text-sm font-bold">{item.step}</span>
-                                )}
-                            </div>
-                            <span
-                                className={`text-[10px] uppercase tracking-widest font-bold ${currentStep >= item.step ? "text-[#9F2D5C]" : "text-slate-400"
-                                    }`}
-                            >
-                                {item.label}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-            </nav>
+            <ProgressStepper currentStep={currentStep} steps={steps} />
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
                 {/* ── Left: Step Content ─────────────────────────────────────── */}
@@ -545,7 +440,7 @@ function BookingPageInner() {
                             )}
 
                             {/* Options for Selected Style */}
-                            {selectedStyle && <CustomizationSection />}
+                            {selectedStyle && <CustomizationSection {...customizationProps} />}
                         </div>
                     )}
 
@@ -662,7 +557,7 @@ function BookingPageInner() {
                                 </div>
                             </div>
 
-                            <CustomizationSection />
+                            <CustomizationSection {...customizationProps} />
                         </div>
                     )}
 
@@ -845,69 +740,18 @@ function BookingPageInner() {
                     {currentStep === 4 && (
                         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <h2 className="text-4xl font-bold mb-8 text-slate-900 dark:text-white">Review Appointment</h2>
-                            <div className="space-y-6">
-                                {/* Details card */}
-                                <div className="bg-white dark:bg-slate-800 rounded-[2rem] overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
-                                    <div className="p-10 space-y-10">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                                            <div>
-                                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Service Details</p>
-                                                <p className="text-xl font-bold mb-1 text-slate-900 dark:text-white">{selectedStyle?.name}</p>
-                                                <p className="text-slate-500">{selectedStyle?.duration}</p>
-                                            </div>
-                                            <div>
-                                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">When</p>
-                                                <p className="text-xl font-bold mb-1 text-slate-900 dark:text-white">{bookingData.date || "Not selected"}</p>
-                                                <p className="text-slate-500">{bookingData.time || "Not selected"}</p>
-                                            </div>
-                                        </div>
-                                        <div className="pt-10 border-t border-slate-100 dark:border-slate-700 grid md:grid-cols-2 gap-12">
-                                            <div>
-                                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Client Details</p>
-                                                <p className="text-xl font-bold mb-1 text-slate-900 dark:text-white">{bookingData.name || "N/A"}</p>
-                                                <p className="text-slate-500">{bookingData.email || "N/A"}</p>
-                                                {bookingData.phone && <p className="text-slate-500 mt-1">{bookingData.phone}</p>}
-                                            </div>
-                                            {bookingData.photoPreview && (
-                                                <div>
-                                                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Inspiration Photo</p>
-                                                    <div className="w-24 h-24 rounded-2xl overflow-hidden border-2 border-slate-100 dark:border-slate-800 shadow-sm transition-transform hover:scale-105">
-                                                        <img src={bookingData.photoPreview} alt="Style inspiration" className="w-full h-full object-cover" />
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
+                            <ReviewSummary
+                                styleName={selectedStyle?.name}
+                                styleDuration={selectedStyle?.duration}
+                                date={bookingData.date}
+                                time={bookingData.time}
+                                name={bookingData.name}
+                                email={bookingData.email}
+                                phone={bookingData.phone}
+                                photoPreview={bookingData.photoPreview}
+                            />
 
-                                {/* Deposit Policy Notice */}
-                                <div className="flex items-start gap-5 bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10 border border-[#9F2D5C]/20 rounded-[1.5rem] p-7">
-                                    <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-[#9F2D5C] flex items-center justify-center shadow-lg shadow-[#9F2D5C]/30">
-                                        <span className="material-icons text-white text-base">lock</span>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-slate-900 dark:text-white mb-1">{DEPOSIT_AMOUNT} Non-Refundable Deposit Required</p>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                                            {DEPOSIT_POLICY} {CANCELLATION_POLICY}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* Price Discretion Notice */}
-                                <div className="flex items-start gap-5 bg-amber-50 dark:bg-amber-900/10 border border-amber-200 rounded-[1.5rem] p-7">
-                                    <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-amber-500 flex items-center justify-center shadow-lg shadow-amber-500/30">
-                                        <span className="material-icons text-white text-base">info</span>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-slate-900 dark:text-white mb-1">Final Price Disclaimer</p>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed italic">
-                                            Price is subject to change at the discretion of the braider based on specific requirements or hair conditions.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <CustomizationSection />
+                            <CustomizationSection {...customizationProps} />
                         </div>
                     )}
 
@@ -1047,37 +891,12 @@ function BookingPageInner() {
             </div>
 
             {/* No Slots Modal */}
-            <Modal
+            <NoSlotsModal
                 isOpen={showNoSlotsModal}
                 onClose={() => setShowNoSlotsModal(false)}
-                title="No Slots Available"
-            >
-                <div className="flex flex-col items-center justify-center text-center pb-4">
-                    <div className="w-16 h-16 bg-[#9F2D5C]/10 rounded-full flex items-center justify-center mb-6">
-                        <span className="material-icons text-[#9F2D5C] text-3xl">event_busy</span>
-                    </div>
-                    <p className="text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
-                        We&apos;re sorry, but there are no available slots for <strong className="text-slate-900 dark:text-white">{bookingData.date}</strong>. 
-                        This may be because we are fully booked, or the remaining time before our <strong>9:00 PM</strong> closing time is not enough to complete your selected style (<span className="text-[#9F2D5C] font-semibold">{selectedStyle?.duration}</span>).
-                    </p>
-                    <button
-                        onClick={() => setShowNoSlotsModal(false)}
-                        className="w-full bg-[#9F2D5C] text-white py-4 rounded-xl font-bold hover:bg-[#8A264F] transition-colors shadow-md hover:shadow-lg"
-                    >
-                        Select Another Day
-                    </button>
-                    <div className="mt-6 p-4 rounded-xl bg-[#9F2D5C]/5 border border-[#9F2D5C]/20 flex items-start gap-3 text-left">
-                        <div className="relative flex h-3 w-3 mt-1 shrink-0">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#9F2D5C] opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-3 w-3 bg-[#9F2D5C]"></span>
-                        </div>
-                        <div className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-                            <strong className="text-[#9F2D5C] block mb-0.5">Need Help or need urgent services?</strong>
-                            Please call <a href={`tel:${CONTACT_PHONE.replace(/\D/g, '')}`} className="font-bold text-[#9F2D5C] hover:underline">{CONTACT_PHONE}</a>, or email <a href="mailto:mariefleurekpe@gmail.com" className="font-bold text-[#9F2D5C] hover:underline">mariefleurekpe@gmail.com</a>
-                        </div>
-                    </div>
-                </div>
-            </Modal>
+                date={bookingData.date}
+                styleDuration={selectedStyle?.duration}
+            />
         </main>
     );
 }
