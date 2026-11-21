@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 // Characterization test for the four-step booking wizard (app/book/page.tsx).
 // It pins what the page does today so the planned component split (Phase 9.4b) can be checked against it.
@@ -10,20 +10,28 @@ const mocks = vi.hoisted(() => ({
     push: vi.fn(),
     getBookingsByDate: vi.fn(),
     search: new URLSearchParams(),
+    auth: { user: null, profile: null } as { user: unknown; profile: unknown },
+    // When true the styles subscription does not answer on subscribe (like Firestore, which answers later);
+    // the test then calls emitStyles() itself, as many times as it wants.
+    deferStyles: false,
+    emitStyles: null as null | (() => void),
 }));
 
 vi.mock("next/navigation", () => ({
     useSearchParams: () => mocks.search,
     useRouter: () => ({ push: mocks.push }),
 }));
-vi.mock("@/src/providers/AuthProvider", () => ({ useAuth: () => ({ user: null, profile: null }) }));
+vi.mock("@/src/providers/AuthProvider", () => ({ useAuth: () => mocks.auth }));
 vi.mock("@/src/lib/firebase/userBookings", () => ({ getBookingsByDate: mocks.getBookingsByDate }));
 vi.mock("@/src/lib/firebase/ownerService", () => ({
     subscribeToStyles: (cb: (d: unknown[]) => void) => {
-        cb([
-            { id: "knotless", name: "Knotless Braids", price: "$150", duration: "4-6 hours", image: "/k.jpg" },
-            { id: "box", name: "Box Braids", price: "$120", duration: "3-4 hours", image: "/b.jpg" },
-        ]);
+        const emit = () =>
+            cb([
+                { id: "knotless", name: "Knotless Braids", price: "$150", duration: "4-6 hours", image: "/k.jpg" },
+                { id: "box", name: "Box Braids", price: "$120", duration: "3-4 hours", image: "/b.jpg" },
+            ]);
+        if (mocks.deferStyles) mocks.emitStyles = emit;
+        else emit();
         return () => {};
     },
     subscribeToPresets: (cb: (d: unknown[]) => void) => {
@@ -51,6 +59,9 @@ beforeEach(() => {
     vi.setSystemTime(new Date(2026, 10, 23, 8, 0));
     window.scrollTo = vi.fn() as unknown as typeof window.scrollTo;
     sessionStorage.clear();
+    mocks.auth = { user: null, profile: null };
+    mocks.deferStyles = false;
+    mocks.emitStyles = null;
     mocks.push.mockReset();
     mocks.getBookingsByDate.mockReset().mockResolvedValue([]);
 });
@@ -129,10 +140,7 @@ describe("booking wizard", () => {
         expect(storedDraft()).toMatchObject({ currentStep: 3, date: "November 25, 2026", time: "10:00 AM" });
     });
 
-    // KNOWN BUG (found while writing this test, fix tracked separately): for a signed-out visitor the
-    // "clear if logged out" effect runs right after draft hydration and wipes the restored name, email and phone.
-    // `it.fails` passes while the bug exists and starts failing once it is fixed: then change it to a plain `it`.
-    it.fails("keeps a signed-out visitor's name, email and phone from the restored draft", () => {
+    it("keeps a signed-out visitor's name, email and phone from the restored draft", () => {
         seedDraft();
         render(<BookingPage />);
 
@@ -141,12 +149,51 @@ describe("booking wizard", () => {
         expect((screen.getByPlaceholderText("(555) 000-0000") as HTMLInputElement).value).toBe("(214) 555-0100");
     });
 
-    // KNOWN BUG (same status): hydration looks the saved style up in `styles` before the styles have loaded,
-    // so the restored draft is saved back with the default (first) style instead of the one the visitor chose.
-    it.fails("keeps the style chosen before the page was reloaded", () => {
+    it("keeps the style chosen before the page was reloaded", () => {
         seedDraft();
         render(<BookingPage />);
 
         expect(storedDraft().styleId).toBe("box");
+    });
+
+    it("restores the chosen style when the styles arrive after the page mounts (the real Firestore order)", async () => {
+        mocks.deferStyles = true;
+        seedDraft();
+        render(<BookingPage />);
+        await act(async () => mocks.emitStyles?.());
+
+        expect(storedDraft().styleId).toBe("box");
+    });
+
+    it("a later styles update does not reset the visitor's selection", async () => {
+        mocks.deferStyles = true;
+        render(<BookingPage />);
+        await act(async () => mocks.emitStyles?.());
+        fireEvent.click(screen.getByText("Box Braids"));
+        await act(async () => mocks.emitStyles?.()); // e.g. the owner edits a style while the visitor is choosing
+
+        expect(storedDraft().styleId).toBe("box");
+    });
+
+    it("pre-fills a signed-in visitor's details from their profile", () => {
+        mocks.auth = { user: { displayName: "G" }, profile: { name: "Grace Hopper", email: "grace@example.com", phone: "(214) 555-0199" } };
+        sessionStorage.setItem("dedes_booking_draft", JSON.stringify({ ...saved, name: "", email: "", phone: "" }));
+        render(<BookingPage />);
+
+        expect((screen.getByPlaceholderText("Jane Doe") as HTMLInputElement).value).toBe("Grace Hopper");
+        expect((screen.getByPlaceholderText("jane@example.com") as HTMLInputElement).value).toBe("grace@example.com");
+    });
+
+    it("clears the details when a signed-in visitor signs out", () => {
+        mocks.auth = { user: { displayName: "G" }, profile: { name: "Grace Hopper", email: "grace@example.com", phone: "(214) 555-0199" } };
+        sessionStorage.setItem("dedes_booking_draft", JSON.stringify({ ...saved, name: "", email: "", phone: "" }));
+        const view = render(<BookingPage />);
+        expect((screen.getByPlaceholderText("Jane Doe") as HTMLInputElement).value).toBe("Grace Hopper");
+
+        mocks.auth = { user: null, profile: null };
+        view.rerender(<BookingPage />);
+
+        expect((screen.getByPlaceholderText("Jane Doe") as HTMLInputElement).value).toBe("");
+        expect((screen.getByPlaceholderText("jane@example.com") as HTMLInputElement).value).toBe("");
     });
 });
