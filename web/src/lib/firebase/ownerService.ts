@@ -88,13 +88,14 @@ export async function cancelBooking(bookingId: string) {
 
 // --- Products ---
 
-export function subscribeToProducts(callback: (products: Product[]) => void) {
+/** `T` is the view of the document the caller expects (defaults to the storefront `Product`). */
+export function subscribeToProducts<T = Product>(callback: (products: T[]) => void) {
     const q = query(collection(db, "products"), orderBy("updatedAt", "desc"));
     return onSnapshot(q, (snapshot) => {
         const products = snapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
-        })) as Product[];
+        })) as T[];
         callback(products);
     }, (error) => {
         console.error("Error subscribing to products:", error);

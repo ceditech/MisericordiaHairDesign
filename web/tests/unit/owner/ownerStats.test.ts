@@ -2,10 +2,12 @@ import { describe, it, expect } from "vitest";
 import {
     buildBusinessTrends,
     computeAffiliateMetrics,
+    computeBlogStats,
     computeConversionRate,
     computeSalesMetrics,
     computeTopPerformers,
     countRecentClients,
+    formatShortDate,
     isConvertedBooking,
     parsePrice,
 } from "@/src/lib/owner/ownerStats";
@@ -216,5 +218,33 @@ describe("countRecentClients", () => {
             since
         );
         expect(n).toBe(3);
+    });
+});
+
+describe("formatShortDate", () => {
+    it("formats Timestamp-like, Date, string and number values", () => {
+        expect(formatShortDate({ toDate: () => new Date(2026, 2, 4) })).toBe("Mar 4, 2026");
+        expect(formatShortDate(new Date(2026, 10, 20))).toBe("Nov 20, 2026");
+        expect(formatShortDate(new Date(2026, 0, 5).getTime())).toBe("Jan 5, 2026");
+    });
+    it("returns a dash for missing values or a throwing Timestamp", () => {
+        expect(formatShortDate(undefined)).toBe("—");
+        expect(formatShortDate(null)).toBe("—");
+        expect(formatShortDate({ toDate: () => { throw new Error("bad"); } })).toBe("—");
+    });
+});
+
+describe("computeBlogStats", () => {
+    it("counts posts, views, drafts and published", () => {
+        expect(
+            computeBlogStats([
+                { views: 10, status: "published" },
+                { views: 5, status: "draft" },
+                { status: "draft" },
+            ])
+        ).toEqual({ totalPosts: 3, totalViews: 15, draftCount: 2, publishedCount: 1 });
+    });
+    it("is all zeros for no posts", () => {
+        expect(computeBlogStats([])).toEqual({ totalPosts: 0, totalViews: 0, draftCount: 0, publishedCount: 0 });
     });
 });

@@ -4,13 +4,15 @@ import React, { useState, useEffect } from "react";
 import { Mail, AlertCircle, CheckCircle2, Lock, Trash2, Plus, Sparkles, RefreshCw } from "lucide-react";
 import { useAuth } from "@/src/providers/AuthProvider";
 import { authFetch } from "@/src/lib/http/authFetch";
+import { errorMessage } from "@/src/lib/errors";
+import type { TimeValue } from "@/src/lib/owner/types";
 
 interface EmailSender {
     email: string;
     name: string;
     isPrimary: boolean;
     connected: boolean;
-    updatedAt?: any;
+    updatedAt?: TimeValue;
 }
 
 export default function StitchEmailSettings() {
@@ -41,8 +43,8 @@ export default function StitchEmailSettings() {
             } else {
                 setError(data.error || "Failed to load email configurations.");
             }
-        } catch (err: any) {
-            setError(err.message || "Failed to fetch email configurations.");
+        } catch (err: unknown) {
+            setError(errorMessage(err, "Failed to fetch email configurations."));
         } finally {
             setLoading(false);
         }
@@ -105,8 +107,8 @@ export default function StitchEmailSettings() {
             } else {
                 setError(data.error || "Failed to delete sender.");
             }
-        } catch (err: any) {
-            setError(err.message || "Failed to delete sender.");
+        } catch (err: unknown) {
+            setError(errorMessage(err, "Failed to delete sender."));
         } finally {
             setActionLoading(null);
         }

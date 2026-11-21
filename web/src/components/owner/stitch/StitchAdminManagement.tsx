@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from "react";
 import { Users, Plus, Trash2, ShieldCheck, Mail, Search, AlertCircle } from "lucide-react";
 import { useAuth } from "@/src/providers/AuthProvider";
-import { subscribeToAssistants, updateUserRole } from "@/src/lib/firebase/ownerService";
+import { subscribeToAssistants, updateUserRole, type AssistantUser } from "@/src/lib/firebase/ownerService";
 import { authFetch } from "@/src/lib/http/authFetch";
 
 export default function StitchAdminManagement() {
     const { isSuperAdmin } = useAuth();
-    const [assistants, setAssistants] = useState<any[]>([]);
+    const [assistants, setAssistants] = useState<AssistantUser[]>([]);
     const [loading, setLoading] = useState(true);
     const [newEmail, setNewEmail] = useState("");
     const [newName, setNewName] = useState("");

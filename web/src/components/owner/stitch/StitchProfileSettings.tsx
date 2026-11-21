@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { User, Phone, Camera, Save, UserCheck } from "lucide-react";
 import { useAuth } from "@/src/providers/AuthProvider";
 import { updateMyProfile, uploadFile } from "@/src/lib/firebase/ownerService";
+import { errorMessage } from "@/src/lib/errors";
 
 export default function StitchProfileSettings() {
     const { user, profile } = useAuth();
@@ -40,9 +41,9 @@ export default function StitchProfileSettings() {
                 email: user.email || undefined
             });
             setMessage({ type: 'success', text: 'Profile updated successfully!' });
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error(err);
-            setMessage({ type: 'error', text: `Failed to update profile: ${err.message || 'Unknown error'}` });
+            setMessage({ type: 'error', text: `Failed to update profile: ${errorMessage(err, 'Unknown error')}` });
         } finally {
             setSaving(false);
         }

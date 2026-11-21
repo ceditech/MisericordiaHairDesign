@@ -4,6 +4,9 @@ import React, { useState, useEffect } from "react";
 import { doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { getDb } from "@/src/lib/firebase/client";
 import { authFetch } from "@/src/lib/http/authFetch";
+import { subscribeToBookings } from "@/src/lib/firebase/ownerService";
+import { formatShortDate } from "@/src/lib/owner/ownerStats";
+import type { TimeValue } from "@/src/lib/owner/types";
 import { Calendar, Search, ChevronRight, X, CheckCircle, XCircle, TrendingUp, DollarSign, Ban, ReceiptText } from "lucide-react";
 
 type Booking = {
@@ -31,7 +34,8 @@ type Booking = {
         taxCents?: number;
         amountDueCents?: number;
     };
-    createdAt?: any;
+    createdAt?: TimeValue;
+    isSeedData?: boolean;
 };
 
 const STATUS_OPTIONS = ["all", "upcoming", "confirmed", "pending", "cancelled", "completed"];
@@ -47,11 +51,6 @@ function statusColor(status?: string) {
     }
 }
 
-function formatDate(ts: any): string {
-    if (!ts) return "—";
-    try { const d = ts?.toDate ? ts.toDate() : new Date(ts); return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); }
-    catch { return "—"; }
-}
 
 export default function StitchAppointments() {
     const [bookings, setBookings] = useState<Booking[]>([]);
@@ -62,8 +61,9 @@ export default function StitchAppointments() {
     const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
-        const { subscribeToBookings } = require("@/src/lib/firebase/ownerService");
-        const unsub = subscribeToBookings((data: Booking[]) => {
+        const unsub = subscribeToBookings((docs) => {
+            // This view reads a stricter shape of the stored booking than the shared owner type
+            const data = docs as Booking[];
             setBookings(data);
             if (data.length > 0 && !selected) setSelected(data[0]);
             setLoading(false);
@@ -123,7 +123,7 @@ export default function StitchAppointments() {
         securedRevenue: bookings
             .filter(b => b.status === 'completed')
             .reduce((sum, b) => {
-                const amount = (b as any).isSeedData 
+                const amount = b.isSeedData 
                     ? (b.totalCents || b.amountCents || b.priceCents || 0)
                     : (b.amountPaidCents || b.pricing?.amountDueCents || b.pricing?.depositCents || 0);
                 return sum + amount;
@@ -139,7 +139,7 @@ export default function StitchAppointments() {
     };
 
 
-    const StatCard = ({ label, value, icon, color }: any) => (
+    const StatCard = ({ label, value, icon, color }: { label: string; value: string | number; icon: React.ReactNode; color: string }) => (
         <div className="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-5 group">
             <div className={`p-4 rounded-2xl ${color} bg-opacity-10 text-opacity-100 shrink-0 group-hover:scale-110 transition-transform`}>
                 {icon}
@@ -252,7 +252,7 @@ export default function StitchAppointments() {
                                         </div>
                                         <div className="flex items-center gap-3 shrink-0">
                                             <div className="text-right hidden sm:block">
-                                                <p className="text-xs font-bold text-slate-600 dark:text-slate-300">{booking.date || formatDate(booking.createdAt)}</p>
+                                                <p className="text-xs font-bold text-slate-600 dark:text-slate-300">{booking.date || formatShortDate(booking.createdAt)}</p>
                                                 <p className="text-xs text-slate-400">{booking.time || ""}</p>
                                             </div>
                                             <span className={`px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide rounded-full ${statusColor(booking.status)}`}>
@@ -295,7 +295,7 @@ export default function StitchAppointments() {
                             <div className="space-y-3 mb-6">
                                 {[
                                     { label: "Service", value: selected.styleName || selected.service || selected.styleId || "—" },
-                                    { label: "Date", value: selected.date || formatDate(selected.createdAt) },
+                                    { label: "Date", value: selected.date || formatShortDate(selected.createdAt) },
                                     { label: "Time", value: selected.time || "—" },
                                     { label: "Status", value: selected.status || "pending" },
                                     { 
@@ -304,7 +304,7 @@ export default function StitchAppointments() {
                                             ? "Full Payment" 
                                             : (selected.amountPaidCents || selected.pricing?.amountDueCents)
                                                 ? `$${((selected.amountPaidCents || selected.pricing?.amountDueCents || 0) / 100).toFixed(2)}`
-                                                : (selected as any).isSeedData && selected.status !== 'pending'
+                                                : selected.isSeedData && selected.status !== 'pending'
                                                     ? "Yes (Seed)"
                                                     : selected.depositPaid ? "Yes" : "No"
                                     },

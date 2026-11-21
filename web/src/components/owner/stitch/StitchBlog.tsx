@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { computeBlogStats, toDate } from "@/src/lib/owner/ownerStats";
 import { subscribeToBlogPosts, upsertBlogPost, deleteBlogPost, uploadFile, type BlogPost } from "@/src/lib/firebase/ownerService";
 import { 
     FileText, Plus, Trash2, Edit3, Save, X, Calendar, User, Eye, 
@@ -30,14 +31,7 @@ export default function StitchBlog() {
             setPosts(data);
             setLoading(false);
             
-            // Calculate stats locally or fetch from service
-            const s = data.reduce((acc: any, p: any) => ({
-                totalPosts: acc.totalPosts + 1,
-                totalViews: acc.totalViews + (p.views || 0),
-                draftCount: acc.draftCount + (p.status === "draft" ? 1 : 0),
-                publishedCount: acc.publishedCount + (p.status === "published" ? 1 : 0)
-            }), { totalPosts: 0, totalViews: 0, draftCount: 0, publishedCount: 0 });
-            setStats(s);
+            setStats(computeBlogStats(data));
         });
 
         return () => unsub();
@@ -186,7 +180,7 @@ export default function StitchBlog() {
                                 <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                                     <span>{post.category || "General"}</span>
                                     <span>•</span>
-                                    <span>{post.createdAt?.toDate ? post.createdAt.toDate().toLocaleDateString() : new Date(post.createdAt as any).toLocaleDateString()}</span>
+                                    <span>{toDate(post.createdAt).toLocaleDateString()}</span>
                                 </div>
                                 <h3 className="text-xl font-black text-slate-900 dark:text-white line-clamp-2 group-hover:text-[#6b38d4] transition-colors">
                                     {post.title}
@@ -303,7 +297,7 @@ export default function StitchBlog() {
                                             <select 
                                                 className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold focus:ring-2 focus:ring-[#6b38d4]"
                                                 value={formData.status}
-                                                onChange={(e) => setFormData(d => ({ ...d, status: e.target.value as any }))}
+                                                onChange={(e) => setFormData(d => ({ ...d, status: e.target.value as BlogPost["status"] }))}
                                             >
                                                 <option value="draft">Draft</option>
                                                 <option value="published">Published</option>
@@ -423,7 +417,7 @@ export default function StitchBlog() {
                                     <User size={16} className="text-[#6b38d4]" /> {viewingPost.author}
                                 </div>
                                 <div className="flex items-center gap-2 font-bold text-xs">
-                                    <Calendar size={16} className="text-[#6b38d4]" /> {viewingPost.createdAt?.toDate ? viewingPost.createdAt.toDate().toLocaleDateString(undefined, { dateStyle: 'long' }) : new Date(viewingPost.createdAt as any).toLocaleDateString()}
+                                    <Calendar size={16} className="text-[#6b38d4]" /> {toDate(viewingPost.createdAt).toLocaleDateString(undefined, { dateStyle: 'long' })}
                                 </div>
                                 <div className="flex items-center gap-2 font-bold text-xs">
                                     <Eye size={16} className="text-[#6b38d4]" /> {viewingPost.views || 0} views
