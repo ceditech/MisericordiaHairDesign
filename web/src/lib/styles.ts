@@ -101,3 +101,12 @@ export const BRAID_STYLES: BraidStyle[] = [
         prepChecklist: DEFAULT_PREP
     },
 ];
+
+/**
+ * The style a booking is priced from: the live Firestore style, else the built-in one with the same id.
+ * Returns null for an unknown id so callers can reject the booking instead of pricing it as another style.
+ */
+export function resolveBookingStyle(styleId: string | undefined, liveStyles: BraidStyle[]): BraidStyle | null {
+    if (!styleId) return null;
+    return liveStyles.find((s) => s.id === styleId) ?? BRAID_STYLES.find((s) => s.id === styleId) ?? null;
+}

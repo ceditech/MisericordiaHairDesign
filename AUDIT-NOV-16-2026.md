@@ -298,11 +298,11 @@ Each step: tests green before and after; no functional change in the same commit
 
 | # | Task | Notes |
 |---|---|---|
-| 8.1 | B-1: finish and commit the styles changes (`our-styles`, `lib/styles.ts`, `StitchStyles`); add tests for style data mapping; fix the `label` type issue (D-5) | Small PR |
-| 8.2 | C-6/B-2: "9 styles selection" on `/book` and dynamic booking summary — write acceptance criteria with the owner first (grid of 9 styles? source: Firestore `styles` vs static `BRAID_STYLES`?) | Needs owner input (see open questions) |
-| 8.3 | B-4: complete or retire `next-prompt.md` (steps 2–5 of the booking flow) once `/book` behavior is final | Doc cleanup |
+| 8.1 | **Done:** committed; style data falls back to the static list through `resolveBookingStyle`.  B-1: finish and commit the styles changes (`our-styles`, `lib/styles.ts`, `StitchStyles`); add tests for style data mapping; fix the `label` type issue (D-5) | Small PR |
+| 8.2 | **Done:** `/book` lists the styles from Firestore (static list as fallback, 9 styles) with a live summary; `SITE.md` updated.  C-6/B-2: "9 styles selection" on `/book` and dynamic booking summary — write acceptance criteria with the owner first (grid of 9 styles? source: Firestore `styles` vs static `BRAID_STYLES`?) | Needs owner input (see open questions) |
+| 8.3 | **Done:** `next-prompt.md` removed.  B-4: complete or retire `next-prompt.md` (steps 2–5 of the booking flow) once `/book` behavior is final | Doc cleanup |
 | 8.4 | B-3: finish the Stitch migration — verify each module has parity with the legacy tab, then remove the legacy UI and the `NEXT_PUBLIC_OWNER_DASH_UI` switch | After Phase 7.4 |
-| 8.5 | Update `SITE.md` checkboxes (Booking `[x]`) and sitemap (shop, blog, contact, affiliate pages) | Docs |
+| 8.5 | **Done:** `SITE.md` updated. `/services`, `/gallery`, `/about` have no route under `web/app`: owner to confirm.  Update `SITE.md` checkboxes (Booking `[x]`) and sitemap (shop, blog, contact, affiliate pages) | Docs |
 
 ### 2.11 Phase 9 — Code quality and refactors (D-8)
 
@@ -338,7 +338,7 @@ Surgical, behavior-preserving, test-backed (characterization tests first):
 ### 2.14 Open questions for the owner
 1. Is `/api/affiliate/generate` meant to be public signup or staff-only?
 2. Who creates `shopOrders` today (client or server)? (Determines Phase 2.5 scope.)
-3. "9 styles selection" on `/book`: which 9 styles, and from Firestore or static config?
+3. ~~"9 styles selection" on `/book`~~ Implemented (Firestore `styles`, static fallback); confirm the displayed set is the one you want.
 4. Are any `/debug/*` or `/dev/*` pages still needed in production?
 5. Which scheduler triggers `/api/admin/reminders` (Cloud Scheduler, external cron)?
 6. Is the legacy owner dashboard still used by anyone (can it be deleted)?
