@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminDb } from "@/src/lib/firebase/admin";
+import { clientIp, createRateLimiter } from "@/src/lib/http/rateLimit";
+
+// Public endpoint, one Firestore query per call: best-effort per-IP limit (see src/lib/http/rateLimit.ts).
+// Generous because /book calls it each time the visitor changes the date.
+const availabilityLimiter = createRateLimiter({ limit: 60, windowMs: 60 * 1000 });
 
 /**
  * GET /api/bookings/availability?date=...
@@ -7,6 +12,14 @@ import { adminDb } from "@/src/lib/firebase/admin";
  */
 export async function GET(req: NextRequest) {
   try {
+    const limit = availabilityLimiter.check(clientIp(req));
+    if (!limit.ok) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: 429, headers: { "Retry-After": String(limit.retryAfterSec) } }
+      );
+    }
+
     const { searchParams } = new URL(req.url);
     const date = searchParams.get("date");
 

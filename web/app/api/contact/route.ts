@@ -3,9 +3,21 @@ import { adminDb } from "@/src/lib/firebase/admin";
 import { EmailManager } from "@/src/lib/email/EmailManager";
 import { generateContactInquiryEmail } from "@/src/lib/email/templates/contactTemplate";
 import { FieldValue } from "firebase-admin/firestore";
+import { clientIp, createRateLimiter } from "@/src/lib/http/rateLimit";
+
+// Public endpoint that saves a document and emails the owner: best-effort per-IP limit (see src/lib/http/rateLimit.ts).
+const contactLimiter = createRateLimiter({ limit: 5, windowMs: 60 * 60 * 1000 });
 
 export async function POST(req: NextRequest) {
     try {
+        const limit = contactLimiter.check(clientIp(req));
+        if (!limit.ok) {
+            return NextResponse.json(
+                { error: "Too many requests. Please try again later." },
+                { status: 429, headers: { "Retry-After": String(limit.retryAfterSec) } }
+            );
+        }
+
         const body = await req.json();
         const { name, email, service, message } = body;
 
