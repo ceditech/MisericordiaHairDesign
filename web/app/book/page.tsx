@@ -38,13 +38,23 @@ function BookingPageInner() {
     const [currentStep, setCurrentStep] = useState(1);
     const [selectedStyle, setSelectedStyle] = useState<BraidStyle | null>(null);
 
+    // Latest styles, and the style id saved in the draft that is waiting for the styles to load.
+    const stylesRef = useRef<BraidStyle[]>([]);
+    const draftStyleId = useRef<string | undefined>(undefined);
+
     useEffect(() => {
         const unsubStyles = subscribeToStyles((data) => {
+            stylesRef.current = data;
             setStyles(data);
             setLoadingStyles(false);
-            if (!selectedStyle && data.length > 0) {
-                const initial = data.find((s) => s.id === (styleParam ?? "")) ?? data[0];
-                setSelectedStyle(initial);
+            if (data.length > 0) {
+                // Only choose a style when none is selected yet: later updates must not reset the visitor's choice.
+                // Priority: ?style= in the URL, then the style saved in the draft, then the first style.
+                const initial =
+                    data.find((s) => s.id === (styleParam ?? "")) ??
+                    (styleParam ? undefined : data.find((s) => s.id === draftStyleId.current)) ??
+                    data[0];
+                setSelectedStyle((prev) => prev ?? initial);
             }
         });
 
@@ -107,8 +117,9 @@ function BookingPageInner() {
 
         // URL ?style= param takes priority over the saved draft style
         if (!styleParam && draft.styleId) {
-            const savedStyle = styles.find((s) => s.id === draft.styleId);
+            const savedStyle = stylesRef.current.find((s) => s.id === draft.styleId);
             if (savedStyle) setSelectedStyle(savedStyle);
+            else draftStyleId.current = draft.styleId;
         }
 
         if (draft.currentStep > 1) setCurrentStep(draft.currentStep);
@@ -139,16 +150,19 @@ function BookingPageInner() {
     }, []); // intentionally empty — runs once on mount
 
     // ── Pre-fill from Auth Profile ────────────────────────────────────────────
+    const wasSignedIn = useRef(false);
     useEffect(() => {
         if (profile || user) {
+            wasSignedIn.current = true;
             setBookingData((prev) => ({
                 ...prev,
                 name: prev.name || profile?.name || profile?.displayName || user?.displayName || "",
                 email: prev.email || profile?.email || user?.email || "",
                 phone: prev.phone || profile?.phone || "",
             }));
-        } else if (!user) {
-            // Clear if logged out
+        } else if (wasSignedIn.current) {
+            // Clear on sign-out only. A visitor who was never signed in keeps what the draft restored.
+            wasSignedIn.current = false;
             setBookingData((prev) => ({
                 ...prev,
                 name: "",
@@ -201,7 +215,7 @@ function BookingPageInner() {
         // Don't overwrite the draft until hydration has completed
         if (!hydrated.current) return;
         saveDraft({
-            styleId: selectedStyle?.id,
+            styleId: selectedStyle?.id ?? draftStyleId.current,
             currentStep,
             date: bookingData.date,
             time: bookingData.time,
