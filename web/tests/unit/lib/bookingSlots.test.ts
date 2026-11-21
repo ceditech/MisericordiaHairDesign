@@ -2,7 +2,8 @@ import { describe, it, expect } from "vitest";
 import type { BraidStyle } from "@/src/lib/styles";
 import type { BookingRecord } from "@/src/lib/firebase/userBookings";
 import { parseMaxDurationHours, timeToMinutes, generateSlots } from "@/src/lib/bookings/slots";
-import { getMonthData, isDatePast } from "@/src/lib/bookings/calendar";
+import { getMonthData, isDatePast, formatBookingDate, MONTH_NAMES } from "@/src/lib/bookings/calendar";
+import { isBookingDateParam } from "@/src/lib/http/validate";
 import { isStepValid, validatePhoto } from "@/src/lib/bookings/stepValidity";
 
 // Characterization tests: they pin the behaviour of the logic that used to live inside app/book/page.tsx.
@@ -154,5 +155,31 @@ describe("validatePhoto", () => {
         expect(validatePhoto({ type: "application/pdf", size: 1000 })).toMatch(/valid image/);
         expect(validatePhoto({ type: "image/png", size: 5 * 1024 * 1024 + 1 })).toMatch(/under 5 MB/);
         expect(validatePhoto({ type: "image/png", size: 5 * 1024 * 1024 })).toBeNull();
+    });
+});
+
+describe("formatBookingDate", () => {
+    it("builds the English 'Month D, YYYY' string the server stores and validates", () => {
+        expect(formatBookingDate(2026, 10, 21)).toBe("November 21, 2026");
+        expect(formatBookingDate(2027, 2, 3)).toBe("March 3, 2027");
+    });
+
+    it("does not depend on the browser language", () => {
+        const original = Date.prototype.toLocaleString;
+        Date.prototype.toLocaleString = function () { return "novembre"; };
+        try {
+            expect(formatBookingDate(2026, 10, 21)).toBe("November 21, 2026");
+        } finally {
+            Date.prototype.toLocaleString = original;
+        }
+    });
+
+    it("produces a string the availability route accepts and Date can parse, for every month", () => {
+        MONTH_NAMES.forEach((_, month) => {
+            const str = formatBookingDate(2026, month, 15);
+            expect(isBookingDateParam(str)).toBe(true);
+            const d = new Date(str);
+            expect([d.getFullYear(), d.getMonth(), d.getDate()]).toEqual([2026, month, 15]);
+        });
     });
 });

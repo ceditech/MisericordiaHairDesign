@@ -15,7 +15,7 @@ import { Skeleton, Modal } from "@/components/ui";
 import { calculateBookingPrice, formatCents } from "@/src/lib/pricing";
 import { formatUSPhone, isValidUSPhone } from "@/src/lib/utils";
 import { parseMaxDurationHours, generateSlots } from "@/src/lib/bookings/slots";
-import { getMonthData, isDatePast } from "@/src/lib/bookings/calendar";
+import { getMonthData, isDatePast, formatBookingDate, MONTH_NAMES } from "@/src/lib/bookings/calendar";
 import { isStepValid as isStepValidFor, validatePhoto } from "@/src/lib/bookings/stepValidity";
 
 
@@ -228,7 +228,7 @@ function BookingPageInner() {
     };
 
     const { year, month, firstDayOfMonth, daysInMonth } = getMonthData(viewDate);
-    const monthName = viewDate.toLocaleString("default", { month: "long" });
+    const monthName = MONTH_NAMES[month];
 
     // ── Photo handler ──────────────────────────────────────────────────────────
     const handlePhotoUpload = (file: File | undefined) => {
@@ -568,7 +568,7 @@ function BookingPageInner() {
                                             {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((d) => {
                                                 const isSunday = new Date(year, month, d).getDay() === 0;
                                                 const isDisabled = isDatePast(d, month, year) || isSunday;
-                                                const dateStr = `${monthName} ${d}, ${year}`;
+                                                const dateStr = formatBookingDate(year, month, d);
                                                 const isSelected = bookingData.date === dateStr;
                                                 return (
                                                     <button
