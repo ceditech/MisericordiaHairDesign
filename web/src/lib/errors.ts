@@ -16,3 +16,8 @@ export function errorCode(err: unknown): string | undefined {
   }
   return undefined;
 }
+
+/** True when a navigation or fetch was aborted (e.g. router.push interrupted by another navigation). */
+export function isAbortError(err: unknown): boolean {
+  return typeof err === "object" && err !== null && "name" in err && (err as { name?: unknown }).name === "AbortError";
+}

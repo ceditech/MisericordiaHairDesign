@@ -103,7 +103,7 @@ export default function ProductsPage() {
                     <select
                         className="bg-transparent font-semibold text-sm outline-none text-slate-900 dark:text-white cursor-pointer"
                         value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value as any)}
+                        onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
                     >
                         <option value="featured">Featured First</option>
                         <option value="price-low">Price: Low to High</option>

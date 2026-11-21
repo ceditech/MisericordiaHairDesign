@@ -48,8 +48,8 @@ async function main() {
         try {
             const publicUrl = await uploadFileToStorage(localPath, destinationPath);
             urlMappings[file] = publicUrl;
-        } catch (err: any) {
-            console.error(`Failed to upload ${file}:`, err.message);
+        } catch (err: unknown) {
+            console.error(`Failed to upload ${file}:`, err instanceof Error ? err.message : String(err));
         }
     }
 

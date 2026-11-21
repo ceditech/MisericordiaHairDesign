@@ -1,5 +1,6 @@
 "use client";
 
+import { errorCode, errorMessage } from "@/src/lib/errors";
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useToast } from "@/components/ui";
@@ -9,6 +10,7 @@ import { calculateBookingPrice, formatCents } from "@/src/lib/pricing";
 
 import type { PaymentProvider, PaymentChoice, PaymentStatus } from "@/src/lib/payments/types";
 import { subscribeToStyles, subscribeToPresets, subscribeToAddons } from "@/src/lib/firebase/ownerService";
+import type { AddonDoc } from "@/src/lib/firebase/ownerService";
 import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
 import { DEPOSIT_POLICY, CANCELLATION_POLICY, PRICE_NOTE_POLICY } from "@/src/content/legal";
 import { useAuth } from "@/src/providers/AuthProvider";
@@ -104,7 +106,7 @@ function CheckoutPageInner() {
     const [loadingStyles, setLoadingStyles] = useState(true);
     const [sizePresets, setSizePresets] = useState<SizePreset[]>([]);
     const [lengthPresets, setLengthPresets] = useState<LengthPreset[]>([]);
-    const [addons, setAddons] = useState<any[]>([]);
+    const [addons, setAddons] = useState<AddonDoc[]>([]);
 
     useEffect(() => {
         const unsubStyles = subscribeToStyles((data) => {
@@ -113,8 +115,8 @@ function CheckoutPageInner() {
         });
 
         const unsubPresets = subscribeToPresets((data) => {
-            const sizes = data.filter(p => (p as any).type === "size") as SizePreset[];
-            const lengths = data.filter(p => (p as any).type === "length") as LengthPreset[];
+            const sizes = data.filter(p => p.type === "size") as SizePreset[];
+            const lengths = data.filter(p => p.type === "length") as LengthPreset[];
             setSizePresets(sizes);
             setLengthPresets(lengths);
         });
@@ -224,7 +226,7 @@ function CheckoutPageInner() {
     };
 
     // ── Persist draft to Firestore (server needs it before payment) ───────────
-    const persistDraftToFirestore = async (id: string, providerName: string): Promise<void> => {
+    const persistDraftToFirestore = async (id: string, providerName: "stripe" | "paypal"): Promise<void> => {
         if (!draft) {
             console.warn("[Checkout] No draft found to persist.");
             return;
@@ -259,14 +261,15 @@ function CheckoutPageInner() {
                         createdAt: serverTimestamp(),
                         updatedAt: serverTimestamp(),
                     });
-                } catch (err: any) {
-                    if (err.code === "auth/email-already-in-use") {
+                } catch (err: unknown) {
+                    const code = errorCode(err);
+                    if (code === "auth/email-already-in-use") {
                         console.warn("[Checkout] Email in use. Proceeding as guest linked to this email.");
                         // Handle gracefully: we don't set currentUserId, but we don't block the booking.
-                    } else if (err.code === "auth/invalid-email") {
+                    } else if (code === "auth/invalid-email") {
                         throw new Error("The email provided is invalid. Please double-check it.");
                     } else {
-                        console.error("[Checkout] Account creation failed:", err.code, err.message);
+                        console.error("[Checkout] Account creation failed:", code, errorMessage(err, ""));
                         // We continue with guest flow but log it
                     }
                 }
@@ -337,7 +340,7 @@ function CheckoutPageInner() {
                 amountPaidLabel: formatCents(amountDueNow),
                 paymentChoice,
                 promoCode: appliedCode || null,
-                provider: providerName as any,
+                provider: providerName,
                 pricing: {
                     baseCents: pricing.baseCents,
                     subtotalCents: pricing.subtotalCents,
@@ -366,10 +369,10 @@ function CheckoutPageInner() {
                 clientPhone: phoneToUse,
                 amountPaidLabel: formatCents(amountDueNow),
                 paymentChoice,
-                provider: providerName as any,
+                provider: providerName,
                 draftId: id
             });
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("[Checkout] Fatal draft persistence error:", err);
             setFlowStatus("failed");
             throw err;
@@ -415,10 +418,10 @@ function CheckoutPageInner() {
             }
 
             window.location.href = data.approvalLink;
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("[Checkout] PayPal initiation error:", err);
             setFlowStatus("failed");
-            setErrorMsg(err.message ?? "Failed to initialize PayPal. Please try again.");
+            setErrorMsg(errorMessage(err, "Failed to initialize PayPal. Please try again."));
         }
     };
 

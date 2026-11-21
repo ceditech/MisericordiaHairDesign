@@ -14,6 +14,7 @@
  *   - onError: called if the server returns an error before redirect
  */
 
+import { errorMessage } from "@/src/lib/errors";
 import { useState } from "react";
 import { Button } from "@/components/ui";
 
@@ -89,10 +90,10 @@ export default function StripeCheckout({
 
       // Hard redirect to Stripe Hosted Checkout
       window.location.href = url;
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("[StripeCheckout] Error creating session:", err);
       setIsRedirecting(false);
-      onError?.(err.message ?? "Failed to initialize Stripe checkout. Please try again.");
+      onError?.(errorMessage(err, "Failed to initialize Stripe checkout. Please try again."));
     }
   };
 

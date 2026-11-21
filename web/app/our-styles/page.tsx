@@ -1,5 +1,6 @@
 "use client";
 
+import { isAbortError } from "@/src/lib/errors";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -24,9 +25,9 @@ function StyleModal({ style, onClose }: { style: BraidStyle; onClose: () => void
         hasRedirected.current = true;
         onClose();
         try {
-            await (router.push(`/book?style=${style.id}`) as any);
-        } catch (err: any) {
-            if (err.name !== 'AbortError') throw err;
+            await router.push(`/book?style=${style.id}`);
+        } catch (err: unknown) {
+            if (!isAbortError(err)) throw err;
         }
     };
 
