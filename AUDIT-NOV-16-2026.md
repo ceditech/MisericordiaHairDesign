@@ -318,6 +318,8 @@ Surgical, behavior-preserving, test-backed (characterization tests first):
 
 ### 2.12 Phase 10 — Config, docs and README (C-7, D-9)
 
+**Status:** `web/README.md`, a tracked `web/.env.example` (it was gitignored), `web/docs/data-model.md` and `web/docs/runbook.md` are written. **Still open:** per-environment `GOOGLE_REDIRECT_URI`/app URL and removing hardcoded domain fallbacks (code change), and the owner confirming the dev/prod Firebase projects (`.firebaserc` is empty) and the reminders scheduler.
+
 - Rewrite `web/README.md`: purpose, architecture diagram, env vars table (public vs secret), local setup with emulators, test commands, deploy procedure (dev/prod), role model.
 - Add `web/.env.example`; move `GOOGLE_REDIRECT_URI` and app URL to per-environment config; remove hardcoded domain fallbacks.
 - Document the data model (collections and who may write them) next to the rules.
