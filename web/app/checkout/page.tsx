@@ -11,13 +11,12 @@ import { resolveInspirationPhotoUrl } from "@/src/lib/checkout/photo";
 import { attemptAccountCreation } from "@/src/lib/checkout/accountCreation";
 import { createPayPalOrder } from "@/src/lib/checkout/paypal";
 import { BRAID_STYLES, BraidStyle } from "@/src/lib/styles";
-import { calculateBookingPrice, formatCents } from "@/src/lib/pricing";
+import { calculateBookingPrice } from "@/src/lib/pricing";
 
 import type { PaymentProvider, PaymentChoice, PaymentStatus } from "@/src/lib/payments/types";
 import { subscribeToStyles, subscribeToPresets, subscribeToAddons } from "@/src/lib/firebase/ownerService";
 import type { AddonDoc } from "@/src/lib/firebase/ownerService";
 import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
-import { DEPOSIT_POLICY, CANCELLATION_POLICY, PRICE_NOTE_POLICY } from "@/src/content/legal";
 import { useAuth } from "@/src/providers/AuthProvider";
 import { signUpUser } from "@/src/lib/firebase/auth";
 import { getDb } from "@/src/lib/firebase";
@@ -25,69 +24,16 @@ import { getStorageInstance } from "@/src/lib/firebase/client";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import StripeCheckout from "@/components/StripeCheckout";
+import { NoBookingState } from "@/components/checkout/NoBookingState";
+import { PaymentChoiceSection } from "@/components/checkout/PaymentChoiceSection";
+import { PaymentMethodSection } from "@/components/checkout/PaymentMethodSection";
+import { PolicyNotice } from "@/components/checkout/PolicyNotice";
+import { ErrorBanner } from "@/components/checkout/ErrorBanner";
+import { PromoCodeBox } from "@/components/checkout/PromoCodeBox";
+import { OrderSummary } from "@/components/checkout/OrderSummary";
 
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-
-// ─── Empty state ──────────────────────────────────────────────────────────────
-
-function NoBookingState() {
-    return (
-        <main className="min-h-[70vh] flex flex-col items-center justify-center text-center px-6 py-20">
-            <div className="w-20 h-20 rounded-3xl bg-[#9F2D5C]/10 flex items-center justify-center mb-8 shadow-xl shadow-[#9F2D5C]/10">
-                <span className="material-icons text-[#9F2D5C] text-3xl">calendar_today</span>
-            </div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">No Booking Found</h1>
-            <p className="text-slate-500 dark:text-slate-400 max-w-md mb-10 leading-relaxed">
-                It looks like you haven&apos;t completed a booking yet, or your session expired.
-                Head back to the booking page to get started.
-            </p>
-            <Link
-                href="/book"
-                className="bg-[#9F2D5C] hover:bg-[#B8326A] text-white font-bold px-10 py-5 rounded-full shadow-2xl shadow-[#9F2D5C]/30 transition-all hover:scale-[1.03] active:scale-95 flex items-center gap-3"
-            >
-                <span className="material-icons text-base">arrow_back</span>
-                Start a Booking
-            </Link>
-        </main>
-    );
-}
-
-// ─── Payment method card ──────────────────────────────────────────────────────
-
-interface MethodCardProps {
-    provider: PaymentProvider;
-    selected: boolean;
-    onSelect: () => void;
-    icon: string;
-    label: string;
-    description: string;
-}
-
-function MethodCard({ provider, selected, onSelect, icon, label, description }: MethodCardProps) {
-    return (
-        <button
-            id={`payment-method-${provider}`}
-            onClick={onSelect}
-            className={`w-full text-left flex items-center gap-5 p-6 rounded-2xl border-2 transition-all ${selected
-                ? "border-[#9F2D5C] bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10"
-                : "border-slate-100 dark:border-slate-700 hover:border-[#9F2D5C]/40 bg-white dark:bg-slate-800"
-                }`}
-            aria-pressed={selected}
-        >
-            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all ${selected ? "bg-[#9F2D5C] text-white shadow-lg shadow-[#9F2D5C]/30" : "bg-slate-100 dark:bg-slate-700 text-slate-500"}`}>
-                <span className="material-icons text-xl">{icon}</span>
-            </div>
-            <div className="flex-1">
-                <p className={`font-bold text-base transition-colors ${selected ? "text-[#9F2D5C]" : "text-slate-900 dark:text-white"}`}>{label}</p>
-                <p className="text-xs text-slate-400 mt-0.5">{description}</p>
-            </div>
-            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${selected ? "border-[#9F2D5C] bg-[#9F2D5C]" : "border-slate-300 dark:border-slate-600"}`}>
-                {selected && <span className="material-icons text-white text-[12px]">check</span>}
-            </div>
-        </button>
-    );
-}
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
@@ -202,8 +148,6 @@ function CheckoutPageInner() {
     });
 
     const amountDueNow = paymentChoice === "deposit" ? pricing.depositCents : pricing.totalCents;
-
-    const amountLabel = formatCents(pricing.totalCents);
 
     const handleApplyPromo = async () => {
         const code = normalizePromoCode(promoCode);
@@ -355,314 +299,82 @@ function CheckoutPageInner() {
                 <div className="lg:col-span-7 space-y-8">
 
                     {/* Payment amount choice */}
-                    <section>
-                        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-5">
-                            Payment Option
-                        </h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {/* Deposit */}
-                            <button
-                                id="choice-deposit"
-                                onClick={() => setPaymentChoice("deposit")}
-                                className={`relative p-7 rounded-[1.5rem] border-2 text-left transition-all ${paymentChoice === "deposit"
-                                    ? "border-[#9F2D5C] bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10"
-                                    : "border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-[#9F2D5C]/40"
-                                    }`}
-                                aria-pressed={paymentChoice === "deposit"}
-                            >
-                                {paymentChoice === "deposit" && (
-                                    <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#9F2D5C] flex items-center justify-center">
-                                        <span className="material-icons text-white text-[14px]">check</span>
-                                    </div>
-                                )}
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Deposit</p>
-                                <p className="text-3xl font-black text-[#9F2D5C] mb-1">{formatCents(pricing.depositCents)}</p>
-                                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                                    Secure your spot now. Non-refundable, applied to your total.
-                                </p>
-                            </button>
-
-                            {/* Full amount */}
-                            <button
-                                id="choice-full"
-                                onClick={() => setPaymentChoice("full")}
-                                className={`relative p-7 rounded-[1.5rem] border-2 text-left transition-all ${paymentChoice === "full"
-                                    ? "border-[#9F2D5C] bg-[#9F2D5C]/5 dark:bg-[#9F2D5C]/10"
-                                    : "border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-[#9F2D5C]/40"
-                                    }`}
-                                aria-pressed={paymentChoice === "full"}
-                            >
-                                {paymentChoice === "full" && (
-                                    <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#9F2D5C] flex items-center justify-center">
-                                        <span className="material-icons text-white text-[14px]">check</span>
-                                    </div>
-                                )}
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Pay in Full</p>
-                                <p className="text-3xl font-black text-[#9F2D5C] mb-1">{amountLabel}</p>
-                                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                                    Pay the full service cost today. No balance due at appointment.
-                                </p>
-                            </button>
-                        </div>
-                    </section>
+                    <PaymentChoiceSection
+                        paymentChoice={paymentChoice}
+                        onChange={setPaymentChoice}
+                        depositCents={pricing.depositCents}
+                        totalCents={pricing.totalCents}
+                    />
 
                     {/* Payment method */}
-                    <section>
-                        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-5">
-                            Payment Method
-                        </h2>
-                        <div className="space-y-3">
-                            <MethodCard
-                                provider="stripe"
-                                selected={provider === "stripe"}
-                                onSelect={() => setProvider("stripe")}
-                                icon="credit_card"
-                                label="Credit / Debit Card"
-                                description="Visa, Mastercard, Amex — powered by Stripe"
-                            />
-                            <MethodCard
-                                provider="paypal"
-                                selected={provider === "paypal"}
-                                onSelect={() => setProvider("paypal")}
-                                icon="account_balance_wallet"
-                                label="PayPal"
-                                description="Pay with your PayPal balance or linked card"
-                            />
-                        </div>
-
-                        {/* Security badges */}
-                        <div className="flex flex-wrap gap-3 mt-5">
-                            {["🔒 SSL Encrypted", "✓ Stripe Secured", "✓ PayPal Buyer Protection"].map((badge) => (
-                                <span key={badge} className="text-[10px] font-semibold uppercase tracking-wide bg-slate-100 dark:bg-slate-800 text-slate-500 px-3 py-1.5 rounded-full">
-                                    {badge}
-                                </span>
-                            ))}
-                        </div>
-                    </section>
+                    <PaymentMethodSection provider={provider} onSelect={setProvider} />
 
                     {/* Policy notice */}
-                    <section className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800/40 rounded-[1.5rem] p-6 text-sm text-amber-800 dark:text-amber-300 leading-relaxed space-y-2">
-                        <div className="flex items-center gap-2 font-bold mb-1">
-                            <span className="material-icons text-base">info</span>
-                            Cancellation Policy
-                        </div>
-                        <p>
-                            {DEPOSIT_POLICY}
-                        </p>
-                        <p>
-                            {CANCELLATION_POLICY}
-                        </p>
-                        <div className="flex items-center gap-2 font-bold mb-1">
-                            <span className="material-icons text-base">info</span>
-                            Price Note Policy
-                        </div>
-                        <p>
-                            {PRICE_NOTE_POLICY}
-                        </p>
-                    </section>
+                    <PolicyNotice />
 
                     {/* Error banner */}
                     {(flowStatus === "failed" || errorMsg) && (
-                        <div className="flex items-center gap-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl px-6 py-5">
-                            <span className="material-icons text-red-500 text-xl">error_outline</span>
-                            <p className="text-sm text-red-600 dark:text-red-400 font-semibold flex-1">
-                                {errorMsg ?? "Something went wrong. Please try again."}
-                            </p>
-                            <button
-                                onClick={() => { setFlowStatus("idle"); setErrorMsg(null); }}
-                                className="text-red-400 hover:text-red-600 transition-colors"
-                                aria-label="Dismiss error"
-                            >
-                                <span className="material-icons text-base">close</span>
-                            </button>
-                        </div>
+                        <ErrorBanner message={errorMsg} onDismiss={() => { setFlowStatus("idle"); setErrorMsg(null); }} />
                     )}
                 </div>
 
                 {/* ── Right: Order summary (sticky) ─────────────────────────── */}
                 <div className="lg:col-span-5 lg:sticky lg:top-28">
-                    <div className="bg-surface rounded-[2rem] p-10 border border-border shadow-xl shadow-brand-primary/5">
-                        <h2 className="text-xl font-bold text-text-primary mb-8">Order Summary</h2>
-
-                        {/* Service */}
-                        <div className="space-y-4 pb-6 border-b border-border">
-                            <div className="flex justify-between">
-                                <div>
-                                    <p className="font-bold text-text-primary">{style.name}</p>
-                                    <p className="text-xs text-text-muted mt-0.5">{style.duration}</p>
-                                </div>
-                                <p className="font-bold text-text-primary text-right">{style.price}</p>
-                            </div>
-                        </div>
-
-                        {/* Promo Code Input */}
-                        {!appliedCode ? (
-                            <div className="mt-8 pt-8 border-t border-border">
-                                <div className="flex gap-2">
-                                    <input
-                                        type="text"
-                                        placeholder="Promo Code"
-                                        value={promoCode}
-                                        onChange={(e) => setPromoCode(e.target.value)}
-                                        className="flex-1 bg-white/5 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#9F2D5C] transition-colors"
-                                    />
-                                    <button
-                                        onClick={handleApplyPromo}
-                                        disabled={!promoCode.trim()}
-                                        className="bg-[#9F2D5C]/20 hover:bg-[#9F2D5C]/30 text-[#9F2D5C] px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-50"
-                                    >
-                                        Apply
-                                    </button>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="mt-8 pt-8 border-t border-border flex justify-between items-center">
-                                <div className="flex items-center gap-2 text-emerald-400 text-[10px] font-black uppercase tracking-widest">
-                                    <span className="material-icons text-xs">check_circle</span>
-                                    Code Applied
-                                </div>
-                                <button
-                                    onClick={() => { setAppliedCode(null); setAppliedDiscountPercent(0); setPromoCode(""); }}
-                                    className="text-text-muted hover:text-text-primary text-[10px] font-black uppercase tracking-widest underline underline-offset-4"
-                                >
-                                    Remove
-                                </button>
-                            </div>
-                        )}
-
-                        {/* When */}
-                        <div className="py-5 border-b border-border">
-                            <p className="text-[10px] font-bold uppercase tracking-widest text-text-muted mb-2">Appointment</p>
-                            <p className="font-bold text-text-primary">{draft.date}</p>
-                            <p className="text-text-secondary">{draft.time}</p>
-                        </div>
-
-                        {/* Client */}
-                        <div className="py-5 border-b border-border">
-                            <p className="text-[10px] font-bold uppercase tracking-widest text-text-muted mb-2">Client</p>
-                            <p className="font-bold text-text-primary">{draft.name}</p>
-                            <p className="text-xs text-text-muted">{draft.email}</p>
-                            {draft.phone && <p className="text-xs text-text-muted">{draft.phone}</p>}
-                        </div>
-
-                        {/* Inspiration photo thumbnail */}
-                        {draft.photoPreview && (
-                            <div className="py-5 border-b border-border">
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-text-muted mb-3">Inspiration</p>
-                                <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-border">
-                                    <img src={draft.photoPreview} alt="Inspiration" className="w-full h-full object-cover" />
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Pricing breakdown */}
-                        <div className="pt-6 space-y-3">
-                            <div className="flex justify-between text-sm text-text-secondary">
-                                <span>Base service</span>
-                                <span className="font-semibold">{style.price}</span>
-                            </div>
-                            <div className="flex justify-between text-sm text-text-secondary">
-                                <span>Size ({sizePresets.find(s => s.id === draft.sizeId)?.label || "Medium"})</span>
-                                <span className="font-semibold">{pricing.sizeAdjustmentCents >= 0 ? '+' : ''}{formatCents(pricing.sizeAdjustmentCents)}</span>
-                            </div>
-                            <div className="flex justify-between text-sm text-text-secondary">
-                                <span>Length ({lengthPresets.find(l => l.id === draft.lengthId)?.label || "Shoulder"})</span>
-                                <span className="font-semibold">{pricing.lengthAdjustmentCents >= 0 ? '+' : ''}{formatCents(pricing.lengthAdjustmentCents)}</span>
-                            </div>
-                            {draft.washingAddon && (
-                                <div className="flex justify-between text-sm text-text-secondary">
-                                    <span>Washing Service</span>
-                                    <span className="font-semibold">+{formatCents((addons.find(a => a.id === "wash")?.price || 25) * 100)}</span>
-                                </div>
-                            )}
-                            {draft.takeDownAddon && (
-                                <div className="flex justify-between text-sm text-text-secondary">
-                                    <span>Take Down Service</span>
-                                    <span className="font-semibold">+{formatCents((addons.find(a => a.id === "take-down")?.price || 45) * 100)}</span>
-                                </div>
-                            )}
-                            {pricing.discountCents > 0 && (
-                                <div className="flex justify-between text-sm text-text-secondary text-emerald-400">
-                                    <span>Discount</span>
-                                    <span className="font-semibold">-{formatCents(pricing.discountCents)}</span>
-                                </div>
-                            )}
-                            <div className="flex justify-between text-sm text-text-secondary font-bold pt-2 border-t border-border mt-2">
-                                <span>Estimated total</span>
-                                <span className="font-semibold">{formatCents(pricing.totalCents)}</span>
-                            </div>
-
-                            {paymentChoice === "deposit" && (
-                                <div className="flex justify-between text-sm text-text-secondary">
-                                    <span>Balance at appointment</span>
-                                    <span className="font-semibold">
-                                        {formatCents(pricing.totalCents - pricing.depositCents)}
-                                    </span>
-                                </div>
-                            )}
-
-                            <div className="flex justify-between items-center pt-4 border-t border-border">
-                                <p className="font-bold text-text-primary">Due Today</p>
-                                <p className="text-3xl font-black text-brand-primary">{formatCents(amountDueNow)}</p>
-                            </div>
-
-                            {paymentChoice === "deposit" && (
-                                <p className="text-[10px] text-text-muted text-right">Non-refundable · Applied to total at appointment</p>
-                            )}
-                        </div>
-
-                        {/* CTA */}
-                        <div className="mt-8 space-y-3">
-                            {provider === "paypal" ? (
-                                /* ── PayPal: redirect to PayPal approval page ─── */
-                                <button
-                                    id="paypal-pay-button"
-                                    onClick={handlePayPalRedirect}
-                                    disabled={flowStatus === "creating"}
-                                    className="w-full py-6 rounded-full font-bold text-slate-900 bg-[#FFC439] hover:bg-[#f0b429] shadow-xl shadow-yellow-400/30 transition-all duration-300 flex items-center justify-center gap-3 group active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
-                                >
-                                    {flowStatus === "creating" ? (
-                                        <>
-                                            <span className="material-icons animate-spin text-lg">autorenew</span>
-                                            <span>Redirecting to PayPal…</span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <span className="material-icons text-lg">account_balance_wallet</span>
-                                            <span>Pay ${((amountDueNow) / 100).toFixed(2)} with PayPal</span>
-                                        </>
-                                    )}
-                                </button>
-                            ) : provider === "stripe" ? (
-                                /* ── Stripe: redirect to Stripe Hosted Checkout ─ */
-                                <StripeCheckout
-                                    amountCents={amountDueNow}
-                                    sessionType="booking"
-                                    draftId={draftId ?? undefined}
-                                    choice={paymentChoice}
-                                    customerEmail={draft.email}
-                                    onBeforeRedirect={handleStripeBeforeRedirect}
-                                    onError={(err) => {
-                                        setFlowStatus("failed");
-                                        setErrorMsg(err);
-                                    }}
-                                />
-                            ) : null}
-
-                            <Link
-                                href="/book"
-                                className="w-full py-4 rounded-full font-bold text-slate-400 hover:text-[#9F2D5C] transition-colors text-center text-sm flex items-center justify-center gap-2"
+                    <OrderSummary
+                        style={style}
+                        draft={draft}
+                        pricing={pricing}
+                        sizePresets={sizePresets}
+                        lengthPresets={lengthPresets}
+                        addons={addons}
+                        paymentChoice={paymentChoice}
+                        amountDueNow={amountDueNow}
+                        promoBox={
+                            <PromoCodeBox
+                                promoCode={promoCode}
+                                appliedCode={appliedCode}
+                                onChange={setPromoCode}
+                                onApply={handleApplyPromo}
+                                onRemove={() => { setAppliedCode(null); setAppliedDiscountPercent(0); setPromoCode(""); }}
+                            />
+                        }
+                    >
+                        {provider === "paypal" ? (
+                            /* ── PayPal: redirect to PayPal approval page ─── */
+                            <button
+                                id="paypal-pay-button"
+                                onClick={handlePayPalRedirect}
+                                disabled={flowStatus === "creating"}
+                                className="w-full py-6 rounded-full font-bold text-slate-900 bg-[#FFC439] hover:bg-[#f0b429] shadow-xl shadow-yellow-400/30 transition-all duration-300 flex items-center justify-center gap-3 group active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
                             >
-                                <span className="material-icons text-sm">arrow_back</span>
-                                Edit my booking
-                            </Link>
-                        </div>
-
-                        {/* Trust note */}
-                        <p className="text-center text-[10px] text-slate-400 mt-4">
-                            Your payment is handled securely. We never store card details.
-                        </p>
-                    </div>
+                                {flowStatus === "creating" ? (
+                                    <>
+                                        <span className="material-icons animate-spin text-lg">autorenew</span>
+                                        <span>Redirecting to PayPal…</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className="material-icons text-lg">account_balance_wallet</span>
+                                        <span>Pay ${((amountDueNow) / 100).toFixed(2)} with PayPal</span>
+                                    </>
+                                )}
+                            </button>
+                        ) : provider === "stripe" ? (
+                            /* ── Stripe: redirect to Stripe Hosted Checkout ─ */
+                            <StripeCheckout
+                                amountCents={amountDueNow}
+                                sessionType="booking"
+                                draftId={draftId ?? undefined}
+                                choice={paymentChoice}
+                                customerEmail={draft.email}
+                                onBeforeRedirect={handleStripeBeforeRedirect}
+                                onError={(err) => {
+                                    setFlowStatus("failed");
+                                    setErrorMsg(err);
+                                }}
+                            />
+                        ) : null}
+                    </OrderSummary>
                 </div>
             </div>
         </main>
