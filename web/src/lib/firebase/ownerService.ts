@@ -2,7 +2,7 @@ import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, setD
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getDb, getStorageInstance } from "./client";
 import { Product } from "@/src/data/products";
-import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
+import { SizePreset, LengthPreset, PRESETS_COLLECTION } from "@/src/constants/braidPresets";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { subscribeToAffiliates } from "@/src/lib/affiliate/affiliateService";
 import type { AffiliateProfile } from "@/src/lib/affiliate/types";
@@ -204,7 +204,7 @@ export async function deleteStyle(styleId: string) {
 // --- Presets (Size/Length) ---
 
 export function subscribeToPresets(callback: (presets: (SizePreset | LengthPreset)[]) => void) {
-    const q = query(collection(db, "presets"), orderBy("id", "asc"));
+    const q = query(collection(db, PRESETS_COLLECTION), orderBy("id", "asc"));
     return onSnapshot(q, (snapshot) => {
         const presets = snapshot.docs.map(doc => ({
             id: doc.id,
@@ -217,7 +217,7 @@ export function subscribeToPresets(callback: (presets: (SizePreset | LengthPrese
 }
 
 export const upsertPreset = async (preset: { id: string; type: string; label: string; priceAdjustment: number; description?: string; inches?: string; priceGuidance?: string }) => {
-    const docRef = doc(getDb(), "braidPresets", preset.id);
+    const docRef = doc(getDb(), PRESETS_COLLECTION, preset.id);
     await setDoc(docRef, {
         ...preset,
         updatedAt: serverTimestamp()
@@ -225,7 +225,7 @@ export const upsertPreset = async (preset: { id: string; type: string; label: st
 };
 
 export const deletePreset = async (id: string) => {
-    await deleteDoc(doc(getDb(), "braidPresets", id));
+    await deleteDoc(doc(getDb(), PRESETS_COLLECTION, id));
 };
 
 // --- Addons ---
