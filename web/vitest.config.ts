@@ -9,7 +9,8 @@ export default defineConfig({
     },
     test: {
         environment: "node",
-        include: ["tests/unit/**/*.test.ts"],
+        // .tsx tests opt in to jsdom with a "// @vitest-environment jsdom" first line; everything else stays on node.
+        include: ["tests/unit/**/*.test.{ts,tsx}"],
         passWithNoTests: false,
     },
 });
