@@ -40,7 +40,7 @@ The rules are in git (`firestore.rules`, `storage.rules`).
 2. Create a scheduler (Cloud Scheduler or any cron) that sends `POST https://<site>/api/admin/reminders` with the header `Authorization: Bearer <CRON_SECRET>` once a day.
 3. Without `CRON_SECRET`, only a super admin can trigger it (from the dashboard).
 
-**Owner to confirm** which scheduler is used today. Known issue: the "tomorrow" date uses the server's time zone (see the audit).
+**Owner to confirm** which scheduler is used today. "Tomorrow" is the salon's calendar day in `America/Chicago` (`src/lib/reminders/targetDate.ts`), whatever the server's time zone is.
 
 ## Clean up legacy draft passwords
 
