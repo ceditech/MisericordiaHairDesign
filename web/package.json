@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "lint:gate": "eslint app src/lib src/providers src/hooks src/data src/constants scripts/upload-styles.ts components/StripeCheckout.tsx src/components/owner/stitch/StitchAdminManagement.tsx src/components/owner/stitch/StitchAffiliates.tsx src/components/owner/stitch/StitchAppointments.tsx src/components/owner/stitch/StitchBlog.tsx src/components/owner/stitch/StitchEmailSettings.tsx src/components/owner/stitch/StitchOverview.tsx src/components/owner/stitch/StitchProfileSettings.tsx src/components/owner/stitch/StitchSales.tsx",
+    "lint:gate": "eslint app src/lib src/providers src/hooks src/data src/constants scripts/upload-styles.ts components/StripeCheckout.tsx src/components/owner/stitch/StitchAdminManagement.tsx src/components/owner/stitch/StitchAffiliates.tsx src/components/owner/stitch/StitchAppointments.tsx src/components/owner/stitch/StitchBlog.tsx src/components/owner/stitch/StitchEmailSettings.tsx src/components/owner/stitch/StitchOverview.tsx src/components/owner/stitch/StitchProfileSettings.tsx src/components/owner/stitch/StitchSales.tsx src/components/owner/stitch/StitchStyles.tsx src/components/owner/stitch/StitchInventory.tsx",
     "firebase:emulators": "firebase emulators:start",
     "firebase:deploy:dev": "firebase deploy -P default",
     "firebase:deploy:prod": "firebase deploy -P prod",

@@ -21,6 +21,14 @@ type Product = {
     stockStatus?: string;
 };
 
+const PRODUCT_FIELDS: { label: string; key: "name" | "description" | "category" | "price" | "stock"; type: string; placeholder: string }[] = [
+    { label: "Product Name *", key: "name", type: "text", placeholder: "e.g. Silk Bonnet" },
+    { label: "Description", key: "description", type: "text", placeholder: "Short description..." },
+    { label: "Category", key: "category", type: "text", placeholder: "e.g. Accessories" },
+    { label: "Price ($)", key: "price", type: "number", placeholder: "45" },
+    { label: "Stock Quantity", key: "stock", type: "number", placeholder: "20" },
+];
+
 export default function StitchInventory() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
@@ -60,7 +68,7 @@ export default function StitchInventory() {
                 priceCents: Math.round(newProd.price * 100), 
                 isActive: true,
                 imageUrl: imageUrl || undefined
-            } as any);
+            });
             setIsAdding(false);
             setNewProd({ name: "", description: "", price: 0, stock: 10, category: "" });
             setImageFile(null);
@@ -164,13 +172,7 @@ export default function StitchInventory() {
                         <button onClick={() => { setIsAdding(false); setEditingId(null); setImageFile(null); }} className="text-slate-400 hover:text-slate-900 p-2 bg-slate-100 dark:bg-slate-800 rounded-full transition-colors"><X size={18} /></button>
                     </div>
 
-                    {[
-                        { label: "Product Name *", key: "name", type: "text", placeholder: "e.g. Silk Bonnet" },
-                        { label: "Description", key: "description", type: "text", placeholder: "Short description..." },
-                        { label: "Category", key: "category", type: "text", placeholder: "e.g. Accessories" },
-                        { label: "Price ($)", key: "price", type: "number", placeholder: "45" },
-                        { label: "Stock Quantity", key: "stock", type: "number", placeholder: "20" },
-                    ].map(f => (
+                    {PRODUCT_FIELDS.map(f => (
                         <div key={f.key} className="space-y-1.5">
                             <label className="text-xs font-bold uppercase tracking-widest text-slate-400">{f.label}</label>
                             {f.key === "description" ? (
@@ -178,7 +180,7 @@ export default function StitchInventory() {
                                     placeholder={f.placeholder}
                                     rows={3}
                                     className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-[#6b38d4] text-slate-900 dark:text-white text-sm resize-none"
-                                    value={isAdding ? (newProd as any)[f.key] : (editData as any)[f.key] || ""}
+                                    value={isAdding ? newProd[f.key] : editData[f.key] || ""}
                                     onChange={e => {
                                         if (isAdding) setNewProd(s => ({ ...s, [f.key]: e.target.value }));
                                         else setEditData(d => ({ ...d, [f.key]: e.target.value }));
@@ -189,7 +191,7 @@ export default function StitchInventory() {
                                     type={f.type}
                                     placeholder={f.placeholder}
                                     className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-[#6b38d4] text-slate-900 dark:text-white text-sm font-bold"
-                                    value={isAdding ? (newProd as any)[f.key] : (editData as any)[f.key] ?? ""}
+                                    value={isAdding ? newProd[f.key] : editData[f.key] ?? ""}
                                     onChange={e => {
                                         const val = f.type === "number" ? (parseFloat(e.target.value) || 0) : e.target.value;
                                         if (isAdding) {
@@ -234,7 +236,7 @@ export default function StitchInventory() {
                                     if (imageFile) {
                                         imageUrl = await uploadFile(imageFile, `products/${editingId}_${Date.now()}`);
                                     }
-                                    await upsertProduct({ ...editData, id: editingId!, imageUrl } as any);
+                                    await upsertProduct({ ...editData, id: editingId!, imageUrl });
                                     setEditingId(null);
                                     setImageFile(null);
                                 } catch (err) { console.error(err); }

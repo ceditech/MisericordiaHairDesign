@@ -102,7 +102,22 @@ export function subscribeToProducts<T = Product>(callback: (products: T[]) => vo
     });
 }
 
-export async function upsertProduct(product: Partial<Product> & { id: string }) {
+/**
+ * Fields the owner screen writes to a `products` document. The screen edits `category` as free text
+ * and sets `price`/`stock`, which the static catalog type (`Product`) does not model.
+ */
+export type ProductWrite = Omit<Partial<Product>, "category" | "stockStatus"> & {
+    id: string;
+    category?: string;
+    stockStatus?: string;
+    description?: string;
+    price?: number;
+    stock?: number;
+    imageUrl?: string;
+    isActive?: boolean;
+};
+
+export async function upsertProduct(product: ProductWrite) {
     const productRef = doc(db, "products", product.id);
     await setDoc(productRef, {
         ...product,
