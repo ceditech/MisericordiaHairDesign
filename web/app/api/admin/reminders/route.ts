@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { adminDb } from "@/src/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
 import { buildReminderEmail } from "@/src/lib/notifications/emailTemplates";
-import { format, addDays } from "date-fns";
+import { reminderTargetDate } from "@/src/lib/reminders/targetDate";
 import { EmailManager } from "@/src/lib/email/EmailManager";
 import { requireCronSecretOrRole } from "@/src/lib/auth/requireCronSecretOrRole";
 import { HttpError } from "@/src/lib/http/HttpError";
@@ -26,8 +26,8 @@ export async function POST(req: NextRequest) {
         const caller = await requireCronSecretOrRole(req, ["superAdmin"]);
         console.info(`[Reminders API] Triggered by ${caller.kind === "cron" ? "scheduler" : `user ${caller.auth.uid}`}`);
 
-        const tomorrow = addDays(new Date(), 1);
-        const tomorrowStr = format(tomorrow, "yyyy-MM-dd");
+        // "Tomorrow" is the salon's calendar day, not the server's (the server usually runs in UTC).
+        const tomorrowStr = reminderTargetDate(new Date());
 
         console.log(`[Reminders API] Checking for bookings on ${tomorrowStr}...`);
 
