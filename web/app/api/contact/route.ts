@@ -4,6 +4,7 @@ import { EmailManager } from "@/src/lib/email/EmailManager";
 import { generateContactInquiryEmail } from "@/src/lib/email/templates/contactTemplate";
 import { FieldValue } from "firebase-admin/firestore";
 import { clientIp, createRateLimiter } from "@/src/lib/http/rateLimit";
+import { parseContactInput } from "@/src/lib/http/validate";
 
 // Public endpoint that saves a document and emails the owner: best-effort per-IP limit (see src/lib/http/rateLimit.ts).
 const contactLimiter = createRateLimiter({ limit: 5, windowMs: 60 * 60 * 1000 });
@@ -18,16 +19,19 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        const body = await req.json();
-        const { name, email, service, message } = body;
-
-        // 1. Basic Validation
-        if (!name || !email || !service || !message) {
-            return NextResponse.json(
-                { error: "Missing required fields" },
-                { status: 400 }
-            );
+        let body: unknown;
+        try {
+            body = await req.json();
+        } catch {
+            return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
         }
+
+        // 1. Validation (types, required, length caps, email shape)
+        const parsed = parseContactInput(body);
+        if (!parsed.ok) {
+            return NextResponse.json({ error: parsed.error }, { status: 400 });
+        }
+        const { name, email, service, message } = parsed.value;
 
         // 2. Save to Firestore
         const messageRef = await adminDb.collection("contactMessages").add({

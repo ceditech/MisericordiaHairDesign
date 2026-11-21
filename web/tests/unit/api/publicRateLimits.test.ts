@@ -38,7 +38,7 @@ const contact = (ip: string) =>
         }),
     );
 const availability = (ip: string) =>
-    availabilityGET(new NextRequest("http://localhost/api/bookings/availability?date=2026-12-01", { headers: { "x-forwarded-for": ip } }));
+    availabilityGET(new NextRequest("http://localhost/api/bookings/availability?date=December%201%2C%202026", { headers: { "x-forwarded-for": ip } }));
 
 beforeEach(() => {
     state.messages = 0;
