@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminDb } from "@/src/lib/firebase/admin";
 import { clientIp, createRateLimiter } from "@/src/lib/http/rateLimit";
+import { isBookingDateParam } from "@/src/lib/http/validate";
 
 // Public endpoint, one Firestore query per call: best-effort per-IP limit (see src/lib/http/rateLimit.ts).
 // Generous because /book calls it each time the visitor changes the date.
@@ -25,6 +26,9 @@ export async function GET(req: NextRequest) {
 
     if (!date) {
       return NextResponse.json({ error: "Date parameter is required" }, { status: 400 });
+    }
+    if (!isBookingDateParam(date)) {
+      return NextResponse.json({ error: "Invalid date format" }, { status: 400 });
     }
 
     const bookingsRef = adminDb.collection("bookings");
