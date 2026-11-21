@@ -5,8 +5,13 @@ import {
     subscribeToStyles, upsertStyle, deleteStyle, 
     subscribeToPresets, upsertPreset, deletePreset, 
     subscribeToAddons, upsertAddon, deleteAddon,
-    uploadFile
+    uploadFile,
+    type AddonDoc
 } from "@/src/lib/firebase/ownerService";
+import {
+    EMPTY_ADDON_DRAFT, EMPTY_PRESET_DRAFT, toAddonDraft, toPresetDraft, withPresetText,
+    type AddonDraft, type PresetDraft
+} from "@/src/lib/owner/presetDrafts";
 import { Scissors, Plus, Trash2, Edit3, Save, X, Clock, DollarSign, Layers, Grid, Upload } from "lucide-react";
 import { Drawer } from "@/components/ui/Drawer";
 import { SizePreset, LengthPreset } from "@/src/constants/braidPresets";
@@ -35,6 +40,13 @@ const STYLE_IMAGE_FALLBACKS: Record<string, string> = {
     "Kids Braids": "https://img1.wsimg.com/isteam/ip/bdf6ba35-495f-402b-9add-1d7fe5046011/kikid.jpg",
 };
 
+const STYLE_FIELDS: { label: string; key: "name" | "description" | "price" | "duration"; type: string; placeholder: string }[] = [
+    { label: "Style Name *", key: "name", type: "text", placeholder: "e.g. Knotless Braids" },
+    { label: "Description", key: "description", type: "text", placeholder: "Short description..." },
+    { label: "Price ($)", key: "price", type: "number", placeholder: "150" },
+    { label: "Duration (min)", key: "duration", type: "number", placeholder: "180" },
+];
+
 export default function StitchStyles() {
     const [styles, setStyles] = useState<StyleRecord[]>([]);
     const [loading, setLoading] = useState(true);
@@ -53,14 +65,14 @@ export default function StitchStyles() {
     // Presets Management State
     const [presets, setPresets] = useState<(SizePreset | LengthPreset)[]>([]);
     const [editingPresetId, setEditingPresetId] = useState<string | null>(null);
-    const [presetEditData, setPresetEditData] = useState<any>({});
+    const [presetEditData, setPresetEditData] = useState<PresetDraft>(EMPTY_PRESET_DRAFT);
     const [isAddingPreset, setIsAddingPreset] = useState(false);
-    const [newPreset, setNewPreset] = useState<any>({ id: "", type: "size", label: "", priceAdjustment: 0, description: "", inches: "", priceGuidance: "" });
+    const [newPreset, setNewPreset] = useState<PresetDraft>(EMPTY_PRESET_DRAFT);
 
     // Addons Management State
-    const [addons, setAddons] = useState<any[]>([]);
+    const [addons, setAddons] = useState<AddonDoc[]>([]);
     const [editingAddonId, setEditingAddonId] = useState<string | null>(null);
-    const [addonEditData, setAddonEditData] = useState<any>({});
+    const [addonEditData, setAddonEditData] = useState<AddonDraft>(EMPTY_ADDON_DRAFT);
     const [isAddingAddon, setIsAddingAddon] = useState(false);
     const [newAddon, setNewAddon] = useState({ id: "", name: "", price: 0, deposit: 0 });
 
@@ -73,7 +85,7 @@ export default function StitchStyles() {
         });
 
         const unsubPresets = subscribeToPresets((data) => {
-            setPresets(data as any[]);
+            setPresets(data);
         });
 
         const unsubAddons = subscribeToAddons((data) => {
@@ -136,7 +148,7 @@ export default function StitchStyles() {
         try {
             await upsertPreset(newPreset);
             setIsAddingPreset(false);
-            setNewPreset({ id: "", type: "size", label: "", priceAdjustment: 0, description: "", inches: "", priceGuidance: "" });
+            setNewPreset(EMPTY_PRESET_DRAFT);
         } catch (err) { console.error(err); }
         finally { setSaving(false); }
     };
@@ -302,21 +314,21 @@ export default function StitchStyles() {
                         <div>
                             <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Size Presets</h3>
                             <div className="space-y-4">
-                                {presets.filter(p => (p as any).type === "size").map(p => {
+                                {presets.filter((p): p is SizePreset => p.type === "size").map(p => {
                                     const isEditing = editingPresetId === p.id;
                                     return (
                                         <div key={p.id} className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
                                             {isEditing ? (
                                                 <div className="space-y-3">
-                                                    <input className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-sm font-bold border-none" value={presetEditData.label} onChange={e => setPresetEditData((d:any) => ({...d, label: e.target.value}))} />
+                                                    <input className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-sm font-bold border-none" value={presetEditData.label} onChange={e => setPresetEditData(d => ({...d, label: e.target.value}))} />
                                                     <div className="flex gap-3">
                                                         <div className="flex-1 space-y-1">
                                                             <label className="text-[10px] font-bold text-slate-400 uppercase">Description</label>
-                                                            <input className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-xs border-none" value={presetEditData.description} onChange={e => setPresetEditData((d:any) => ({...d, description: e.target.value}))} />
+                                                            <input className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-xs border-none" value={presetEditData.description ?? ""} onChange={e => setPresetEditData(d => ({...d, description: e.target.value}))} />
                                                         </div>
                                                         <div className="w-32 space-y-1">
                                                             <label className="text-[10px] font-bold text-slate-400 uppercase">Price Adj ($)</label>
-                                                            <input type="number" className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-xs font-bold border-none" value={presetEditData.priceAdjustment} onChange={e => setPresetEditData((d:any) => ({...d, priceAdjustment: parseFloat(e.target.value)}))} />
+                                                            <input type="number" className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-xs font-bold border-none" value={presetEditData.priceAdjustment} onChange={e => setPresetEditData(d => ({...d, priceAdjustment: parseFloat(e.target.value)}))} />
                                                         </div>
                                                     </div>
                                                     <div className="flex gap-2">
@@ -331,11 +343,11 @@ export default function StitchStyles() {
                                                             <h4 className="font-bold text-slate-900 dark:text-white">{p.label}</h4>
                                                             <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 font-black uppercase tracking-widest">{p.id}</span>
                                                         </div>
-                                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{(p as any).description}</p>
+                                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{p.description}</p>
                                                         <p className="text-xs font-bold text-[#6b38d4] dark:text-[#d0bcff] mt-2">Adjustment: {p.priceAdjustment >= 0 ? '+' : ''}${p.priceAdjustment}</p>
                                                     </div>
                                                     <div className="flex gap-1">
-                                                        <button onClick={() => { setEditingPresetId(p.id); setPresetEditData({ ...p }); }} className="p-2 rounded-lg hover:bg-[#6b38d4]/10 text-slate-400 hover:text-[#6b38d4] transition-colors"><Edit3 size={16} /></button>
+                                                        <button onClick={() => { setEditingPresetId(p.id); setPresetEditData(toPresetDraft(p)); }} className="p-2 rounded-lg hover:bg-[#6b38d4]/10 text-slate-400 hover:text-[#6b38d4] transition-colors"><Edit3 size={16} /></button>
                                                         <button onClick={() => deletePresetHandler(p.id)} className="p-2 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-500 transition-colors"><Trash2 size={16} /></button>
                                                     </div>
                                                 </div>
@@ -349,21 +361,21 @@ export default function StitchStyles() {
                         <div>
                             <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Length Presets</h3>
                             <div className="space-y-4">
-                                {presets.filter(p => (p as any).type === "length").map(p => {
+                                {presets.filter((p): p is LengthPreset => p.type === "length").map(p => {
                                     const isEditing = editingPresetId === p.id;
                                     return (
                                         <div key={p.id} className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
                                             {isEditing ? (
                                                 <div className="space-y-3">
-                                                    <input className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-sm font-bold border-none" value={presetEditData.label} onChange={e => setPresetEditData((d:any) => ({...d, label: e.target.value}))} />
+                                                    <input className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-sm font-bold border-none" value={presetEditData.label} onChange={e => setPresetEditData(d => ({...d, label: e.target.value}))} />
                                                     <div className="flex gap-3">
                                                         <div className="flex-1 space-y-1">
                                                             <label className="text-[10px] font-bold text-slate-400 uppercase">Inches/Desc</label>
-                                                            <input className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-xs border-none" value={(presetEditData as any).inches} onChange={e => setPresetEditData((d:any) => ({...d, inches: e.target.value}))} />
+                                                            <input className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-xs border-none" value={presetEditData.inches ?? ""} onChange={e => setPresetEditData(d => ({...d, inches: e.target.value}))} />
                                                         </div>
                                                         <div className="w-32 space-y-1">
                                                             <label className="text-[10px] font-bold text-slate-400 uppercase">Price Adj ($)</label>
-                                                            <input type="number" className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-xs font-bold border-none" value={presetEditData.priceAdjustment} onChange={e => setPresetEditData((d:any) => ({...d, priceAdjustment: parseFloat(e.target.value)}))} />
+                                                            <input type="number" className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-xs font-bold border-none" value={presetEditData.priceAdjustment} onChange={e => setPresetEditData(d => ({...d, priceAdjustment: parseFloat(e.target.value)}))} />
                                                         </div>
                                                     </div>
                                                     <div className="flex gap-2">
@@ -378,11 +390,11 @@ export default function StitchStyles() {
                                                             <h4 className="font-bold text-slate-900 dark:text-white">{p.label}</h4>
                                                             <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 font-black uppercase tracking-widest">{p.id}</span>
                                                         </div>
-                                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{(p as any).inches}</p>
+                                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{p.inches}</p>
                                                         <p className="text-xs font-bold text-[#6b38d4] dark:text-[#d0bcff] mt-2">Adjustment: {p.priceAdjustment >= 0 ? '+' : ''}${p.priceAdjustment}</p>
                                                     </div>
                                                     <div className="flex gap-1">
-                                                        <button onClick={() => { setEditingPresetId(p.id); setPresetEditData({ ...p }); }} className="p-2 rounded-lg hover:bg-[#6b38d4]/10 text-slate-400 hover:text-[#6b38d4] transition-colors"><Edit3 size={16} /></button>
+                                                        <button onClick={() => { setEditingPresetId(p.id); setPresetEditData(toPresetDraft(p)); }} className="p-2 rounded-lg hover:bg-[#6b38d4]/10 text-slate-400 hover:text-[#6b38d4] transition-colors"><Edit3 size={16} /></button>
                                                         <button onClick={() => deletePresetHandler(p.id)} className="p-2 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-500 transition-colors"><Trash2 size={16} /></button>
                                                     </div>
                                                 </div>
@@ -406,15 +418,15 @@ export default function StitchStyles() {
                                 <div key={addon.id} className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                     {isEditing ? (
                                         <div className="flex-1 space-y-3">
-                                            <input className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-sm font-bold border-none" value={addonEditData.name} onChange={e => setAddonEditData((d:any) => ({...d, name: e.target.value}))} />
+                                            <input className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-sm font-bold border-none" value={addonEditData.name} onChange={e => setAddonEditData(d => ({...d, name: e.target.value}))} />
                                             <div className="flex gap-3">
                                                 <div className="flex-1 space-y-1">
                                                     <label className="text-[10px] font-bold text-slate-400 uppercase">Price ($)</label>
-                                                    <input type="number" className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-xs font-bold border-none" value={addonEditData.price} onChange={e => setAddonEditData((d:any) => ({...d, price: parseFloat(e.target.value)}))} />
+                                                    <input type="number" className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-xs font-bold border-none" value={addonEditData.price} onChange={e => setAddonEditData(d => ({...d, price: parseFloat(e.target.value)}))} />
                                                 </div>
                                                 <div className="flex-1 space-y-1">
                                                     <label className="text-[10px] font-bold text-slate-400 uppercase">Deposit ($)</label>
-                                                    <input type="number" className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-xs font-bold border-none" value={addonEditData.deposit} onChange={e => setAddonEditData((d:any) => ({...d, deposit: parseFloat(e.target.value)}))} />
+                                                    <input type="number" className="w-full rounded-xl py-2 px-3 bg-slate-50 dark:bg-slate-800 text-xs font-bold border-none" value={addonEditData.deposit} onChange={e => setAddonEditData(d => ({...d, deposit: parseFloat(e.target.value)}))} />
                                                 </div>
                                             </div>
                                             <div className="flex gap-2">
@@ -435,7 +447,7 @@ export default function StitchStyles() {
                                                 </div>
                                             </div>
                                             <div className="flex gap-2">
-                                                <button onClick={() => { setEditingAddonId(addon.id); setAddonEditData({ ...addon }); }} className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-[#6b38d4] transition-all"><Edit3 size={18} /></button>
+                                                <button onClick={() => { setEditingAddonId(addon.id); setAddonEditData(toAddonDraft(addon)); }} className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-[#6b38d4] transition-all"><Edit3 size={18} /></button>
                                                 <button onClick={() => deleteAddonHandler(addon.id)} className="p-2.5 rounded-xl bg-red-50 dark:bg-red-900/10 text-slate-400 hover:text-red-500 transition-all"><Trash2 size={18} /></button>
                                             </div>
                                         </>
@@ -462,12 +474,7 @@ export default function StitchStyles() {
                         <button onClick={() => { setIsAdding(false); setEditingId(null); setImageFile(null); }} className="text-slate-400 hover:text-slate-900 p-2 bg-slate-100 dark:bg-slate-800 rounded-full transition-colors"><X size={18} /></button>
                     </div>
 
-                    {[
-                        { label: "Style Name *", key: "name", type: "text", placeholder: "e.g. Knotless Braids" },
-                        { label: "Description", key: "description", type: "text", placeholder: "Short description..." },
-                        { label: "Price ($)", key: "price", type: "number", placeholder: "150" },
-                        { label: "Duration (min)", key: "duration", type: "number", placeholder: "180" },
-                    ].map(f => (
+                    {STYLE_FIELDS.map(f => (
                         <div key={f.key} className="space-y-1.5">
                             <label className="text-xs font-bold uppercase tracking-widest text-slate-400">{f.label}</label>
                             {f.key === "description" ? (
@@ -475,7 +482,7 @@ export default function StitchStyles() {
                                     placeholder={f.placeholder}
                                     rows={3}
                                     className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-[#6b38d4] text-slate-900 dark:text-white text-sm resize-none"
-                                    value={isAdding ? (newStyle as any)[f.key] : (editData as any)[f.key] || ""}
+                                    value={isAdding ? newStyle[f.key] : editData[f.key] || ""}
                                     onChange={e => {
                                         if (isAdding) setNewStyle(s => ({ ...s, [f.key]: e.target.value }));
                                         else setEditData(d => ({ ...d, [f.key]: e.target.value }));
@@ -486,7 +493,7 @@ export default function StitchStyles() {
                                     type={f.type} 
                                     placeholder={f.placeholder} 
                                     className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-[#6b38d4] text-slate-900 dark:text-white text-sm font-bold" 
-                                    value={isAdding ? (newStyle as any)[f.key] : (editData as any)[f.key] ?? ""} 
+                                    value={isAdding ? newStyle[f.key] : editData[f.key] ?? ""} 
                                     onChange={e => {
                                         const val = f.type === "number" ? (parseFloat(e.target.value) || 0) : e.target.value;
                                         if (isAdding) {
@@ -625,27 +632,27 @@ export default function StitchStyles() {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1.5">
                                 <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Type</label>
-                                <select className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold" value={newPreset.type} onChange={e => setNewPreset((s:any) => ({...s, type: e.target.value}))}>
+                                <select className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold" value={newPreset.type} onChange={e => setNewPreset(s => ({...s, type: e.target.value as PresetDraft["type"]}))}>
                                     <option value="size">Size</option>
                                     <option value="length">Length</option>
                                 </select>
                             </div>
                             <div className="space-y-1.5">
                                 <label className="text-xs font-bold uppercase tracking-widest text-slate-400">ID (slug)</label>
-                                <input placeholder="size-small" className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold" value={newPreset.id} onChange={e => setNewPreset((s:any) => ({...s, id: e.target.value}))} />
+                                <input placeholder="size-small" className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold" value={newPreset.id} onChange={e => setNewPreset(s => ({...s, id: e.target.value}))} />
                             </div>
                         </div>
                         <div className="space-y-1.5">
                             <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Label</label>
-                            <input placeholder="Medium" className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold" value={newPreset.label} onChange={e => setNewPreset((s:any) => ({...s, label: e.target.value}))} />
+                            <input placeholder="Medium" className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold" value={newPreset.label} onChange={e => setNewPreset(s => ({...s, label: e.target.value}))} />
                         </div>
                         <div className="space-y-1.5">
                             <label className="text-xs font-bold uppercase tracking-widest text-slate-400">{newPreset.type === "size" ? "Description" : "Inches/Guidance"}</label>
-                            <input className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none text-sm" value={newPreset.type === "size" ? newPreset.description : newPreset.inches} onChange={e => setNewPreset((s:any) => ({...s, [newPreset.type === "size" ? "description" : "inches"]: e.target.value}))} />
+                            <input className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none text-sm" value={newPreset.type === "size" ? newPreset.description : newPreset.inches} onChange={e => setNewPreset(s => withPresetText(s, e.target.value))} />
                         </div>
                         <div className="space-y-1.5">
                             <label className="text-xs font-bold uppercase tracking-widest text-slate-400">Price Adjustment ($)</label>
-                            <input type="number" className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold" value={newPreset.priceAdjustment} onChange={e => setNewPreset((s:any) => ({...s, priceAdjustment: parseFloat(e.target.value)}))} />
+                            <input type="number" className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold" value={newPreset.priceAdjustment} onChange={e => setNewPreset(s => ({...s, priceAdjustment: parseFloat(e.target.value)}))} />
                         </div>
                         <div className="flex gap-3 pt-2">
                             <button onClick={() => setIsAddingPreset(false)} className="flex-1 py-4 rounded-2xl font-bold text-slate-500 bg-slate-100 dark:bg-slate-800">Cancel</button>

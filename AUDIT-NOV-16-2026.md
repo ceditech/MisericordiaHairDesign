@@ -276,8 +276,8 @@ mechanical fixes (unused code, `prefer-const`, JSX entities), `any` removed from
 and `ownerService.ts` (owner stats extracted to `src/lib/owner/ownerStats.ts` with tests), and all `react-hooks` errors fixed.
 `firebase-admin` is on 14.x (6.5 done). CI now blocks on `npm run lint:gate` (server and shared code) and `npm run build`;
 whole-repo lint stays informational. Customer pages (`app/*`), `src/hooks`, `src/data`, `src/constants` and `components/StripeCheckout.tsx` are now `any`-free and in `lint:gate`
-(`isAbortError` added to `src/lib/errors.ts` with tests). Eight of the ten Stitch owner components are also `any`-free and gated (`formatShortDate` and `computeBlogStats` added to `ownerStats` with tests). **Remaining:** about 34 `any` in `StitchStyles` (28) and `StitchInventory` (6), plus the legacy
-`components/Owner` tabs (6, deleted by 7.4), 11 `require` imports in scripts/config, and about 40 `<img>` warnings. Grow the `lint:gate`
+(`isAbortError` added to `src/lib/errors.ts` with tests). All ten Stitch owner components are also `any`-free and gated (`formatShortDate` and `computeBlogStats` added to `ownerStats`, preset/add-on edit drafts in `src/lib/owner/presetDrafts.ts`, all with tests). **Remaining:** the legacy
+`components/Owner` tabs (6 `any`, deleted by 7.4), 11 `require` imports in scripts/config, and about 40 `<img>` warnings. Grow the `lint:gate`
 scope as each folder is cleaned.
 
 ### 2.9 Phase 7 — Consolidate duplicated code (C-4, D-7)
@@ -288,7 +288,7 @@ scope as each folder is cleaned.
 |---|---|---|---|
 | 7.1 | `web/lib/firebase/admin.ts` vs `web/src/lib/firebase/admin.ts` | `web/src/lib/firebase/admin.ts` (used by all API routes) | **Done:** no importers, deleted |
 | 7.2 | `lib/payments/paypal.ts` vs `src/lib/payments/paypalServer.ts` | `src/lib/payments/*Server.ts` | **Done:** no importers, deleted (with the unused mock `paymentService.ts` and `constants.ts`) |
-| 7.3 | **Partly done:** `/api/stripe/create-payment-intent` (no caller, trusted client amount) deleted; `/api/stripe/webhook` kept. Remaining: `/api/paypal/*` vs `/api/payments/paypal/*`; `/api/stripe/*` vs `/api/payments/stripe/*` | `/api/payments/{provider}/*` | Find client callers; migrate; keep old paths returning 308/410 for one release; remove |
+| 7.3 | **Done:** `/api/stripe/create-payment-intent` (no caller, trusted client amount) deleted; `/api/stripe/webhook` kept; no `/api/paypal/*` routes remain. Original scope: `/api/paypal/*` vs `/api/payments/paypal/*`; `/api/stripe/*` vs `/api/payments/stripe/*` | `/api/payments/{provider}/*` | Find client callers; migrate; keep old paths returning 308/410 for one release; remove |
 | 7.4 | `web/components/Owner/*` + `LegacyOwnerDashboard` vs Stitch components | Stitch | Confirm no route imports legacy; delete |
 | 7.5 | `web/lib` vs `web/src/lib` | Decide one root (recommend `web/src`, aliased `@/src/*`) | **Done:** all of `web/lib` moved to `web/src/lib` with `git mv`; imports are `@/src/lib/*`; no behavior change |
 
