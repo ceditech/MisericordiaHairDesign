@@ -39,13 +39,37 @@ import {
     useTopPerformers, 
     useNewClientsCount,
     useConversionMetrics,
-    useAffiliateMetrics
+    useAffiliateMetrics,
+    subscribeToStyles,
+    subscribeToProducts,
+    exportToCSV
 } from "@/src/lib/firebase/ownerService";
 import { isTimestampLike } from "@/src/lib/owner/ownerStats";
 import { useAuth } from "@/src/hooks/useAuth";
 import { authFetch } from "@/src/lib/http/authFetch";
 
 // --- Types ---
+
+/** The parts of a `styles` document the overview reads (older documents use `image` instead of `imageUrl`). */
+interface OverviewStyle {
+    name?: string;
+    price?: string | number;
+    imageUrl?: string;
+    image?: string;
+}
+
+/** The parts of a `products` document the overview reads. */
+interface OverviewProduct {
+    id: string;
+    name?: string;
+    category?: string;
+    price?: number;
+    priceCents?: number;
+    stock?: number;
+    isActive?: boolean;
+    imageUrl?: string;
+    image?: string;
+}
 
 interface DashboardStats {
     totalRevenue: number;
@@ -59,7 +83,16 @@ interface DashboardStats {
 
 // --- Components ---
 
-function StatCard({ label, value, trend, icon, color, suffix }: any) {
+interface StatCardProps {
+    label: string;
+    value: React.ReactNode;
+    trend?: string;
+    icon: React.ReactNode;
+    color: string;
+    suffix?: string;
+}
+
+function StatCard({ label, value, trend, icon, color, suffix }: StatCardProps) {
     return (
         <div className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-all relative overflow-hidden group">
             <div className="flex justify-between items-start mb-4">
@@ -83,12 +116,18 @@ function StatCard({ label, value, trend, icon, color, suffix }: any) {
     );
 }
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+interface TooltipEntry {
+    color?: string;
+    name?: string;
+    value?: number | string;
+}
+
+const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }) => {
     if (active && payload && payload.length) {
         return (
             <div className="bg-white dark:bg-slate-900 p-4 border border-slate-100 dark:border-slate-800 shadow-xl rounded-2xl">
                 <p className="text-xs font-bold text-slate-400 mb-2">{label}</p>
-                {payload.map((entry: any, index: number) => (
+                {payload.map((entry, index) => (
                     <div key={index} className="flex items-center gap-2 mb-1 last:mb-0">
                         <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
                         <p className="text-sm font-bold text-slate-900 dark:text-white">
@@ -118,13 +157,12 @@ export default function StitchOverview() {
     const [showExportMenu, setShowExportMenu] = useState(false);
     const [showDevMenu, setShowDevMenu] = useState(false);
 
-    const [styles, setStyles] = useState<any[]>([]);
-    const [products, setProducts] = useState<any[]>([]);
+    const [styles, setStyles] = useState<OverviewStyle[]>([]);
+    const [products, setProducts] = useState<OverviewProduct[]>([]);
 
     useEffect(() => {
-        const { subscribeToStyles, subscribeToProducts } = require("@/src/lib/firebase/ownerService");
-        const unsubStyles = subscribeToStyles((data: any) => setStyles(data));
-        const unsubProducts = subscribeToProducts((data: any) => setProducts(data));
+        const unsubStyles = subscribeToStyles<OverviewStyle>(setStyles);
+        const unsubProducts = subscribeToProducts<OverviewProduct>(setProducts);
         return () => {
             unsubStyles();
             unsubProducts();
@@ -228,7 +266,6 @@ export default function StitchOverview() {
     };
 
     const handleExport = (type: 'bookings' | 'sales' | 'inventory') => {
-        const { exportToCSV } = require("@/src/lib/firebase/ownerService");
         if (type === 'bookings') {
             const data = bookings.map(b => ({
                 ID: b.id,
@@ -655,7 +692,7 @@ export default function StitchOverview() {
     );
 }
 
-function ActionButton({ icon, label, color, onClick }: any) {
+function ActionButton({ icon, label, color, onClick }: { icon: React.ReactNode; label: string; color: string; onClick: () => void }) {
     return (
         <button 
             onClick={onClick}

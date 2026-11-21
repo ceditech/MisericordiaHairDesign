@@ -21,12 +21,13 @@ import {
     UserCog,
 } from "lucide-react";
 import { Tooltip } from "@/components/ui";
+import { errorMessage } from "@/src/lib/errors";
+import { formatShortDate } from "@/src/lib/owner/ownerStats";
 
-function formatDate(ts: any): string {
-    if (!ts) return "—";
-    const d = ts?.toDate ? ts.toDate() : new Date(ts);
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-}
+const NEW_AFFILIATE_FIELDS: { label: string; key: "name" | "email"; type: string; placeholder: string }[] = [
+    { label: "Full Name *", key: "name", type: "text", placeholder: "e.g. Jane Smith" },
+    { label: "Email *", key: "email", type: "email", placeholder: "jane@example.com" },
+];
 
 function typeBadge(type?: string) {
     if (type === "client")
@@ -105,8 +106,8 @@ export default function StitchAffiliates() {
             await createAffiliateProfile({ name: form.name, email: form.email, type: form.type });
             setIsAdding(false);
             setForm({ name: "", email: "", type: "general" });
-        } catch (err: any) {
-            setFormError(err.message || "Failed to create affiliate.");
+        } catch (err: unknown) {
+            setFormError(errorMessage(err, "Failed to create affiliate."));
         } finally {
             setFormSaving(false);
         }
@@ -268,7 +269,7 @@ export default function StitchAffiliates() {
                                                     </span>
                                                 )}
                                                 <span className="text-[10px] text-slate-400">
-                                                    {formatDate(affiliate.createdAt)}
+                                                    {formatShortDate(affiliate.createdAt)}
                                                 </span>
                                             </div>
                                         </div>
@@ -331,7 +332,7 @@ export default function StitchAffiliates() {
                                 </div>
                                 <div className="flex justify-between text-sm">
                                     <span className="text-slate-500">Joined</span>
-                                    <span className="font-bold text-slate-900 dark:text-white">{formatDate(selected.createdAt)}</span>
+                                    <span className="font-bold text-slate-900 dark:text-white">{formatShortDate(selected.createdAt)}</span>
                                 </div>
                                 <div className="flex justify-between text-sm">
                                     <span className="text-slate-500">Discount</span>
@@ -391,16 +392,13 @@ export default function StitchAffiliates() {
                         )}
 
                         <div className="space-y-4">
-                            {[
-                                { label: "Full Name *", key: "name", type: "text", placeholder: "e.g. Jane Smith" },
-                                { label: "Email *", key: "email", type: "email", placeholder: "jane@example.com" },
-                            ].map((f) => (
+                            {NEW_AFFILIATE_FIELDS.map((f) => (
                                 <div key={f.key} className="space-y-1.5">
                                     <label className="text-xs font-bold uppercase tracking-widest text-slate-400">{f.label}</label>
                                     <input
                                         type={f.type}
                                         placeholder={f.placeholder}
-                                        value={(form as any)[f.key]}
+                                        value={form[f.key]}
                                         onChange={(e) => setForm((s) => ({ ...s, [f.key]: e.target.value }))}
                                         className="w-full rounded-2xl py-3.5 px-5 bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-[#6b38d4] text-slate-900 dark:text-white text-sm font-bold focus:outline-none"
                                     />

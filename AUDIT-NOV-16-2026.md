@@ -276,7 +276,7 @@ mechanical fixes (unused code, `prefer-const`, JSX entities), `any` removed from
 and `ownerService.ts` (owner stats extracted to `src/lib/owner/ownerStats.ts` with tests), and all `react-hooks` errors fixed.
 `firebase-admin` is on 14.x (6.5 done). CI now blocks on `npm run lint:gate` (server and shared code) and `npm run build`;
 whole-repo lint stays informational. Customer pages (`app/*`), `src/hooks`, `src/data`, `src/constants` and `components/StripeCheckout.tsx` are now `any`-free and in `lint:gate`
-(`isAbortError` added to `src/lib/errors.ts` with tests). **Remaining:** about 68 `any` in `src/components/owner/stitch` (62) and the legacy
+(`isAbortError` added to `src/lib/errors.ts` with tests). Eight of the ten Stitch owner components are also `any`-free and gated (`formatShortDate` and `computeBlogStats` added to `ownerStats` with tests). **Remaining:** about 34 `any` in `StitchStyles` (28) and `StitchInventory` (6), plus the legacy
 `components/Owner` tabs (6, deleted by 7.4), 11 `require` imports in scripts/config, and about 40 `<img>` warnings. Grow the `lint:gate`
 scope as each folder is cleaned.
 

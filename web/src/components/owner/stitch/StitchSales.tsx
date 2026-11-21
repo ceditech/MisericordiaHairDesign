@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
+import { formatShortDate } from "@/src/lib/owner/ownerStats";
+import type { TimeValue } from "@/src/lib/owner/types";
 import {
     subscribeToShopOrders,
     updateOrderStatus,
@@ -31,16 +33,11 @@ type Order = {
     total?: number;
     items?: Array<{ name?: string; quantity?: number; price?: number; priceCents?: number; imageUrl?: string }>;
     paymentMethod?: string;
-    createdAt?: any;
+    createdAt?: TimeValue;
 };
 
 type FilterTab = "all" | "pending" | "completed" | "refunded";
 
-function formatDate(ts: any): string {
-    if (!ts) return "—";
-    const d = ts?.toDate ? ts.toDate() : new Date(ts);
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-}
 
 function formatCurrency(cents?: number, flat?: number): string {
     const amount = cents != null ? cents / 100 : (flat ?? 0);
@@ -220,7 +217,7 @@ export default function StitchSales() {
                                             <span className="text-xs font-bold text-slate-400 flex items-center gap-1">
                                                 <CreditCard size={12} /> {order.paymentMethod || "Stripe"}
                                             </span>
-                                            <span className="text-[10px] text-slate-400">{formatDate(order.createdAt)}</span>
+                                            <span className="text-[10px] text-slate-400">{formatShortDate(order.createdAt)}</span>
                                         </div>
                                         <ChevronRight size={20} className="text-slate-300 group-hover:text-[#6b38d4] transition-colors shrink-0" />
                                     </div>
@@ -336,7 +333,7 @@ export default function StitchSales() {
                                         <CheckCircle2 size={12} className="text-white" />
                                     </div>
                                     <p className="text-xs font-bold text-slate-900 dark:text-white">Payment Captured</p>
-                                    <p className="text-[10px] text-slate-400">{selectedOrder.paymentMethod || "Stripe"} • {formatDate(selectedOrder.createdAt)}</p>
+                                    <p className="text-[10px] text-slate-400">{selectedOrder.paymentMethod || "Stripe"} • {formatShortDate(selectedOrder.createdAt)}</p>
                                 </div>
                                 <div className="relative pl-8">
                                     <div className="absolute left-0 top-1 w-6 h-6 bg-[#6b38d4] rounded-full flex items-center justify-center ring-4 ring-white dark:ring-slate-900">

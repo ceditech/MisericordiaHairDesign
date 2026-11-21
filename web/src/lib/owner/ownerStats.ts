@@ -196,3 +196,32 @@ export function countRecentClients(bookings: OwnerBooking[], since: Date): numbe
         });
     return unique.size;
 }
+
+/** "Mar 4, 2026" for a Timestamp, Date, string or number; "—" when missing or unreadable. */
+export function formatShortDate(ts: TimeValue): string {
+    if (!ts) return "—";
+    try {
+        return toDate(ts).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    } catch {
+        return "—";
+    }
+}
+
+export interface BlogStats {
+    totalPosts: number;
+    totalViews: number;
+    draftCount: number;
+    publishedCount: number;
+}
+
+export function computeBlogStats(posts: { views?: number; status?: string }[]): BlogStats {
+    return posts.reduce<BlogStats>(
+        (acc, p) => ({
+            totalPosts: acc.totalPosts + 1,
+            totalViews: acc.totalViews + (p.views || 0),
+            draftCount: acc.draftCount + (p.status === "draft" ? 1 : 0),
+            publishedCount: acc.publishedCount + (p.status === "published" ? 1 : 0),
+        }),
+        { totalPosts: 0, totalViews: 0, draftCount: 0, publishedCount: 0 }
+    );
+}
