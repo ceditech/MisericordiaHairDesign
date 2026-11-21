@@ -5,7 +5,8 @@ import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { BraidStyle } from "@/src/lib/styles";
 import { useAuth } from "@/src/providers/AuthProvider";
-import { saveDraft, loadDraft, clearDraft } from "@/src/lib/bookingDraft";
+import { clearDraft } from "@/src/lib/bookingDraft";
+import { useBookingDraft, EMPTY_BOOKING_FORM, type BookingFormData } from "@/src/lib/bookings/useBookingDraft";
 import { getBookingsByDate, BookingRecord } from "@/src/lib/firebase/userBookings";
 import { subscribeToStyles, subscribeToPresets, subscribeToAddons } from "@/src/lib/firebase/ownerService";
 import type { AddonDoc } from "@/src/lib/firebase/ownerService";
@@ -88,71 +89,26 @@ function BookingPageInner() {
         };
     }, [styleParam]); // Re-run if style param changes to update selection
 
-    const [bookingData, setBookingData] = useState({
-        date: "",
-        time: "",
-        name: "",
-        email: "",
-        phone: "",
-        notes: "",
-        inspirationPhoto: null as File | null,
-        photoPreview: "",
-        sizeId: "",
-        lengthId: "",
-        washingAddon: false,
-        takeDownAddon: false,
-        password: "",
-        createAccount: true,
-    });
+    const [bookingData, setBookingData] = useState<BookingFormData>(EMPTY_BOOKING_FORM);
     const [existingBookings, setExistingBookings] = useState<BookingRecord[]>([]);
     const [isLoadingBookings, setIsLoadingBookings] = useState(false);
     const [photoError, setPhotoError] = useState<string | null>(null);
 
     const [showNoSlotsModal, setShowNoSlotsModal] = useState(false);
 
-    const [draftRestored, setDraftRestored] = useState(false);
     const hasRedirected = useRef(false);
-    // Guard: only start persisting AFTER draft hydration has run
-    const hydrated = useRef(false);
 
-    // ── Draft hydration — runs once after mount (client-only) ─────────────────
-    useEffect(() => {
-        const draft = loadDraft();
-        if (!draft) { hydrated.current = true; return; }
-
-        // URL ?style= param takes priority over the saved draft style
-        if (!styleParam && draft.styleId) {
-            const savedStyle = stylesRef.current.find((s) => s.id === draft.styleId);
-            if (savedStyle) setSelectedStyle(savedStyle);
-            else draftStyleId.current = draft.styleId;
-        }
-
-        if (draft.currentStep > 1) setCurrentStep(draft.currentStep);
-
-        setBookingData((prev) => ({
-            ...prev,
-            date: draft.date || prev.date,
-            time: draft.time || prev.time,
-            name: draft.name || prev.name,
-            email: draft.email || prev.email,
-            phone: draft.phone || prev.phone,
-            notes: draft.notes || prev.notes,
-            photoPreview: draft.photoPreview || prev.photoPreview,
-            sizeId: draft.sizeId || prev.sizeId,
-            lengthId: draft.lengthId || prev.lengthId,
-            washingAddon: draft.washingAddon ?? prev.washingAddon,
-            takeDownAddon: draft.takeDownAddon ?? prev.takeDownAddon,
-            password: draft.password || prev.password,
-            createAccount: draft.createAccount ?? prev.createAccount,
-        }));
-
-        if (draft.date || draft.name || draft.currentStep > 1) {
-            setDraftRestored(true);
-        }
-
-        hydrated.current = true;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // intentionally empty — runs once on mount
+    const { draftRestored, setDraftRestored } = useBookingDraft({
+        styleParam,
+        stylesRef,
+        draftStyleId,
+        selectedStyle,
+        currentStep,
+        bookingData,
+        setSelectedStyle,
+        setCurrentStep,
+        setBookingData,
+    });
 
     // ── Pre-fill from Auth Profile ────────────────────────────────────────────
     const wasSignedIn = useRef(false);
@@ -215,28 +171,6 @@ function BookingPageInner() {
     }, [isLoadingBookings, bookingData.date, existingBookings, selectedStyle, styles]);
 
 
-    // ── Persist draft on every relevant state change ──────────────────────────
-    useEffect(() => {
-        // Don't overwrite the draft until hydration has completed
-        if (!hydrated.current) return;
-        saveDraft({
-            styleId: selectedStyle?.id ?? draftStyleId.current,
-            currentStep,
-            date: bookingData.date,
-            time: bookingData.time,
-            name: bookingData.name,
-            email: bookingData.email,
-            phone: bookingData.phone,
-            notes: bookingData.notes,
-            photoPreview: bookingData.photoPreview,
-            sizeId: bookingData.sizeId,
-            lengthId: bookingData.lengthId,
-            washingAddon: bookingData.washingAddon,
-            takeDownAddon: bookingData.takeDownAddon,
-            password: bookingData.password,
-            createAccount: bookingData.createAccount,
-        });
-    }, [selectedStyle, currentStep, bookingData]);
 
 
     const [viewDate, setViewDate] = useState(new Date());
