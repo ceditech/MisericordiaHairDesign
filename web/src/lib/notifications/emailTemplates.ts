@@ -1,5 +1,6 @@
 import { ConfirmedBooking } from "@/src/lib/bookingDraft";
 import { DEPOSIT_POLICY, CANCELLATION_POLICY } from "@/src/content/legal";
+import { getAppUrl } from "@/src/lib/config/appUrl";
 
 interface EmailData {
     subject: string;
@@ -187,7 +188,7 @@ We look forward to seeing you!
     </div>
 
     <p style="font-size: 14px; color: #666;">
-        If you need to reschedule, please refer to our <a href="https://misericordiahairdesign.com/policies" style="color: #a319c5;">cancellation policy</a>.
+        If you need to reschedule, please refer to our <a href="${getAppUrl()}/policies" style="color: #a319c5;">cancellation policy</a>.
     </p>
 
     <p style="margin-top: 30px; font-size: 14px; color: #888;">

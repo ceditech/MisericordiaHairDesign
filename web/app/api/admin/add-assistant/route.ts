@@ -4,6 +4,7 @@ import { adminAuth, adminDb } from "@/src/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
 import { EmailManager } from "@/src/lib/email/EmailManager";
 import { withAuth } from "@/src/lib/auth/withAuth";
+import { getAppUrl } from "@/src/lib/config/appUrl";
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +46,7 @@ export const POST = withAuth(["superAdmin"], async (req: NextRequest, auth) => {
 
                 // Generate a password reset link for the new user to set their password
                 // continueUrl brings them back to login after setting their password
-                const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://misericordiahairdesign.com";
+                const appUrl = getAppUrl();
                 resetLink = await adminAuth.generatePasswordResetLink(email, {
                     url: `${appUrl}/login?email=${encodeURIComponent(email)}&welcome=true`,
                 });
@@ -79,7 +80,7 @@ export const POST = withAuth(["superAdmin"], async (req: NextRequest, auth) => {
         let emailError = null;
 
         try {
-            const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://misericordiahairdesign.com";
+            const appUrl = getAppUrl();
             const subject = "You've been added as an Admin!";
             
             let bodyHtml = `

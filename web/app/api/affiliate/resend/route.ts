@@ -3,6 +3,7 @@ import { EmailManager } from "@/src/lib/email/EmailManager";
 import { adminDb } from "@/src/lib/firebase/admin";
 import { escapeHtml } from "@/src/lib/html";
 import { clientIp, createRateLimiter } from "@/src/lib/http/rateLimit";
+import { getAppUrl, getAppHost } from "@/src/lib/config/appUrl";
 
 export const runtime = "nodejs";
 
@@ -83,7 +84,7 @@ export async function POST(req: NextRequest) {
                     <p style="font-size: 14px; color: #888; text-align: center; margin: 0;">
                         Best regards,<br/>
                         <strong>Misericordia Hair Design Team</strong><br/>
-                        <a href="https://misericordiahairdesign.com" style="color: #9F2D5C; text-decoration: none;">misericordiahairdesign.com</a>
+                        <a href="${getAppUrl()}" style="color: #9F2D5C; text-decoration: none;">${getAppHost()}</a>
                     </p>
                 </div>
             `

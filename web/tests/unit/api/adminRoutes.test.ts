@@ -10,7 +10,8 @@ const state = vi.hoisted(() => ({
     createdAuthUsers: [] as string[],
     userWrites: [] as Array<{ uid: string; data: Record<string, unknown> }>,
     bookingUpdates: [] as Array<{ id: string; data: Record<string, unknown> }>,
-    emails: [] as Array<{ to: string }>,
+    emails: [] as Array<{ to: string; bodyHtml?: string }>,
+    resetUrls: [] as string[],
     seedCalls: 0,
 }));
 
@@ -44,7 +45,7 @@ vi.mock("@/src/lib/firebase/admin", () => {
                 state.createdAuthUsers.push(email);
                 return { uid: "new-uid" };
             },
-            generatePasswordResetLink: async () => "https://reset.example/link",
+            generatePasswordResetLink: async (_email: string, opts?: { url?: string }) => { state.resetUrls.push(opts?.url ?? ""); return "https://reset.example/link"; },
         },
     };
 });
@@ -52,7 +53,7 @@ vi.mock("firebase-admin/firestore", () => ({
     FieldValue: { serverTimestamp: () => "TS" },
 }));
 vi.mock("@/src/lib/email/EmailManager", () => ({
-    EmailManager: { sendEmail: async (m: { to: string }) => { state.emails.push({ to: m.to }); } },
+    EmailManager: { sendEmail: async (m: { to: string; bodyHtml?: string }) => { state.emails.push({ to: m.to, bodyHtml: m.bodyHtml }); } },
 }));
 vi.mock("@/src/lib/email/templates/receiptTemplate", () => ({
     generateElegantReceiptEmail: () => "<p>receipt</p>",
@@ -94,6 +95,7 @@ beforeEach(() => {
     state.bookings = { b1: { clientEmail: "c@example.com", pricing: { depositCents: 5000 } } };
     state.authUsersByEmail = {};
     state.createdAuthUsers = [];
+    state.resetUrls = [];
     state.userWrites = [];
     state.bookingUpdates = [];
     state.emails = [];
@@ -175,6 +177,37 @@ describe("POST /api/admin/add-assistant (super admin only)", () => {
         expect((await res.json()).success).toBe(true);
         expect(state.createdAuthUsers).toEqual(["new@example.com"]);
         expect(state.userWrites[0].data.role).toBe("assistant");
+    });
+    it("builds the welcome links from the configured app URL", async () => {
+        vi.stubEnv("NEXT_PUBLIC_APP_URL", "https://staging.example.com/");
+        try {
+            const res = await call(addAssistantPOST, { token: "super-t", body });
+            expect(res.status).toBe(200);
+            expect(state.resetUrls[0]).toBe("https://staging.example.com/login?email=new%40example.com&welcome=true");
+        } finally {
+            vi.unstubAllEnvs();
+        }
+    });
+    it("links an existing user straight to the login page on the configured app URL", async () => {
+        vi.stubEnv("NEXT_PUBLIC_APP_URL", "https://staging.example.com");
+        state.authUsersByEmail["new@example.com"] = { uid: "u9" };
+        state.users.u9 = { role: "client" };
+        try {
+            const res = await call(addAssistantPOST, { token: "super-t", body });
+            expect(res.status).toBe(200);
+            expect(state.emails[0].bodyHtml).toContain('href="https://staging.example.com/login"');
+        } finally {
+            vi.unstubAllEnvs();
+        }
+    });
+    it("falls back to the production site when no app URL is configured", async () => {
+        vi.stubEnv("NEXT_PUBLIC_APP_URL", "");
+        try {
+            await call(addAssistantPOST, { token: "super-t", body });
+            expect(state.resetUrls[0]).toMatch(/^https:\/\/misericordiahairdesign\.com\/login\?/);
+        } finally {
+            vi.unstubAllEnvs();
+        }
     });
     it("409 and no write when the target already is an owner or admin (no silent downgrade)", async () => {
         state.authUsersByEmail["boss2@example.com"] = { uid: "o9" };
