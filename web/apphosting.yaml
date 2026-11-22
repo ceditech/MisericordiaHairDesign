@@ -27,7 +27,7 @@ env:
   - variable: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
     value: "pk_test_51TCwmTGhGPCysRtGD4N3m6RVPYPqwhC7I8Kw6shRnu11foLQVgQJgF02h9vPBw3UtGOq4lluNhtTlpOOUBFLBLtu00vGCgeFM3"
   - variable: GOOGLE_REDIRECT_URI
-    value: "https://dedesbraids.com/api/admin/email/callback"
+    value: "https://misericordiahairdesign.com/api/admin/email/callback"
 
   - variable: STRIPE_SECRET_KEY
     secret: STRIPE_SECRET_KEY@1
