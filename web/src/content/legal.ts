@@ -2,8 +2,10 @@
 // Import these everywhere policy text appears so wording stays consistent.
 
 export const LAST_UPDATED = "3/26/2026";
-export const CONTACT_EMAIL = "info@misericordiahairdesign.com";
+export const CONTACT_EMAIL = "mariefleurekpe@gmail.com";
 export const CONTACT_PHONE = "(945) 275-4778";
+/** `href` for a tap-to-call link to CONTACT_PHONE. */
+export const CONTACT_PHONE_TEL = "tel:+19452754778";
 export const LOCATION = "Dallas, TX";
 export const FULL_ADDRESS = "1931 Market Center Boulevard, Dallas, TX 75207";
 export const BUSINESS_NAME = "Misericordia Hair Design";

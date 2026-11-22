@@ -1,7 +1,7 @@
 "use client";
 
 import { errorMessage } from "@/src/lib/errors";
-import { DEPOSIT_POLICY, CANCELLATION_POLICY, CONTACT_EMAIL, CONTACT_PHONE, FULL_ADDRESS } from "@/src/content/legal";
+import { DEPOSIT_POLICY, CANCELLATION_POLICY, CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_TEL, FULL_ADDRESS } from "@/src/content/legal";
 
 import { useState, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
@@ -167,7 +167,7 @@ export default function ContactPage() {
 
                     <div className="space-y-6">
                         <a
-                            href="tel:+19452754778"
+                            href={CONTACT_PHONE_TEL}
                             className="flex items-center gap-6 p-4 rounded-2xl hover:bg-brand-primary/5 transition-colors group border border-transparent hover:border-brand-primary/10"
                         >
                             <div className="w-14 h-14 bg-brand-primary text-white rounded-2xl flex items-center justify-center shadow-lg shadow-brand-primary/20">

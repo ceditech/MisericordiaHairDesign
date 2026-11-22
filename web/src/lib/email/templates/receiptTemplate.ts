@@ -1,4 +1,5 @@
 import { getAppUrl } from "@/src/lib/config/appUrl";
+import { CONTACT_EMAIL, CONTACT_PHONE } from "@/src/content/legal";
 
 /** The booking-draft fields shown in the receipt email. */
 export interface ReceiptDraft {
@@ -168,7 +169,7 @@ export function generateElegantReceiptEmail(
         <div class="footer">
             <p style="margin: 0 0 10px 0; color: #0f172a;"><strong>Misericordia Hair Design</strong></p>
             <p style="margin: 0; line-height: 1.5;">1931 Market Center Blvd, Dallas, TX 75207<br>Gate Code 823 near Stair Six or 7</p>
-            <p style="margin: 10px 0 0 0;">Phone: 945-275-4778 • Email: <a href="mailto:mariefleurekpe@gmail.com" style="color: #94a3b8; text-decoration: none;">mariefleurekpe@gmail.com</a></p>
+            <p style="margin: 10px 0 0 0;">Phone: ${CONTACT_PHONE} • Email: <a href="mailto:${CONTACT_EMAIL}" style="color: #94a3b8; text-decoration: none;">${CONTACT_EMAIL}</a></p>
             <div style="margin-top: 16px; display: inline-block;">
                 <a href="https://www.facebook.com/profile.php?id=61585347691705" target="_blank" style="text-decoration: none; display: inline-block; margin: 0 8px;">
                     <img src="https://img.icons8.com/ios-filled/50/a319c5/facebook-new.png" width="24" height="24" alt="Facebook" style="vertical-align: middle; border: none; display: block;">

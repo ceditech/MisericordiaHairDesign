@@ -1,5 +1,5 @@
 import { Modal } from "@/components/ui";
-import { CONTACT_PHONE } from "@/src/content/legal";
+import { CONTACT_PHONE, CONTACT_PHONE_TEL, CONTACT_EMAIL } from "@/src/content/legal";
 
 interface NoSlotsModalProps {
     isOpen: boolean;
@@ -32,7 +32,7 @@ export function NoSlotsModal({ isOpen, onClose, date, styleDuration }: NoSlotsMo
                     </div>
                     <div className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
                         <strong className="text-[#9F2D5C] block mb-0.5">Need Help or need urgent services?</strong>
-                        Please call <a href={`tel:${CONTACT_PHONE.replace(/\D/g, '')}`} className="font-bold text-[#9F2D5C] hover:underline">{CONTACT_PHONE}</a>, or email <a href="mailto:mariefleurekpe@gmail.com" className="font-bold text-[#9F2D5C] hover:underline">mariefleurekpe@gmail.com</a>
+                        Please call <a href={CONTACT_PHONE_TEL} className="font-bold text-[#9F2D5C] hover:underline">{CONTACT_PHONE}</a>, or email <a href={`mailto:${CONTACT_EMAIL}`} className="font-bold text-[#9F2D5C] hover:underline">{CONTACT_EMAIL}</a>
                     </div>
                 </div>
             </div>
