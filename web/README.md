@@ -59,7 +59,7 @@ CI (`.github/workflows/ci.yml`) runs tests, typecheck, `lint:gate` and build in 
 
 ## Roles and access
 
-Staff roles are stored on `users/{uid}.role`: `owner`, `admin` or `assistant`. Super admins are the emails in `SUPER_ADMIN_EMAILS`. Clients have no role. Rules and API routes both enforce this; see [`docs/data-model.md`](docs/data-model.md). Roles are assigned by staff or by server routes with the Admin SDK, never by the client.
+Staff roles are stored on `users/{uid}.role`: `owner`, `admin` or `assistant`. Super admins are the emails in `SUPER_ADMIN_EMAILS`, which defaults to the list in `src/lib/config/adminEmails.ts`; an account must have a verified email to count. The dashboard UI cannot read that server variable, so it uses the defaults to decide what to show, while the API always enforces the real list. The Firestore rules keep their own owner allowlist (`firestore.rules`), so a new super admin also needs the rules updated or a `users/{uid}.role` of `owner`. Clients have no role. Rules and API routes both enforce this; see [`docs/data-model.md`](docs/data-model.md). Roles are assigned by staff or by server routes with the Admin SDK, never by the client.
 
 ## Payments in one paragraph
 

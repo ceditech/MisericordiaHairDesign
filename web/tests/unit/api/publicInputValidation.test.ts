@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 
-const state = vi.hoisted(() => ({ saved: [] as Record<string, unknown>[], queries: 0 }));
+const state = vi.hoisted(() => ({ saved: [] as Record<string, unknown>[], queries: 0, emailsTo: [] as string[] }));
 
 vi.mock("@/src/lib/firebase/admin", () => {
     const query = {
@@ -18,7 +18,7 @@ vi.mock("@/src/lib/firebase/admin", () => {
     return { adminDb: { collection: () => query } };
 });
 vi.mock("firebase-admin/firestore", () => ({ FieldValue: { serverTimestamp: () => "TS" } }));
-vi.mock("@/src/lib/email/EmailManager", () => ({ EmailManager: { sendEmail: async () => {} } }));
+vi.mock("@/src/lib/email/EmailManager", () => ({ EmailManager: { sendEmail: async (m: { to: string }) => { state.emailsTo.push(m.to); } } }));
 vi.mock("@/src/lib/email/templates/contactTemplate", () => ({ generateContactInquiryEmail: () => "<p>hi</p>" }));
 
 import { POST as contactPOST } from "@/app/api/contact/route";
@@ -38,10 +38,26 @@ const availability = (date?: string) =>
 beforeEach(() => {
     state.saved.length = 0;
     state.queries = 0;
+    state.emailsTo.length = 0;
     vi.spyOn(console, "error").mockImplementation(() => {});
 });
 
 const ok = { name: "Jane", email: "jane@example.com", service: "Braids", message: "Hello" };
+
+describe("POST /api/contact owner notification", () => {
+    it("emails the inquiry to the owner notification address, or OWNER_NOTIFICATION_EMAIL when set", async () => {
+        expect((await contact(JSON.stringify(ok))).status).toBe(200);
+        expect(state.emailsTo).toEqual(["mariefleurekpe@gmail.com"]);
+
+        vi.stubEnv("OWNER_NOTIFICATION_EMAIL", "orders@example.com");
+        try {
+            await contact(JSON.stringify(ok));
+            expect(state.emailsTo).toEqual(["mariefleurekpe@gmail.com", "orders@example.com"]);
+        } finally {
+            vi.unstubAllEnvs();
+        }
+    });
+});
 
 describe("POST /api/contact validation", () => {
     it("saves a trimmed, valid message", async () => {

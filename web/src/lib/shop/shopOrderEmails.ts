@@ -1,8 +1,9 @@
 import { EmailManager } from "@/src/lib/email/EmailManager";
 import { generateShopReceiptEmail, oneLine, shopOrderRef, type ShopReceiptOrder } from "@/src/lib/email/templates/shopReceiptTemplate";
 
+import { getOwnerNotificationEmail } from "@/src/lib/config/adminEmails";
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const DEFAULT_OWNER_EMAIL = "sales@edxstore.com";
 
 export interface ShopEmailDeps {
     sendEmail: (m: { to: string; subject: string; bodyHtml: string }) => Promise<void>;
@@ -25,7 +26,7 @@ export async function sendShopOrderEmails(
     deps: ShopEmailDeps = { sendEmail: (m) => EmailManager.sendEmail(m) },
 ): Promise<ShopEmailResult> {
     const ref = shopOrderRef(orderId);
-    const ownerEmail = deps.ownerEmail ?? process.env.OWNER_NOTIFICATION_EMAIL ?? DEFAULT_OWNER_EMAIL;
+    const ownerEmail = deps.ownerEmail ?? getOwnerNotificationEmail();
     const result: ShopEmailResult = { customerSent: false, ownerSent: false };
 
     const customerEmail = typeof order.customerEmail === "string" ? order.customerEmail.trim() : "";

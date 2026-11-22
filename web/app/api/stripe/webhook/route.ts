@@ -9,6 +9,7 @@ import { addInventoryDecrements } from "@/src/lib/shop/finalizeShopOrder";
 import { emailStatusFields, sendShopOrderEmails } from "@/src/lib/shop/shopOrderEmails";
 import { generateElegantReceiptEmail } from "@/src/lib/email/templates/receiptTemplate";
 import Stripe from "stripe";
+import { getOwnerNotificationEmail } from "@/src/lib/config/adminEmails";
 
 export const runtime = "nodejs";
 
@@ -227,7 +228,7 @@ async function handleBookingPayment(session: Stripe.Checkout.Session, eventId: s
       // Notify the owner of the new booking
       const ownerHtml = generateElegantReceiptEmail(draft, bookingId, "owner", formattedAmount);
       await EmailManager.sendEmail({
-        to: "sales@edxstore.com", // Send to owner
+        to: getOwnerNotificationEmail(), // Send to owner
         subject: `New Booking! ${draft.clientName} - ${draft.styleName}`,
         bodyHtml: ownerHtml,
       });

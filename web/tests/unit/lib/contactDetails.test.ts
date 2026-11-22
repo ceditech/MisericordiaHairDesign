@@ -9,7 +9,9 @@ import { generateElegantReceiptEmail } from "@/src/lib/email/templates/receiptTe
 
 const root = resolve(__dirname, "../../..");
 const SOURCE_DIRS = ["app", "src", "components"];
-const EXCLUDED = new Set([join("src", "content", "legal.ts")]);
+// adminEmails.ts names the owner's account as super admin and notification recipient. That is a separate setting from the
+// public contact email, so the two should not change together by accident.
+const EXCLUDED = new Set([join("src", "content", "legal.ts"), join("src", "lib", "config", "adminEmails.ts")]);
 
 function sourceFiles(dir: string): string[] {
     return readdirSync(dir).flatMap((name) => {
