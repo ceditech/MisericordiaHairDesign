@@ -111,6 +111,17 @@ describe("POST /api/affiliate/generate (public signup, hardened)", () => {
         expect(state.emails).toHaveLength(0);
     });
 
+    it("links the email footer to the configured app URL", async () => {
+        vi.stubEnv("NEXT_PUBLIC_APP_URL", "https://staging.example.com");
+        try {
+            await post(generatePOST, ok);
+            expect(state.emails[0].bodyHtml).toContain('<a href="https://staging.example.com"');
+            expect(state.emails[0].bodyHtml).toContain(">staging.example.com</a>");
+        } finally {
+            vi.unstubAllEnvs();
+        }
+    });
+
     it("HTML-escapes the name in the welcome email (no markup injection)", async () => {
         await post(generatePOST, { ...ok, name: "<script>alert(1)</script>" });
         expect(state.emails[0].bodyHtml).not.toContain("<script>");
@@ -145,6 +156,15 @@ describe("POST /api/affiliate/resend (public, no longer an open mail relay)", ()
         expect(state.emails[0].bodyHtml).not.toContain("Phish");
     });
 
+    it("links the email footer to the production site when no app URL is configured", async () => {
+        vi.stubEnv("NEXT_PUBLIC_APP_URL", "");
+        try {
+            await post(resendPOST, { code: "DB-AFF-ABC123" });
+            expect(state.emails[0].bodyHtml).toContain('<a href="https://misericordiahairdesign.com"');
+        } finally {
+            vi.unstubAllEnvs();
+        }
+    });
     it("404 for an unknown code and 400 for a malformed or missing code; nothing is sent", async () => {
         expect((await post(resendPOST, { code: "DB-AFF-ZZZZZZ" })).status).toBe(404);
         expect((await post(resendPOST, { code: "<img src=x>" })).status).toBe(400);

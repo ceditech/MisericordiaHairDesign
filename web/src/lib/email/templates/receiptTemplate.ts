@@ -1,3 +1,5 @@
+import { getAppUrl } from "@/src/lib/config/appUrl";
+
 /** The booking-draft fields shown in the receipt email. */
 export interface ReceiptDraft {
     clientName?: string;
@@ -154,11 +156,11 @@ export function generateElegantReceiptEmail(
             ${!isOwner ? `
             <div style="text-align: center; margin-top: 40px;">
                 <p style="font-size: 14px; color: #64748b; margin-bottom: 20px;">Need to make changes to your appointment?</p>
-                <a href="https://misericordiahairdesign.com/contact" class="button" style="color: white;">Contact Us</a>
+                <a href="${getAppUrl()}/contact" class="button" style="color: white;">Contact Us</a>
             </div>
             ` : `
             <div style="text-align: center; margin-top: 40px;">
-                <a href="https://misericordiahairdesign.com/owner/dashboard" class="button" style="color: white;">View in Dashboard</a>
+                <a href="${getAppUrl()}/owner/dashboard" class="button" style="color: white;">View in Dashboard</a>
             </div>
             `}
         </div>
