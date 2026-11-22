@@ -172,6 +172,23 @@ describe("staff (owner, admin, assistant)", () => {
         }
     });
 
+    it("the owner's Gmail account has full access once its email is verified", async () => {
+        const db = actors.ownerGmail(env, true).firestore();
+        for (const col of [...OWNER_ONLY, "products", "styles", "users"]) {
+            await assertSucceeds(setDoc(doc(db, `${col}/x`), { a: 1 }));
+            await assertSucceeds(getDoc(doc(db, `${col}/x`)));
+        }
+    });
+
+    it("the owner's Gmail address gives no access while the email is unverified (anyone can sign up with an unverified address)", async () => {
+        const db = actors.ownerGmail(env, false).firestore();
+        for (const col of OWNER_ONLY) {
+            await assertFails(setDoc(doc(db, `${col}/x`), { a: 1 }));
+            await assertFails(getDoc(doc(db, `${col}/x`)));
+        }
+        await assertFails(setDoc(doc(db, "products/x"), { a: 1 }));
+    });
+
     it.each(["owner", "admin", "assistant"])("a users/{uid}.role of %s has full access to top-level collections", async (role) => {
         await seedStaff(env, "staff1", role);
         const db = actors.staff(env, "staff1").firestore();

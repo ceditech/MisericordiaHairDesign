@@ -10,6 +10,9 @@ service cloud.firestore {
     function isOwner() {
       return isAuthenticated() && 
         (request.auth.token.email in ['info@dedesbraids.com', 'e.noom@test.com', 'sales@edxstore.com', 'dedeadmin@example.com'] ||
+         // The owner's Gmail account counts only with a verified email: Firebase lets anyone sign up with an
+         // address they do not own, so an unverified match must not grant access.
+         (request.auth.token.email == 'mariefleurekpe@gmail.com' && request.auth.token.email_verified == true) ||
          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['owner', 'admin', 'assistant']);
     }
 
