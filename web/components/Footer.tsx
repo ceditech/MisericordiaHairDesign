@@ -1,4 +1,4 @@
-import { CONTACT_EMAIL, CONTACT_PHONE, FULL_ADDRESS } from "@/src/content/legal";
+import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_TEL, FULL_ADDRESS } from "@/src/content/legal";
 import Link from "next/link";
 import { Tooltip } from "./ui";
 
@@ -101,7 +101,7 @@ export default function Footer() {
                             </li>
                             <li className="flex items-center gap-3">
                                 <span className="material-icons text-[#D8A75F] text-sm">phone</span>
-                                <a href={`tel:${CONTACT_PHONE.replace(/\D/g, '')}`} className="hover:text-[#FFF8EF] transition-colors">
+                                <a href={CONTACT_PHONE_TEL} className="hover:text-[#FFF8EF] transition-colors">
                                     {CONTACT_PHONE}
                                 </a>
                             </li>

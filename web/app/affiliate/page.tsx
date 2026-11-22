@@ -6,7 +6,7 @@ import { Button, Badge, Input, Card, Accordion, useToast } from "@/components/ui
 import { Users, Gift, CheckCircle, Copy, Mail, ChevronRight, HelpCircle, Phone, ShieldCheck, Coins, Sparkles } from "lucide-react";
 import { AffiliateType, AffiliateProfile } from "@/src/lib/affiliate/types";
 import { createAffiliateProfile, sendAffiliateCodeEmail } from "@/src/lib/affiliate/affiliateService";
-import { CONTACT_PHONE, CONTACT_EMAIL } from "@/src/content/legal";
+import { CONTACT_PHONE, CONTACT_PHONE_TEL, CONTACT_EMAIL } from "@/src/content/legal";
 
 export default function AffiliatePage() {
     const { showToast } = useToast();
@@ -409,7 +409,7 @@ export default function AffiliatePage() {
                                 Contact Support
                             </Link>
                             <div className="flex flex-col items-center sm:items-start text-xs font-black uppercase tracking-[0.2em] text-slate-400 space-y-2">
-                                <a href={`tel:${CONTACT_PHONE.replace(/\D/g, '')}`} className="flex items-center gap-2 hover:text-white transition-colors">
+                                <a href={CONTACT_PHONE_TEL} className="flex items-center gap-2 hover:text-white transition-colors">
                                     <Phone size={14} className="text-[#9F2D5C]" />
                                     {CONTACT_PHONE}
                                 </a>

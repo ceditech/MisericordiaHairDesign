@@ -6,6 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { BraidStyle } from "@/src/lib/styles";
 import { useAuth } from "@/src/providers/AuthProvider";
 import { clearDraft } from "@/src/lib/bookingDraft";
+import { CONTACT_PHONE, CONTACT_PHONE_TEL } from "@/src/content/legal";
 import { useBookingDraft, EMPTY_BOOKING_FORM, type BookingFormData } from "@/src/lib/bookings/useBookingDraft";
 import { getBookingsByDate, BookingRecord } from "@/src/lib/firebase/userBookings";
 import { subscribeToStyles, subscribeToPresets, subscribeToAddons } from "@/src/lib/firebase/ownerService";
@@ -502,10 +503,10 @@ function BookingPageInner() {
                             <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800 space-y-4">
                                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                                     <span className="font-bold text-slate-700 dark:text-slate-300">Need a special time slot or have a special request?</span><br />
-                                    <a href="tel:+19452754778" className="font-bold text-[#9F2D5C] hover:underline">Call (945) 275-4778</a>.
+                                    <a href={CONTACT_PHONE_TEL} className="font-bold text-[#9F2D5C] hover:underline">Call {CONTACT_PHONE}</a>.
                                 </p>
                                 <div className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed bg-amber-50 dark:bg-amber-900/10 p-4 rounded-xl border border-amber-100 dark:border-amber-900/30 text-amber-800 dark:text-amber-300">
-                                    <strong className="block mb-1">Closed on Sundays.</strong> For special Sunday requests or appointments outside regular hours (including after 9:00 PM), call <strong>(945) 275-4778</strong>.
+                                    <strong className="block mb-1">Closed on Sundays.</strong> For special Sunday requests or appointments outside regular hours (including after 9:00 PM), call <strong>{CONTACT_PHONE}</strong>.
                                 </div>
                             </div>
                         </div>
