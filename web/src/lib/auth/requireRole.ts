@@ -1,5 +1,6 @@
 import { adminAuth, adminDb } from "@/src/lib/firebase/admin";
 import { HttpError } from "@/src/lib/http/HttpError";
+import { getSuperAdminEmails } from "@/src/lib/config/adminEmails";
 
 /** Roles that may use staff/admin API routes. Mirrors firestore.rules isOwner(). */
 export type StaffRole = "owner" | "admin" | "assistant";
@@ -27,16 +28,6 @@ export interface AuthDeps {
 }
 
 const STAFF_ROLES: readonly string[] = ["owner", "admin", "assistant"];
-const DEFAULT_SUPER_ADMIN_EMAILS = ["sales@edxstore.com"];
-
-function parseSuperAdminEmails(raw: string | undefined): string[] {
-    if (!raw) return DEFAULT_SUPER_ADMIN_EMAILS;
-    return raw
-        .split(",")
-        .map((e) => e.trim().toLowerCase())
-        .filter(Boolean);
-}
-
 export function defaultAuthDeps(): AuthDeps {
     return {
         verifyIdToken: (token) => adminAuth.verifyIdToken(token),
@@ -45,7 +36,7 @@ export function defaultAuthDeps(): AuthDeps {
             const role = snap.exists ? snap.data()?.role : null;
             return typeof role === "string" ? role : null;
         },
-        superAdminEmails: parseSuperAdminEmails(process.env.SUPER_ADMIN_EMAILS),
+        superAdminEmails: getSuperAdminEmails(process.env.SUPER_ADMIN_EMAILS),
     };
 }
 

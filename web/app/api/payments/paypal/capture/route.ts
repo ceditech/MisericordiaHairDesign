@@ -8,6 +8,7 @@ import { addInventoryDecrements } from "@/src/lib/shop/finalizeShopOrder";
 import type { ShopReceiptOrder } from "@/src/lib/email/templates/shopReceiptTemplate";
 import { emailStatusFields, sendShopOrderEmails } from "@/src/lib/shop/shopOrderEmails";
 import { generateElegantReceiptEmail } from "@/src/lib/email/templates/receiptTemplate";
+import { getOwnerNotificationEmail } from "@/src/lib/config/adminEmails";
 
 export const runtime = "nodejs";
 
@@ -213,7 +214,7 @@ export async function POST(req: NextRequest) {
           
           // Notify the owner
           await EmailManager.sendEmail({
-            to: "sales@edxstore.com", // Send to owner
+            to: getOwnerNotificationEmail(), // Send to owner
             subject: `New Booking via PayPal! ${draft.clientName} - ${draft.styleName}`,
             bodyHtml: ownerHtml,
           });

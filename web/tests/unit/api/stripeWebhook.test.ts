@@ -118,6 +118,21 @@ describe("Stripe webhook: bookings", () => {
         expect(wrote("paymentEvents")).toHaveLength(1);
     });
 
+    it("sends the owner's new-booking email to the owner notification address", async () => {
+        await sendEvent(session());
+        expect(state.emails).toEqual(["ann@example.com", "mariefleurekpe@gmail.com"]);
+    });
+
+    it("OWNER_NOTIFICATION_EMAIL redirects the owner's new-booking email", async () => {
+        vi.stubEnv("OWNER_NOTIFICATION_EMAIL", "orders@example.com");
+        try {
+            await sendEvent(session());
+            expect(state.emails).toEqual(["ann@example.com", "orders@example.com"]);
+        } finally {
+            vi.unstubAllEnvs();
+        }
+    });
+
     it("holds the booking for review (no booking, no emails) when the amount differs", async () => {
         await sendEvent(session({ amount_total: 100 }));
         expect(wrote("bookings")).toHaveLength(0);
@@ -170,7 +185,7 @@ describe("Stripe webhook: shop orders", () => {
     it("emails the customer and the owner once the order is paid, and records the email status", async () => {
         state.orders.shop_1 = order({ customerName: "Ann Lee", customerEmail: "ann@example.com", fulfillmentType: "pickup", totals: { totalCents: 2500, subtotalCents: 2000, taxCents: 500, shippingCents: 0, discountCents: 0 } });
         await sendEvent(shopSession());
-        expect(state.emails).toEqual(["ann@example.com", "sales@edxstore.com"]);
+        expect(state.emails).toEqual(["ann@example.com", "mariefleurekpe@gmail.com"]);
         expect(wrote("shopOrders").some((w) => w.data["emails.customerSent"] === true && w.data["emails.ownerSent"] === true)).toBe(true);
     });
 

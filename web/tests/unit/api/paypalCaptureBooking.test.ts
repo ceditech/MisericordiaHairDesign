@@ -105,6 +105,22 @@ describe("PayPal capture: bookings", () => {
         expect(state.emails).toContain("ann@example.com");
     });
 
+    it("sends the owner's new-booking email to the owner notification address (and honours OWNER_NOTIFICATION_EMAIL)", async () => {
+        await bookingCall({ draftId: "d1" });
+        expect(state.emails).toContain("mariefleurekpe@gmail.com");
+
+        state.emails = [];
+        state.writes = [];
+        vi.stubEnv("OWNER_NOTIFICATION_EMAIL", "orders@example.com");
+        try {
+            await bookingCall({ draftId: "d1" });
+            expect(state.emails).toContain("orders@example.com");
+            expect(state.emails).not.toContain("mariefleurekpe@gmail.com");
+        } finally {
+            vi.unstubAllEnvs();
+        }
+    });
+
     it("does NOT capture when the draft is missing (404) or draftId is missing (400)", async () => {
         expect((await bookingCall({ draftId: "nope" })).status).toBe(404);
         expect((await bookingCall({ draftId: undefined })).status).toBe(400);

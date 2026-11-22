@@ -114,7 +114,7 @@ describe("PayPal capture: shop orders", () => {
     it("emails the customer and the owner after a verified payment", async () => {
         state.orders[ID] = pendingOrder({ customerName: "Ann", customerEmail: "ann@example.com" });
         await shopCall();
-        expect(state.emails).toEqual(["ann@example.com", "sales@edxstore.com"]);
+        expect(state.emails).toEqual(["ann@example.com", "mariefleurekpe@gmail.com"]);
         expect(state.updates.some((u) => u.col === "shopOrders" && u.data["emails.customerSent"] === true)).toBe(true);
     });
 

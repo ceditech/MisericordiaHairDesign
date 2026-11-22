@@ -109,7 +109,7 @@ describe("sendShopOrderEmails", () => {
         delete process.env.OWNER_NOTIFICATION_EMAIL;
         const sent: string[] = [];
         await sendShopOrderEmails(order({ customerEmail: null }), ID, { sendEmail: async (m) => void sent.push(m.to) });
-        expect(sent).toEqual(["sales@edxstore.com"]);
+        expect(sent).toEqual(["mariefleurekpe@gmail.com"]);
     });
 
     it("builds the status fields stored on the order", () => {

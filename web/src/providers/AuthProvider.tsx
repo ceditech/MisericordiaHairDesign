@@ -5,6 +5,7 @@ import { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { onAuthChanged, signOutUser } from "@/src/lib/firebase/auth";
 import { getDb } from "@/src/lib/firebase/client";
+import { isSuperAdminEmail } from "@/src/lib/config/adminEmails";
 
 /** The signed-in user's `users/{uid}` document. */
 export interface UserProfile {
@@ -99,7 +100,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const role = profile?.role || null;
-    const isSuperAdmin = user?.email === "sales@edxstore.com";
+    const isSuperAdmin = isSuperAdminEmail(user?.email);
     const isLoading = loading || profileLoading;
     const roleLoading = profileLoading;
 

@@ -5,6 +5,7 @@ import { generateContactInquiryEmail } from "@/src/lib/email/templates/contactTe
 import { FieldValue } from "firebase-admin/firestore";
 import { clientIp, createRateLimiter } from "@/src/lib/http/rateLimit";
 import { parseContactInput } from "@/src/lib/http/validate";
+import { getOwnerNotificationEmail } from "@/src/lib/config/adminEmails";
 
 // Public endpoint that saves a document and emails the owner: best-effort per-IP limit (see src/lib/http/rateLimit.ts).
 const contactLimiter = createRateLimiter({ limit: 5, windowMs: 60 * 60 * 1000 });
@@ -48,7 +49,7 @@ export async function POST(req: NextRequest) {
         try {
             const emailHtml = generateContactInquiryEmail(name, email, service, message);
             await EmailManager.sendEmail({
-                to: "sales@edxstore.com",
+                to: getOwnerNotificationEmail(),
                 subject: `New Contact Inquiry: ${name} - ${service}`,
                 bodyHtml: emailHtml,
             });

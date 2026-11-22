@@ -9,6 +9,8 @@ const STORAGE_RULES = resolve(__dirname, "../../../storage.rules");
 
 /** Emails the current firestore.rules treat as owner (hard-coded in the rules). */
 export const OWNER_ALLOWLIST_EMAIL = "sales@edxstore.com";
+/** The business owner's account. It is on the rules allowlist only while its email is verified. */
+export const OWNER_GMAIL = "mariefleurekpe@gmail.com";
 
 export async function createRulesEnv(projectId: string): Promise<RulesTestEnvironment> {
     // Hosts/ports are discovered from the emulator hub that `firebase emulators:exec` starts.
@@ -36,6 +38,9 @@ export const actors = {
     /** Owner through the hard-coded email allowlist in the rules. */
     ownerByEmail: (env: RulesTestEnvironment) =>
         env.authenticatedContext("ownerEmail1", { email: OWNER_ALLOWLIST_EMAIL }),
+    /** The owner's Gmail account, with the email verified or not. */
+    ownerGmail: (env: RulesTestEnvironment, emailVerified: boolean) =>
+        env.authenticatedContext("ownerGmail1", { email: OWNER_GMAIL, email_verified: emailVerified }),
     /** Staff through a users/{uid}.role document (seed it first with seedStaff). */
     staff: (env: RulesTestEnvironment, uid: string) => env.authenticatedContext(uid, { email: `${uid}@example.com` }),
 };
