@@ -310,14 +310,14 @@ export default function StitchBlog() {
                                             <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-[2rem] cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all overflow-hidden group">
                                                 {imageFile ? (
                                                     <div className="w-full h-full relative">
-                                                        <img src={URL.createObjectURL(imageFile)} className="w-full h-full object-cover" />
+                                                        <img src={URL.createObjectURL(imageFile)} alt="Featured image preview" className="w-full h-full object-cover" />
                                                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                                             <p className="text-white font-bold text-xs">Change Image</p>
                                                         </div>
                                                     </div>
                                                 ) : formData.imageUrl ? (
                                                     <div className="w-full h-full relative">
-                                                        <img src={formData.imageUrl} className="w-full h-full object-cover" />
+                                                        <img src={formData.imageUrl} alt="Featured image" className="w-full h-full object-cover" />
                                                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                                             <p className="text-white font-bold text-xs">Change Image</p>
                                                         </div>
@@ -392,7 +392,7 @@ export default function StitchBlog() {
                     <div className="w-full max-w-3xl max-h-[85vh] bg-white dark:bg-slate-900 rounded-[3rem] shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
                         <div className="h-72 bg-slate-200 relative">
                             {viewingPost.imageUrl ? (
-                                <img src={viewingPost.imageUrl} className="w-full h-full object-cover" />
+                                <img src={viewingPost.imageUrl} alt={viewingPost.title} className="w-full h-full object-cover" />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-100 to-indigo-100 text-[#6b38d4]">
                                     <ImageIcon size={80} />

@@ -120,7 +120,7 @@ describe("POST /api/admin/reminders", () => {
 
 describe("GET /api/admin/reminders", () => {
     it("still returns the harmless usage message without any data access", async () => {
-        const res = await GET(new NextRequest("http://localhost/api/admin/reminders"));
+        const res = await GET();
         expect(res.status).toBe(200);
         expect(await res.json()).toMatchObject({ usage: "POST /api/admin/reminders" });
     });
